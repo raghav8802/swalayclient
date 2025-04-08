@@ -1,0 +1,155 @@
+.container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+}
+
+
+
+.containerLeft {
+    height: 100vh;
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.containerRight {
+    width: 60%;
+    height: 100vh;
+    /* border: 2px solid blue; */
+
+    flex: 1;
+    position: relative;
+    overflow: auto;
+
+}
+
+.containerRightTextContainer {
+    background-color: #0000007b;
+}
+
+.backgroundOverlaw {
+    /* background-color: #4dc8c8; */
+    background-color: #4e37e0;
+}
+
+
+.containerLeftInner {
+    width: 80%;
+    /* border: 2px solid blue; */
+    height: 600px;
+}
+
+.headingContainer {
+    width: 80%;
+    /* display: flex;
+    align-items: center;
+    justify-content: center; */
+    /* border: 2px solid rgb(168, 17, 188); */
+}
+
+.heading {
+
+    font-size: 1.5rem;
+    color: #1b1b1b;
+    font-weight: 600;
+    margin-bottom: 5px;
+    text-align: left;
+    text-align: center;
+
+    /* line-height: 1.66;
+    margin: 0;
+    padding: 0;
+    font-weight: 700;
+    color: #222;
+    font-size: 2rem;
+    display: flex;
+    align-items: baseline;
+    justify-content: baseline;
+    text-align: left; */
+    /* border: 2px solid rgb(17, 17, 188); */
+}
+
+.logo {
+    /* border: 2px solid rgb(65, 188, 17); */
+    display: flex;
+    margin: 0 auto;
+}
+
+.roleTitle {
+    font-size: 1.5rem;
+    color: #1b1b1b;
+    font-weight: 600;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+.roleButton {
+
+    --bg: #000;
+    --hover-bg: #4e37e0;
+    --hover-text: #000;
+    color: #fff;
+    cursor: pointer;
+    /* border: 1px solid var(--bg); */
+    border-radius: 4px;
+    padding: 0.8em 2em;
+    background: var(--bg);
+    transition: 0.2s;
+    font-size: 1.2rem;
+    margin-top: 10px;
+    margin-bottom: 7px;
+    text-align: center;
+    transform: translate(-0.25rem, -0.25rem);
+    background: var(--hover-bg);
+    box-shadow: 0.25rem 0.25rem var(--bg);
+}
+
+.roleButtonLabel{
+
+    --bg: #000;
+    --hover-bg: #9333ea;
+    --hover-text: #000;
+    color: #fff;
+    cursor: pointer;
+    /* border: 1px solid var(--bg); */
+    border-radius: 4px;
+    padding: 0.8em 2em;
+    background: var(--bg);
+    transition: 0.2s;
+    font-size: 1.2rem;
+    margin-top: 10px;
+    margin-bottom: 7px;
+    text-align: center;
+    transform: translate(-0.25rem, -0.25rem);
+    background: var(--hover-bg);
+    box-shadow: 0.25rem 0.25rem var(--bg);
+
+}
+
+
+.agreeTerm{
+    border: 2px solid rebeccapurple;
+    
+    display: inline-block;
+    width: 13px;
+    height: 13px;
+    margin-right: 15px;
+    margin-bottom: 3px;
+    border: 1px solid #999;
+    /* display: none; */
+}
+
+
+.formGroup{
+    cursor: pointer;
+}
+
+
+
+
+
+

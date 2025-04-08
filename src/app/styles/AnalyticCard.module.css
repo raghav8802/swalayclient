@@ -1,0 +1,52 @@
+.Card{
+    /* border: 2px solid black; */
+    width: 100%;
+    padding: 15px;
+    border-radius: 13px;
+    background-color: #000000;
+    /* background-color: #42c5be; */
+    color: #fff;
+    height: 150px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+
+.CardHeader{
+    color: #fff;
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    font-weight: 400;
+    color: #6aff67;
+    font-weight: 500;
+}
+
+
+.CardNumber{
+    color: #fff;
+    font-size: 2.5rem;
+    /* margin-bottom: 15px; */
+    font-weight: 800;
+}
+
+
+.CardIcon{
+    font-size: 3rem;
+    /* color: #42c5be; */
+    /* color: #6aff67;  */
+}
+
+.CardDetails{
+    /* border: 2px solid white; */
+    width: 100%;
+}
+
+
+
+
+
+
+
+
