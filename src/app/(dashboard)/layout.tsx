@@ -29,7 +29,8 @@ export default function RootLayout({
 
       </Head> */}
 
-      <body className={`dashboardBody ${inter.className}`} >
+      <body className={`dashboardBody ${inter.className} dark:bg-gray-900 dark:text-white`} >
+
         <UserProvider>
 
 

@@ -151,7 +151,7 @@ export default function DashboradSection() {
               title="Total Releases"
               value={stats.albums}
               icon="bi bi-arrow-up-right-circle-fill"
-              // iconColor="#3b82f6" // Blue
+              iconColor="#3b82f6" // Blue
             />
             <AnalyticCard
               title="Total Artists"
@@ -163,8 +163,8 @@ export default function DashboradSection() {
             <AnalyticCard
               title="Revenue"
               value={`₹ ${stats.balance}`}
-              icon="bi bi-wallet"
-              // iconColor="#3b82f6" // Blue
+              icon="bi bi-wallet2"
+              iconColor="#3b82f6" // Blue
             />
 
             <AnalyticCard

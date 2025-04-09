@@ -4,52 +4,57 @@ import React from "react";
 
 const TermsOfService = () => {
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">Terms of Service</h1>
-      <p className="text-sm text-gray-600 mb-8">Last updated: Jan 12, 2025</p>
+    <div className="max-w-5xl mx-auto px-6 py-10">
+      <h1 className="text-4xl font-extrabold text-gray-900 mb-8">Terms of Service</h1>
+      <p className="text-sm text-gray-500 mb-10">Last updated: Jan 12, 2025</p>
 
-      <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-4">TABLE OF CONTENTS</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
-          {[...Array(30)].map((_, index) => (
-            <a 
-              key={index} 
-              href={`#section-${index + 1}`}
-              className="hover:text-blue-600"
-            >
-              {index + 1}. {getTableOfContentsTitle(index + 1)}
-            </a>
-          ))}
-        </div>
-      </div>
-
-      <div className="space-y-12">
+      <div className="mb-12">
+      <h2 className="text-2xl font-bold text-gray-800 mb-6">Table of Contents</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
         {[...Array(30)].map((_, index) => (
-          <section key={index} id={`section-${index + 1}`} className="scroll-mt-20">
-            <h2 className="text-xl font-semibold mb-4">
-              {index + 1}. {getTableOfContentsTitle(index + 1)}
-            </h2>
-            <div className="prose max-w-none">
-              {getSectionContent(index + 1)}
-            </div>
-          </section>
+        <a
+          key={index}
+          href={`#section-${index + 1}`}
+          className="text-gray-700 hover:text-blue-500 transition-colors"
+        >
+          {index + 1}. {getTableOfContentsTitle(index + 1)}
+        </a>
         ))}
       </div>
+      </div>
 
-      <div className="mt-12 p-6 bg-gray-50 rounded-lg">
-        <h2 className="text-xl font-semibold mb-4">Contact Us</h2>
-        <p className="text-gray-700">
-          In order to resolve a complaint regarding the Site or to receive further information regarding use of the Site, please contact us at:
-        </p>
-        <div className="mt-4">
-          <p className="font-semibold">SwaLay Digital</p>
-          <p>TC HO, C-4, 4/19, Sector-2</p>
-          <p>Rajender Nagar, Sahibabad</p>
-          <p>Ghaziabad, Uttar Pradesh 201005</p>
-          <p>India</p>
-          <p>Phone: (+91)7303630201</p>
-          <p>Email: swalay.care@talantoncore.in</p>
+      <div className="space-y-16">
+      {[...Array(30)].map((_, index) => (
+        <section
+        key={index}
+        id={`section-${index + 1}`}
+        className="scroll-mt-24"
+        >
+        <h2 className="text-2xl font-semibold text-gray-800 mb-6">
+          {index + 1}. {getTableOfContentsTitle(index + 1)}
+        </h2>
+        <div className="prose prose-gray max-w-none">
+          {getSectionContent(index + 1)}
         </div>
+        </section>
+      ))}
+      </div>
+
+      <div className="mt-16 p-8 bg-gray-100 rounded-lg shadow-md">
+      <h2 className="text-2xl font-bold text-gray-800 mb-6">Contact Us</h2>
+      <p className="text-gray-700 mb-4">
+        In order to resolve a complaint regarding the Site or to receive
+        further information regarding use of the Site, please contact us at:
+      </p>
+      <div className="space-y-2">
+        <p className="font-semibold text-gray-800">SwaLay Digital</p>
+        <p className="text-gray-700">TC HO, C-4, 4/19, Sector-2</p>
+        <p className="text-gray-700">Rajender Nagar, Sahibabad</p>
+        <p className="text-gray-700">Ghaziabad, Uttar Pradesh 201005</p>
+        <p className="text-gray-700">India</p>
+        <p className="text-gray-700">Phone: (+91)7303630201</p>
+        <p className="text-gray-700">Email: swalay.care@talantoncore.in</p>
+      </div>
       </div>
     </div>
   );

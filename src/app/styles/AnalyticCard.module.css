@@ -3,33 +3,35 @@
     width: 100%;
     padding: 15px;
     border-radius: 13px;
-    background-color: #000000;
-    /* background-color: #42c5be; */
+    /* background-color: #000000; */
+    background-color: #fff;
     color: #fff;
     height: 150px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 
 
 
 .CardHeader{
-    color: #fff;
+    color: #363535;
     font-size: 1.2rem;
     margin-bottom: 15px;
     font-weight: 400;
-    color: #6aff67;
+    /* color: #6aff67; */
     font-weight: 500;
 }
 
 
 .CardNumber{
-    color: #fff;
+    color: #040404;
     font-size: 2.5rem;
     /* margin-bottom: 15px; */
     font-weight: 800;
 }
+
 
 
 .CardIcon{

@@ -59,7 +59,7 @@ const ProfileBankDetailsSchema: Schema<IProfileBankDetails> = new Schema({
   gstNo: {
     type: String,
     required: false,
-    // unique: true,
+    unique: true,
     trim: true
   }
 });

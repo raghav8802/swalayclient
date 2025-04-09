@@ -121,12 +121,19 @@ const ArtistPage = ({ params }: { params: { id: string } }) => {
 
         <div className="flex justify-between items-center" >
 
-          <button
+          {/* <button
             className="bg-black text-white px-4 py-3 rounded me-4"
             onClick={() => setIsModalVisible(true)}
           >
             <i className="bi bi-pencil-square"></i> Edit
-          </button>
+          </button> */}
+
+            {/* className="bg-black text-white px-4 py-3 rounded me-4" */}
+            {/* onClick={() => setIsModalVisible(true)} */}
+
+          <Link href={`/artists/edit/${artistId}`} className="bg-black text-white px-4 py-3 rounded me-4">
+            <i className="bi bi-pencil-square"></i> Edit
+            </Link>
 
           <DeleteArtist artistId={decodedArtistId as string } />
 

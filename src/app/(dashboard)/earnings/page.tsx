@@ -53,6 +53,7 @@ const Payments = () => {
     }
   }, [labelId]);
 
+
   const handleSave = async () => {
     // Handle save logic here
     try {
@@ -72,6 +73,7 @@ const Payments = () => {
       toast.error("Internal server");
     }
   };
+
 
   const handleClose = () => {
     setIsModalVisible(false);

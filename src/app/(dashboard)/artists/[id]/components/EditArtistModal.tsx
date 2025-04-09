@@ -93,6 +93,7 @@ const EditArtistModal = ({
     },
   });
   const [defaultIprsNumber, setDefaultIprsNumber] = useState(""); // State to store default IPRS number
+  
   useEffect(() => {
     if (artistData) {
       // Pre-fill the form with the artist data

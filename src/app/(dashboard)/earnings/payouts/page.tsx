@@ -9,8 +9,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 
-import { Button } from "@/components/ui/button";
-import { Modal } from "@/components/Modal";
+
 import toast from "react-hot-toast";
 import UserContext from "@/context/userContext";
 import { apiGet, apiPost } from "@/helpers/axiosRequest";
@@ -35,8 +34,7 @@ const Payments = () => {
       const response = await apiGet(
         `/api/payments/getPayments?labelId=${labelId}`
       );
-      console.log("payments data");
-      console.log(response.data);
+   
 
       if (response.success) {
         setPaymentData(response.data.payments);
@@ -54,8 +52,7 @@ const Payments = () => {
       const response = await apiGet(
         `/api/payments/payout/getPayouts?labelId=${labelId}`
       );
-      // console.log("payout response");
-      // console.log(response);
+  
       if (response.success) {
         setPayout(response.data);
       }

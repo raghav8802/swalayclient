@@ -7,6 +7,11 @@ const nextConfig = {
         hostname: 'swalay-music-files.s3.ap-south-1.amazonaws.com',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'swalay-test-files.s3.ap-south-1.amazonaws.com',
+        pathname: '/**',
+      },
     ],
   },
   

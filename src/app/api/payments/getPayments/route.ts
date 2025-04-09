@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Fetch payments from the database
-    const payments = await Payment.find({ labelId }).sort({ _id: -1 });
+    const payments = await Payment.find({ labelId }).sort({ time: 1 });
 
     // Fetch total balance from the TotalBalance collection
     const totalBalanceRecord = await TotalBalance.findOne({ labelId });

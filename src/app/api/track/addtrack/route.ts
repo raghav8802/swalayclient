@@ -26,8 +26,8 @@ export async function POST(req: NextRequest) {
     // }).sort({ _id: -1 });
 
     // Generate the next ISRC
-    // let newISRC = "INT63" + new Date().getFullYear().toString().slice(-2) + "03001"; // Default value
-    let newISRC = "";
+    let newISRC = "INT63" + new Date().getFullYear().toString().slice(-2) + "03001"; // Default value
+    // let newISRC = "";
     if (lastTrack && lastTrack.isrc) {
       const lastISRC = parseInt(lastTrack.isrc.slice(-5)); // Extract the sequence number
       const nextISRC = lastISRC + 1;

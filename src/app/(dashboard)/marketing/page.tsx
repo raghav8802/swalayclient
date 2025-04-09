@@ -74,7 +74,11 @@ const page = () => {
     }
   }, [labelId]);
 
-  return (    <div className="w-full min-h-screen p-6 bg-white rounded-sm">
+  return (   
+    
+    <div className="w-full min-h-screen p-6 bg-white rounded-sm">
+
+      
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>

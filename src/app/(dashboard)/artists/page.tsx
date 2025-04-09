@@ -19,6 +19,7 @@ import { ArtistDataTable } from "./components/ArtistDataTable";
 import Loading from "@/components/ui/Loading";
 
 function ArtistForm() {
+  
   const context = useContext(UserContext);
   const labelId = context?.user?._id;
 
