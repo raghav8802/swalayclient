@@ -11,6 +11,7 @@ export async function POST(req: NextRequest) {
     const formData = await req.formData();
 
     const albumId = formData.get("albumId")?.toString();
+    
     if (!albumId || !mongoose.Types.ObjectId.isValid(albumId)) {
       return NextResponse.json({
         message: "Invalid albumId",

@@ -5,30 +5,6 @@ import React, { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import Loading from "./ui/Loading";
 
-// Helper functions to validate and extract required parts from URLs
-const validateAndExtract = {
-  spotify: (url: string) => {
-    const regex = /^https:\/\/open\.spotify\.com\/artist\/([\w\d]+)/;
-    const match = url.match(regex);
-    return match ? match[1] : null;
-  },
-  apple: (url: string) => {
-    const regex = /^https:\/\/music\.apple\.com\/.*\/artist\/.*\/(\d+)/;
-    const match = url.match(regex);
-    return match ? match[1] : null;
-  },
-  instagram: (url: string) => {
-    const regex = /^https:\/\/www\.instagram\.com\/([\w\.\_]+)/;
-    const match = url.match(regex);
-    return match ? match[1] : null;
-  },
-  facebook: (url: string) => {
-    const regex = /^https:\/\/www\.facebook\.com\/([\w\.]+)/;
-    const match = url.match(regex);
-    return match ? match[1] : null;
-  },
-};
-
 const ArtistModalForm = ({
   isVisible,
   onClose,
@@ -54,92 +30,48 @@ const ArtistModalForm = ({
     composer: false,
     producer: false,
   });
-  const [errors, setErrors] = useState({
-    spotifyID: "",
-    appleID: "",
-    instagramID: "",
-    facebookID: "",
-  });
 
   const handleInputChange = (e: any) => {
     const { name, value } = e.target;
-    const newFormData = { ...formData, [name]: value };
-    const newErrors = { ...errors };
-
-    switch (name) {
-      case "spotify":
-        const spotifyID = validateAndExtract.spotify(value);
-        newFormData.spotifyID = spotifyID || "";
-        newErrors.spotifyID = spotifyID ? "" : "Enter a valid Spotify URL";
-        break;
-      case "apple":
-        const appleID = validateAndExtract.apple(value);
-        newFormData.appleID = appleID || "";
-        newErrors.appleID = appleID ? "" : "Enter a valid Apple Music URL";
-        break;
-      case "instagram":
-        const instagramID = validateAndExtract.instagram(value);
-        newFormData.instagramID = instagramID || "";
-        newErrors.instagramID = instagramID ? "" : "Enter a valid Instagram URL";
-        break;
-      case "facebook":
-        const facebookID = validateAndExtract.facebook(value);
-        newFormData.facebookID = facebookID || "";
-        newErrors.facebookID = facebookID ? "" : "Enter a valid Facebook URL";
-        break;
-      default:
-        break;
-    }
-
-    setFormData(newFormData);
-    setErrors(newErrors);
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSave = async () => {
     setIsSubmitting(true);
-    if (
-      !errors.spotifyID &&
-      !errors.appleID &&
-      !errors.instagramID &&
-      !errors.facebookID
-    ) {
-      const data = {
-        labelId: labelId,
-        artistName: formData.artistName,
-        iprs: formData.isIPRSMember,
-        iprsNumber: formData.iprsNumber,
-        facebook: formData.facebookID,
-        appleMusic: formData.appleID,
-        spotify: formData.spotifyID,
-        instagram: formData.instagramID,
-        isSinger: artistType.singer,
-        isLyricist: artistType.lyricist,
-        isComposer: artistType.composer,
-        isProducer: artistType.producer,
-      };
-      const response = await apiPost("/api/artist/addArtist", data);
-      if (response.success) {
-        setFormData({
-          artistName: "",
-          spotifyID: "",
-          appleID: "",
-          instagramID: "",
-          facebookID: "",
-          isIPRSMember: false,
-          iprsNumber: "",
-        });
-        setArtistType({
-          singer: false,
-          lyricist: false,
-          composer: false,
-          producer: false,
-        });
+    const data = {
+      labelId: labelId,
+      artistName: formData.artistName,
+      iprs: formData.isIPRSMember,
+      iprsNumber: formData.iprsNumber,
+      facebook: formData.facebookID,
+      appleMusic: formData.appleID,
+      spotify: formData.spotifyID,
+      instagram: formData.instagramID,
+      isSinger: artistType.singer,
+      isLyricist: artistType.lyricist,
+      isComposer: artistType.composer,
+      isProducer: artistType.producer,
+    };
+    const response = await apiPost("/api/artist/addArtist", data);
+    if (response.success) {
+      setFormData({
+        artistName: "",
+        spotifyID: "",
+        appleID: "",
+        instagramID: "",
+        facebookID: "",
+        isIPRSMember: false,
+        iprsNumber: "",
+      });
+      setArtistType({
+        singer: false,
+        lyricist: false,
+        composer: false,
+        producer: false,
+      });
 
-        onClose();
-        toast.success("New artist added successfully");
-      }
-    } else {
-      toast.error("Please fix the errors in the form");
+      onClose();
+      toast.success("New artist added successfully");
     }
     setIsSubmitting(false);
   };
@@ -188,13 +120,12 @@ const ArtistModalForm = ({
           <input
             type="url"
             id="spotify"
-            name="spotify"
+            name="spotifyID"
             value={formData.spotifyID}
             onChange={handleInputChange}
-            className={`form-control ${errors.spotifyID ? "error" : ""}`}
+            className="form-control"
             placeholder="Spotify url of artist"
           />
-          {errors.spotifyID && <p className="text-red-600">{errors.spotifyID}</p>}
         </div>
 
         {/* Apple Music */}
@@ -205,13 +136,12 @@ const ArtistModalForm = ({
           <input
             type="url"
             id="apple"
-            name="apple"
+            name="appleID"
             value={formData.appleID}
             onChange={handleInputChange}
-            className={`form-control ${errors.appleID ? "error" : ""}`}
+            className="form-control"
             placeholder="Apple url of artist"
           />
-          {errors.appleID && <p className="text-red-600">{errors.appleID}</p>}
         </div>
 
         {/* Instagram */}
@@ -222,13 +152,12 @@ const ArtistModalForm = ({
           <input
             type="url"
             id="instagram"
-            name="instagram"
+            name="instagramID"
             value={formData.instagramID}
             onChange={handleInputChange}
-            className={`form-control ${errors.instagramID ? "error" : ""}`}
+            className="form-control"
             placeholder="Instagram url of artist"
           />
-          {errors.instagramID && <p className="text-red-600">{errors.instagramID}</p>}
         </div>
 
         {/* Facebook */}
@@ -239,13 +168,12 @@ const ArtistModalForm = ({
           <input
             type="url"
             id="facebook"
-            name="facebook"
+            name="facebookID"
             value={formData.facebookID}
             onChange={handleInputChange}
-            className={`form-control ${errors.facebookID ? "error" : ""}`}
+            className="form-control"
             placeholder="Facebook url of artist"
           />
-          {errors.facebookID && <p className="text-red-600">{errors.facebookID}</p>}
         </div>
       </div>
 

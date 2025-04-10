@@ -63,7 +63,6 @@ const TrackDetails: React.FC<TrackListProps> = ({
       );
 
       if (response.success) {
-
         setTrackDetails(response.data);
         const songName = response.data.songName;
         const audioUrl = `${process.env.NEXT_PUBLIC_AWS_S3_FOLDER_PATH}albums/07c1a${response.data.albumId}ba3/tracks/${response.data.audioFile}`;
@@ -160,7 +159,7 @@ const TrackDetails: React.FC<TrackListProps> = ({
                 download={trackDetails.audioFile as string}
                 style={{ display: "none" }}
                 target="_blank"
-                  rel="noopener noreferrer"
+                rel="noopener noreferrer"
               >
                 Download
               </a>
@@ -212,7 +211,7 @@ const TrackDetails: React.FC<TrackListProps> = ({
               )}`}
             >
               Add Lyrics <i className="bi bi-pen-fill"></i>
-            </Link>          
+            </Link>
           </div>
         )}
 
@@ -224,37 +223,55 @@ const TrackDetails: React.FC<TrackListProps> = ({
             </TabsList>
             <TabsContent value="track">
               <div className={`mt-2  ${Style.trackInfoListContainer}`}>
-                <ul className="p-3">
-                  <li className={`mb-2 ${Style.albumInfoItem}`}>
-                    <span className="text-sm font-medium text-gray-900 truncate dark:text-white">
-                      ISRC:
-                    </span>{" "}
-                    {trackDetails && trackDetails.isrc}
-                  </li>
-                  <li className={`mb-2 ${Style.albumInfoItem}`}>
-                    <span className="text-sm font-medium text-gray-900 truncate dark:text-white">
-                      Category:
-                    </span>{" "}
-                    {trackDetails && trackDetails.category}
-                  </li>
-                  <li className={`mb-2 ${Style.albumInfoItem}`}>
-                    <span className="text-sm font-medium text-gray-900 truncate dark:text-white">
-                      TrackType:
-                    </span>{" "}
-                    {trackDetails && trackDetails.trackType}
-                  </li>
-                  <li className={`mb-2 ${Style.albumInfoItem}`}>
-                    <span className="text-sm font-medium text-gray-900 truncate dark:text-white">
-                      Version:
-                    </span>{" "}
-                    {trackDetails && trackDetails.version}
+                <ul className="p-6 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-xl shadow-md space-y-4">
+                  {/* ISRC */}
+                  <li className="flex flex-col">
+                    <span className="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">
+                      ISRC
+                    </span>
+                    <div className="text-gray-800 dark:text-gray-200 font-medium">
+                      {trackDetails && trackDetails.isrc}
+                    </div>
                   </li>
 
-                  <li className={`mb-2 ${Style.albumInfoItem}`}>
-                    <span className="text-sm font-medium text-gray-900 truncate dark:text-white">
-                      Caller Tune:
-                    </span>{" "}
-                    {trackDetails && trackDetails.crbt}
+                  {/* Category */}
+                  <li className="flex flex-col">
+                    <span className="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">
+                      Category
+                    </span>
+                    <div className="text-gray-800 dark:text-gray-200 font-medium">
+                      {trackDetails && trackDetails.category}
+                    </div>
+                  </li>
+
+                  {/* TrackType */}
+                  <li className="flex flex-col">
+                    <span className="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">
+                      Track Type
+                    </span>
+                    <div className="text-gray-800 dark:text-gray-200 font-medium">
+                      {trackDetails && trackDetails.trackType}
+                    </div>
+                  </li>
+
+                  {/* Version */}
+                  <li className="flex flex-col">
+                    <span className="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">
+                      Version
+                    </span>
+                    <div className="text-gray-800 dark:text-gray-200 font-medium">
+                      {trackDetails && trackDetails.version}
+                    </div>
+                  </li>
+
+                  {/* Caller Tune */}
+                  <li className="flex flex-col">
+                    <span className="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">
+                      Caller Tune
+                    </span>
+                    <div className="text-gray-800 dark:text-gray-200 font-medium">
+                      {trackDetails && trackDetails.crbt}
+                    </div>
                   </li>
                 </ul>
               </div>
@@ -262,74 +279,126 @@ const TrackDetails: React.FC<TrackListProps> = ({
 
             <TabsContent value="publishiling">
               <div className={`mt-2  ${Style.trackInfoListContainer}`}>
-                <ul className="p-3">
-                  <li className={`mb-2 ${Style.albumInfoItem}`}>
-                   
-                    {trackDetails?.primarySinger && (
-                      <Link href={`/artist/${trackDetails.primarySinger._id}`}>
-                        {trackDetails.primarySinger.artistName}
-                      </Link>
-                    )}
-                  </li>
-                  <li className={`mb-2 ${Style.albumInfoItem}`}>
-                    <span className="text-sm font-medium text-gray-900 truncate dark:text-white">
-                      Singer:{" "}
-                    </span>
-                    {/* {trackDetails?.singers?.map((singer) => (
-                      <span key={singer._id}>
-                        <Link href={`/artist/${singer._id}`}>
-                          {singer.artistName}
+                <ul className="p-6 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-xl shadow-md space-y-4">
+                  
+                  {/* Primary Singer with special highlight */}
+                  {trackDetails?.primarySinger && (
+                    <li className="flex flex-col">
+                      {/* <span className="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">Artist</span> */}
+                      <div className="flex items-center">
+                        <Link
+                          href={`/artists/${btoa(
+                            trackDetails.primarySinger._id
+                          )}`}
+                          className="text-lg font-semibold text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 transition duration-200"
+                        >
+                          {trackDetails.primarySinger.artistName}
                         </Link>
-                      </span>
-                    ))} */}
+                      </div>
+                    </li>
+                  )}
 
-                    {trackDetails?.singers?.map((singer, index) => (
-                      <span key={singer._id}>
-                        <Link href={`/artist/${singer._id}`}>
-                          {singer.artistName}
-                        </Link>
-                        {index < (trackDetails.singers?.length ?? 0) - 1 &&
-                          ", "}
-                      </span>
-                    ))}
+                  {/* Singers */}
+                  <li className="flex flex-col">
+                    <span className="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">
+                      Singer
+                    </span>
+                    <div className="flex flex-wrap items-center">
+                      {trackDetails?.singers?.map((singer, index) => (
+                        <span
+                          key={singer._id}
+                          className="inline-flex items-center"
+                        >
+                          <Link
+                            href={`/artists/${btoa(singer._id)}`}
+                            className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition duration-200"
+                          >
+                            {singer.artistName}
+                          </Link>
+                          {index < (trackDetails.singers?.length ?? 0) - 1 && (
+                            <span className="mx-1 text-gray-400">&middot;</span>
+                          )}
+                        </span>
+                      ))}
+                    </div>
                   </li>
-                  <li className={`mb-2 ${Style.albumInfoItem}`}>
-                    <span className="text-sm font-medium text-gray-900 truncate dark:text-white">
-                      Lyricist:
-                    </span>{" "}
-                    {trackDetails?.lyricists?.map((lyricist, index) => (
-                      <span key={lyricist._id}>
-                        <Link href={`/artist/${lyricist._id}`}>
-                          {lyricist.artistName}
-                        </Link>
-                        {index < (trackDetails.lyricists?.length ?? 0) - 1 &&
-                          ", "}
-                      </span>
-                    ))}
+
+                  {/* Lyricists */}
+                  <li className="flex flex-col">
+                    <span className="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">
+                      Lyricist
+                    </span>
+                    <div className="flex flex-wrap items-center">
+                      {trackDetails?.lyricists?.map((lyricist, index) => (
+                        <span
+                          key={lyricist._id}
+                          className="inline-flex items-center"
+                        >
+                          <Link
+                            href={`/artist/${lyricist._id}`}
+                            className="text-teal-600 hover:text-teal-800 dark:text-teal-400 dark:hover:text-teal-300 transition duration-200"
+                          >
+                            {lyricist.artistName}
+                          </Link>
+                          {index <
+                            (trackDetails.lyricists?.length ?? 0) - 1 && (
+                            <span className="mx-1 text-gray-400">&middot;</span>
+                          )}
+                        </span>
+                      ))}
+                    </div>
                   </li>
-                  <li className={`mb-2 ${Style.albumInfoItem}`}>
-                    <span className="text-sm font-medium text-gray-900 truncate dark:text-white">
-                      Composer:
-                    </span>{" "}
-                    {trackDetails?.composers?.map((composer) => (
-                      <span key={composer._id}>
-                        <Link href={`/artist/${composer._id}`}>
-                          {composer.artistName}
-                        </Link>
-                      </span>
-                    ))}
+
+                  {/* Composers */}
+                  <li className="flex flex-col">
+                    <span className="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">
+                      Composer
+                    </span>
+                    <div className="flex flex-wrap items-center">
+                      {trackDetails?.composers?.map((composer, index) => (
+                        <span
+                          key={composer._id}
+                          className="inline-flex items-center"
+                        >
+                          <Link
+                            href={`/artists/${btoa(composer._id)}`}
+                            className="text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 transition duration-200"
+                          >
+                            {composer.artistName}
+                          </Link>
+                          {index <
+                            (trackDetails.composers?.length ?? 0) - 1 && (
+                            <span className="mx-1 text-gray-400">&middot;</span>
+                          )}
+                        </span>
+                      ))}
+                    </div>
                   </li>
-                  <li className={`mb-2 ${Style.albumInfoItem}`}>
-                    <span className="text-sm font-medium text-gray-900 truncate dark:text-white">
-                      Music Producer:
-                    </span>{" "}
-                    {trackDetails?.producers?.map((producer) => (
-                      <span key={producer._id}>
-                        <Link href={`/artist/${producer._id}`}>
-                          {producer.artistName}
-                        </Link>
-                      </span>
-                    ))}
+
+                  {/* Music Producers */}
+                  <li className="flex flex-col">
+                    <span className="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">
+                      Music Producer
+                    </span>
+                    <div className="flex flex-wrap items-center">
+                      {trackDetails?.producers?.map((producer, index) => (
+                        <span
+                          key={producer._id}
+                          className="inline-flex items-center"
+                        >
+                          <Link
+                            href={`/artists/${btoa(producer._id)}`}
+                            className="text-amber-600 hover:text-amber-800 dark:text-amber-400 dark:hover:text-amber-300 transition duration-200"
+                          >
+                            {producer.artistName}
+                          </Link>
+                          {index <
+                            (trackDetails.producers?.length ?? 0) - 1 && (
+                            <span className="mx-1 text-gray-400">&middot;</span>
+                          )}
+                        </span>
+                      ))}
+                    </div>
                   </li>
                 </ul>
               </div>

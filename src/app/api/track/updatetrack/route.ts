@@ -9,7 +9,17 @@ export async function POST(req: NextRequest) {
     await connect();
     const formData = await req.formData();
 
+    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"); // Log the form data
+    console.log("Form data received:"); // Log the form data
+    console.log("Form data keys:", Array.from(formData.keys())); // Log the keys in the form data
+    console.log("Form data values:"); // Log the values in the form data
+    formData.forEach((value, key) => {
+      console.log(`${key}: ${value}`); // Log each key-value pair
+    });
+
     const trackId = formData.get("trackId")?.toString();
+  
+
     if (!trackId || !mongoose.Types.ObjectId.isValid(trackId)) {
       return NextResponse.json({
         message: "Invalid trackId",
@@ -17,6 +27,16 @@ export async function POST(req: NextRequest) {
         status: 400,
       });
     }
+
+    const albumId = formData.get("albumId")?.toString();
+    if (!albumId || !mongoose.Types.ObjectId.isValid(trackId)) {
+      return NextResponse.json({
+        message: "Invalid trackId",
+        success: false,
+        status: 400,
+      });
+    }
+
 
     // Initialize the updateData object with all potential fields
     const updateData: {
@@ -42,7 +62,7 @@ export async function POST(req: NextRequest) {
     updateData.composers = JSON.parse(formData.get("composers")?.toString() ?? "[]");
     updateData.lyricists = JSON.parse(formData.get("lyricists")?.toString() ?? "[]");
     updateData.producers = JSON.parse(formData.get("producers")?.toString() ?? "[]");
-    updateData.isrc = formData.get("isrc")?.toString() ?? "";
+    // updateData.isrc = formData.get("isrc")?.toString() ?? "";
     updateData.duration = formData.get("duration")?.toString() ?? "";
     updateData.crbt = formData.get("crbt")?.toString() ?? "";
     updateData.category = formData.get("category")?.toString() ?? "";
@@ -53,6 +73,11 @@ export async function POST(req: NextRequest) {
 
     // Handle audio file update
     if (audioFile) {
+      console.log("Audio file received:", audioFile); // Log the audio file details
+      console.log("Audio file name:", audioFile.name); // Log the audio file name
+      console.log("Audio file size:", audioFile.size); // Log the audio file size
+      console.log("Audio file type:", audioFile.type); // Log the audio file type
+
       const songName = (formData.get("songName") as string).trim();
       const songNameNoSpace = songName.replace(/ /g, "-");
       const audioBuffer = Buffer.from(await audioFile.arrayBuffer());
@@ -62,8 +87,10 @@ export async function POST(req: NextRequest) {
       const uploadResult = await uploadTrackToS3({
         file: audioBuffer,
         fileName: audioFileName,
-        folderName: trackId,
+        folderName: albumId,
       });
+
+      console.log("Upload result:", uploadResult); // Log the upload result
 
       if (!uploadResult.status) {
         return NextResponse.json({

@@ -49,6 +49,10 @@ const TrackList: React.FC<TrackListProps> = ({ albumId, onTrackClick }) => {
         const response = await apiGet(
           `/api/track/getTracks?albumId=${albumId}`
         );
+
+        console.log("=-=-=-=-=-==-:"); // Log the response
+        console.log("Tracks response:", response); // Log the response
+
         if (response.data) {
           const reversedTracks = response.data.reverse(); // Reverse the tracks array
           setTracks(reversedTracks);

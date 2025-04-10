@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent } from "react";
+import React, { useState, ChangeEvent, FocusEvent } from "react";
 import toast from "react-hot-toast";
 
 function CallerTune() {
@@ -10,13 +10,15 @@ function CallerTune() {
   };
 
   const handleTimeChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setCallerTuneTime(e.target.value); // Update the value without validation
+  };
+
+  const handleTimeBlur = (e: FocusEvent<HTMLInputElement>) => {
     const value = e.target.value;
 
     if (!validateTimeFormat(value)) {
       toast.error("Invalid format! Use HH:MM:SS");
     }
-
-    setCallerTuneTime(value);
   };
 
   return (
@@ -29,7 +31,8 @@ function CallerTune() {
         type="text"
         placeholder="HH:MM:SS"
         value={callerTuneTime}
-        onChange={handleTimeChange}
+        onChange={handleTimeChange} // Update value on change
+        onBlur={handleTimeBlur} // Validate on blur
         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         maxLength={8}
         required

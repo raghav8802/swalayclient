@@ -189,14 +189,12 @@ const albums = ({ params }: { params: { albumid: string } }) => {
             </li>
             <li className={`mb-2 ${Style.albumInfoItem}`}>
               <span className="text-sm font-medium text-gray-900 truncate dark:text-white">
-                Language:{" "}
-              </span>
+                Language: </span>
               {albumDetails?.language}
             </li>
             <li className={`mb-2 ${Style.albumInfoItem}`}>
               <span className="text-sm font-medium text-gray-900 truncate dark:text-white">
-                UPC:{" "}
-              </span>
+                UPC: </span>
               {albumDetails?.upc}
             </li>
             <li className={`mb-2 ${Style.albumInfoItem}`}>

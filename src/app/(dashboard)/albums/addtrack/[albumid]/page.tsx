@@ -180,10 +180,10 @@ export default function NewTrack({ params }: { params: { albumid: string } }) {
     const loadAudioMetadata = new Promise<void>((resolve, reject) => {
       audio.onloadedmetadata = () => {
         const audioDuration = audio.duration;
-        console.log("audio.duration");
-        console.log(audioDuration);
-        console.log(" | ");
-        console.log(audioDuration.toString());
+        // console.log("audio.duration");
+        // console.log(audioDuration);
+        // console.log(" | ");
+        // console.log(audioDuration.toString());
         formData.append("duration", audioDuration.toString());
 
         const callerTuneDuration = convertToSeconds(callerTuneTime);
@@ -208,10 +208,11 @@ export default function NewTrack({ params }: { params: { albumid: string } }) {
     try {
       await loadAudioMetadata; // Wait for metadata to be loaded
 
-      const data: Record<string, any> = {};
-      formData.forEach((value, key) => {
-        data[key] = value;
-      });
+      // const data: Record<string, any> = {};
+
+      // formData.forEach((value, key) => {
+      //   data[key] = value;
+      // });
 
 
       if (selectedSingers.length === 0) {
@@ -249,7 +250,8 @@ export default function NewTrack({ params }: { params: { albumid: string } }) {
       );
 
       setIsUploading(true);
-      const response = await apiFormData("/api/track/addtrack", formData);
+      const response = await apiFormData("/api/track/addtrack", 
+        formData);
       
       console.log("add track api response :");
       console.log(response);
@@ -302,8 +304,7 @@ export default function NewTrack({ params }: { params: { albumid: string } }) {
                 {/* {albumId && (<input type="hidden" name="albumid" value={albumId} />)} */}
                 <div>
                   <label className="block text-sm font-medium mb-2 text-gray-700">
-                    Song Title{" "}
-                      
+                    Song Title
                   </label>
                   <input
                     name="songName"
@@ -323,9 +324,7 @@ export default function NewTrack({ params }: { params: { albumid: string } }) {
                   <div className="col-span-6 space-y-6">
                     <div>
                       <label className="block text-sm font-medium mb-2 text-gray-700">
-                        Audio File (Max 128M){" "}
-                        
-                      </label>
+                        Audio File (Max 128M)</label>
                       <input
                         name="audioFile"
                         type="file"
