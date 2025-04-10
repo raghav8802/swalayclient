@@ -36,6 +36,7 @@ export default function NewTrack({ params }: { params: { albumid: string } }) {
   const [error, setError] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false); // for new artist modal control
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const context = useContext(UserContext);
   const labelId = context?.user?._id;
@@ -214,21 +215,20 @@ export default function NewTrack({ params }: { params: { albumid: string } }) {
       //   data[key] = value;
       // });
 
-
       if (selectedSingers.length === 0) {
-        toast.error("Please select at least one singer.")
+        toast.error("Please select at least one singer.");
         return;
       }
       if (selectedComposers.length === 0) {
-        toast.error("Please select at least one composer.")
+        toast.error("Please select at least one composer.");
         return;
       }
       if (selectedLyricists.length === 0) {
-        toast.error("Please select at least one lyricist.")
+        toast.error("Please select at least one lyricist.");
         return;
       }
       if (selectedProducers.length === 0) {
-        toast.error("Please select at least one Producer.")
+        toast.error("Please select at least one Producer.");
         return;
       }
 
@@ -250,12 +250,10 @@ export default function NewTrack({ params }: { params: { albumid: string } }) {
       );
 
       setIsUploading(true);
-      const response = await apiFormData("/api/track/addtrack", 
-        formData);
-      
+      const response = await apiFormData("/api/track/addtrack", formData);
+
       console.log("add track api response :");
       console.log(response);
-      
 
       if (response.success) {
         toast.success("Song uploaded successfully!");
@@ -268,6 +266,13 @@ export default function NewTrack({ params }: { params: { albumid: string } }) {
       setIsUploading(false);
       toast.error("Something went wrong while uploading the song.");
       console.error("Error:", error);
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
     }
   };
 
@@ -320,30 +325,81 @@ export default function NewTrack({ params }: { params: { albumid: string } }) {
                   )}
                 </div>
 
-                <div className="grid grid-cols-12 gap-6 ">
-                  <div className="col-span-6 space-y-6">
-                    <div>
-                      <label className="block text-sm font-medium mb-2 text-gray-700">
-                        Audio File (Max 128M)</label>
-                      <input
-                        name="audioFile"
-                        type="file"
-                        accept="audio/mpeg, audio/wav"
-                        className="w-full py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        required
-                      />
-                      {errors.audioFile && (
-                        <p className="text-red-500 text-sm mt-1">
-                          {errors.audioFile._errors[0]}
-                        </p>
-                      )}
+                <div>
+                  <label className="block text-sm font-medium mb-2 text-gray-700">
+                    Audio File (Max 128M)
+                  </label>
+                  <div className="relative">
+                    <div className="flex items-center justify-center w-full">
+                      <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                          <svg
+                            className="w-8 h-8 mb-4 text-gray-500"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 20 16"
+                          >
+                            <path
+                              stroke="currentColor"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                            />
+                          </svg>
+                          <p className="mb-2 text-sm text-gray-500">
+                            <span className="font-semibold">
+                              Click to upload
+                            </span>{" "}
+                            or drag and drop
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            MP3 or WAV (MAX. 128MB)
+                          </p>
+                        </div>
+                        <input
+                          name="audioFile"
+                          type="file"
+                          accept=".mp3, .wav"
+                          className="hidden"
+                          onChange={handleFileChange}
+                          required
+                        />
+                      </label>
                     </div>
+                    {selectedFile && (
+                      <div className="mt-2 flex items-center justify-between bg-blue-50 p-2 rounded border border-blue-200">
+                        <div className="flex items-center">
+                          <svg
+                            className="w-5 h-5 text-blue-500 mr-2"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 20 16"
+                          >
+                            <path
+                              stroke="currentColor"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                            />
+                          </svg>
+                          <span className="text-sm text-blue-600 font-medium">
+                            {selectedFile.name}
+                          </span>
+                        </div>
+                        <span className="text-xs text-blue-500 font-medium">
+                          New file
+                        </span>
+                      </div>
+                    )}
                   </div>
-                  <div className="col-span-6 space-y-6" >
-                    <div>
-                      <CallerTune />
-                    </div>
-                  </div>
+                </div>
+
+                <div>
+                  <CallerTune />
                 </div>
 
                 <div>
@@ -383,7 +439,6 @@ export default function NewTrack({ params }: { params: { albumid: string } }) {
                 <div>
                   <label className="block text-sm font-medium mb-2 text-gray-700">
                     Singers{" "}
-                     
                   </label>
                   <MultiSelect
                     hasSelectAll={false}
@@ -401,10 +456,7 @@ export default function NewTrack({ params }: { params: { albumid: string } }) {
                 </div>
 
                 <div>
-                  <h3>
-                    Lyricists{" "}
-                      
-                  </h3>
+                  <h3>Lyricists </h3>
                   <MultiSelect
                     hasSelectAll={false}
                     options={formatOptions(artistData.lyricist)}
@@ -422,10 +474,7 @@ export default function NewTrack({ params }: { params: { albumid: string } }) {
                 </div>
 
                 <div>
-                  <h3>
-                    Composers{" "}
-                      
-                  </h3>
+                  <h3>Composers </h3>
                   <MultiSelect
                     hasSelectAll={false}
                     options={formatOptions(artistData.composer)}
@@ -442,10 +491,7 @@ export default function NewTrack({ params }: { params: { albumid: string } }) {
                 </div>
 
                 <div>
-                  <h3>
-                    Producers{" "}
-                      
-                  </h3>
+                  <h3>Producers </h3>
                   <MultiSelect
                     hasSelectAll={false}
                     options={formatOptions(artistData.producer)}
@@ -466,7 +512,6 @@ export default function NewTrack({ params }: { params: { albumid: string } }) {
                 <div className="flex flex-col">
                   <label className="block text-sm font-medium mb-2 text-gray-700">
                     Track Category{" "}
-                      
                   </label>
                   <select
                     name="category"
@@ -492,7 +537,6 @@ export default function NewTrack({ params }: { params: { albumid: string } }) {
                 <div>
                   <label className="block text-sm font-medium mb-2 text-gray-700">
                     Track Type{" "}
-                      
                   </label>
                   <select
                     name="trackType"
@@ -512,7 +556,6 @@ export default function NewTrack({ params }: { params: { albumid: string } }) {
                 <div>
                   <label className="block text-sm font-medium mb-2 text-gray-700">
                     Version{" "}
-                      
                   </label>
                   <select
                     name="version"
@@ -531,7 +574,7 @@ export default function NewTrack({ params }: { params: { albumid: string } }) {
 
                 <button
                   type="submit"
-                  className="px-6 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className="w-full px-6 py-3 mt-5 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
                   Submit
                 </button>

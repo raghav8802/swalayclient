@@ -15,6 +15,7 @@ import UserContext from "@/context/userContext";
 import { MultiSelect } from "react-multi-select-component";
 import { useRouter } from "next/navigation";
 import Uploading from "@/components/Uploading";
+import Loading from "@/components/ui/Loading";
 
 type ArtistTypeOption = {
   label: string;
@@ -318,7 +319,7 @@ export default function UpdateTrack({
   }
 
   if (!track) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   return (
@@ -606,7 +607,7 @@ export default function UpdateTrack({
                 <div className="mt-6 flex justify-end">
                   <button
                     type="submit"
-                    className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                    className="w-full px-6 py-3 mt-5 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                   >
                     Update Track
                   </button>
