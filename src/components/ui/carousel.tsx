@@ -5,6 +5,7 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons"
 import useEmblaCarousel, {
   type UseEmblaCarouselType,
 } from "embla-carousel-react"
+import PropTypes from "prop-types"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -23,7 +24,6 @@ type CarouselProps = {
 
 type CarouselContextProps = {
   carouselRef: ReturnType<typeof useEmblaCarousel>[0]
-  api: ReturnType<typeof useEmblaCarousel>[1]
   scrollPrev: () => void
   scrollNext: () => void
   canScrollPrev: boolean
@@ -58,7 +58,7 @@ const Carousel = React.forwardRef<
     },
     ref
   ) => {
-    const [carouselRef, api] = useEmblaCarousel(
+    const [carouselRef, carouselApi] = useEmblaCarousel(
       {
         ...opts,
         axis: orientation === "horizontal" ? "x" : "y",
@@ -78,12 +78,12 @@ const Carousel = React.forwardRef<
     }, [])
 
     const scrollPrev = React.useCallback(() => {
-      api?.scrollPrev()
-    }, [api])
+      carouselApi?.scrollPrev()
+    }, [carouselApi])
 
     const scrollNext = React.useCallback(() => {
-      api?.scrollNext()
-    }, [api])
+      carouselApi?.scrollNext()
+    }, [carouselApi])
 
     const handleKeyDown = React.useCallback(
       (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -99,32 +99,31 @@ const Carousel = React.forwardRef<
     )
 
     React.useEffect(() => {
-      if (!api || !setApi) {
+      if (!carouselApi || !setApi) {
         return
       }
 
-      setApi(api)
-    }, [api, setApi])
+      setApi(carouselApi)
+    }, [carouselApi, setApi])
 
     React.useEffect(() => {
-      if (!api) {
+      if (!carouselApi) {
         return
       }
 
-      onSelect(api)
-      api.on("reInit", onSelect)
-      api.on("select", onSelect)
+      onSelect(carouselApi)
+      carouselApi.on("reInit", onSelect)
+      carouselApi.on("select", onSelect)
 
       return () => {
-        api?.off("select", onSelect)
+        carouselApi?.off("select", onSelect)
       }
-    }, [api, onSelect])
+    }, [carouselApi, onSelect])
 
     return (
       <CarouselContext.Provider
         value={{
           carouselRef,
-          api: api,
           opts,
           orientation:
             orientation || (opts?.axis === "y" ? "vertical" : "horizontal"),
@@ -149,6 +148,14 @@ const Carousel = React.forwardRef<
   }
 )
 Carousel.displayName = "Carousel"
+Carousel.propTypes = {
+  orientation: PropTypes.oneOf(["horizontal", "vertical"]),
+  opts: PropTypes.object,
+  setApi: PropTypes.func,
+  plugins: PropTypes.array,
+  className: PropTypes.string,
+  children: PropTypes.node,
+}
 
 const CarouselContent = React.forwardRef<
   HTMLDivElement,
@@ -171,6 +178,9 @@ const CarouselContent = React.forwardRef<
   )
 })
 CarouselContent.displayName = "CarouselContent"
+CarouselContent.propTypes = {
+  className: PropTypes.string,
+}
 
 const CarouselItem = React.forwardRef<
   HTMLDivElement,
@@ -193,6 +203,9 @@ const CarouselItem = React.forwardRef<
   )
 })
 CarouselItem.displayName = "CarouselItem"
+CarouselItem.propTypes = {
+  className: PropTypes.string,
+}
 
 const CarouselPrevious = React.forwardRef<
   HTMLButtonElement,
@@ -222,6 +235,11 @@ const CarouselPrevious = React.forwardRef<
   )
 })
 CarouselPrevious.displayName = "CarouselPrevious"
+CarouselPrevious.propTypes = {
+  className: PropTypes.string,
+  variant: PropTypes.oneOf(["default", "destructive", "outline", "secondary", "ghost", "link"]),
+  size: PropTypes.oneOf(["default", "sm", "lg", "icon"]),
+}
 
 const CarouselNext = React.forwardRef<
   HTMLButtonElement,
@@ -251,6 +269,11 @@ const CarouselNext = React.forwardRef<
   )
 })
 CarouselNext.displayName = "CarouselNext"
+CarouselNext.propTypes = {
+  className: PropTypes.string,
+  variant: PropTypes.oneOf(["default", "destructive", "outline", "secondary", "ghost", "link"]),
+  size: PropTypes.oneOf(["default", "sm", "lg", "icon"]),
+}
 
 export {
   type CarouselApi,

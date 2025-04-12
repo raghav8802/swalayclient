@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Style from "../../../../../styles/ViewAlbums.module.css";
 import { apiGet } from "@/helpers/axiosRequest";
 import toast from "react-hot-toast";
@@ -26,7 +26,6 @@ interface Track {
 
 interface TrackListProps {
   albumId: string;
-  // esnlit-disable-next-line no-unused-vars
   onTrackClick: (trackId: string) => void;
 }
 
@@ -43,6 +42,11 @@ const TrackList: React.FC<TrackListProps> = ({ albumId, onTrackClick }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [activeTrackId, setActiveTrackId] = useState<string | null>(null);
 
+  const handleTrackClick = useCallback((trackId: string) => {
+    setActiveTrackId(trackId);
+    onTrackClick(trackId);
+  }, [onTrackClick]);
+
   // Fetch all tracks by albumId
   useEffect(() => {
     const fetchTracks = async () => {
@@ -50,8 +54,6 @@ const TrackList: React.FC<TrackListProps> = ({ albumId, onTrackClick }) => {
         const response = await apiGet(
           `/api/track/getTracks?albumId=${albumId}`
         );
-
-
 
         if (response.data) {
           const reversedTracks = response.data.reverse(); // Reverse the tracks array
@@ -70,14 +72,7 @@ const TrackList: React.FC<TrackListProps> = ({ albumId, onTrackClick }) => {
     };
 
     fetchTracks();
-  }, [albumId]);
-
-  // Handle track item click
-  // eslint-disable-next-line no-unused-vars
-  const handleTrackClick = (trackId: string) => {
-    setActiveTrackId(trackId);
-    onTrackClick(trackId);
-  };
+  }, [albumId, onTrackClick]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -87,8 +82,6 @@ const TrackList: React.FC<TrackListProps> = ({ albumId, onTrackClick }) => {
     <ul className={`mt-3 ${Style.trackList}`}>
       {tracks.length > 0 ? (
         tracks.map((track, index) => {
-
-          
           return (
             <li
               key={track._id}
@@ -146,13 +139,9 @@ const TrackList: React.FC<TrackListProps> = ({ albumId, onTrackClick }) => {
                   <div className={Style.controllersItem}>
                     <span>
                       <i className={`bi bi-stopwatch ${Style.stopwatchIcon}`}></i>{" "}
-                      {formatDuration(track.duration)} {/* Display formatted duration */}
+                      {formatDuration(track.duration)}
                     </span>
                   </div>
-
-                  {/* <div className="flex justify-end">
-                    <i className="bi bi-play-fill"></i>
-                  </div> */}
                 </div>
               </div>
             </li>

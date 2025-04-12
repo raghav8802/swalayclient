@@ -1,18 +1,14 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/* eslint-disable no-unused-vars */
 export enum AlbumStatus {
-  //eslint-disable @typescript-eslint/no-unused-vars
   Draft = 0, // on information submit
-  //eslint-disable @typescript-eslint/no-unused-vars
   Processing = 1, // on final submit
-  //eslint-disable @typescript-eslint/no-unused-vars
   Approved = 2,
-  //eslint-disable @typescript-eslint/no-unused-vars
   Rejected = 3,
-  //eslint-disable @typescript-eslint/no-unused-vars
   Live = 4,
 }
+/* eslint-enable no-unused-vars */
 
 // Define the interface for the Album document
 interface IAlbum extends Document {

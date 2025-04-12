@@ -1,16 +1,13 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/* eslint-disable no-unused-vars */
 export enum PaymentStatus {
-  //eslint-disable @typescript-eslint/no-unused-vars
   PENDING = "PENDING",
-  //eslint-disable @typescript-eslint/no-unused-vars
   APPROVED = "APPROVED",
-  //eslint-disable @typescript-eslint/no-unused-vars
   FAILED = "FAILED",
-  //eslint-disable @typescript-eslint/no-unused-vars
   REJECTED = "REJECTED",
 }
+/* eslint-enable no-unused-vars */
 
 interface IPaymentRequest extends Document {
   labelId: string;

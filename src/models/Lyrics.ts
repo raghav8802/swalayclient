@@ -1,16 +1,13 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/* eslint-disable no-unused-vars */
 export enum AlbumStatus {
-  //eslint-disable @typescript-eslint/no-unused-vars
   Draft = 0,
-  //eslint-disable @typescript-eslint/no-unused-vars
   Processing = 1,
-  //eslint-disable @typescript-eslint/no-unused-vars
   Approved = 2,
-  //eslint-disable @typescript-eslint/no-unused-vars
   Rejected = 3,
 }
+/* eslint-enable no-unused-vars */
 
 interface ILyric extends Document {
   trackId: mongoose.Schema.Types.ObjectId;

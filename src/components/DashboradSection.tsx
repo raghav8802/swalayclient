@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 import {
   Card,
   CardHeader,
@@ -71,7 +71,7 @@ export default function DashboradSection() {
   const [draftAlbums, setDraftAlbums] = useState<Album[]>([]);
   const [artistData, setArtistData] = useState<ArtistData[]>([]);
 
-  const fetchNumberCounts = async () => {
+  const fetchNumberCounts = useCallback(async () => {
     try {
       const response = await apiGet(`/api/numbers?labelId=${labelId}`);
 
@@ -86,9 +86,9 @@ export default function DashboradSection() {
     } catch (error) {
       console.error(error);
     }
-  };
+  }, [labelId]);
 
-  const fetchNewRelese = async (labelId: string) => {
+  const fetchNewRelese = useCallback(async (labelId: string) => {
     try {
       const response = await apiGet(
         `/api/albums/filter?labelId=${labelId}&status=Live&limit=3}`
@@ -100,9 +100,9 @@ export default function DashboradSection() {
     } catch (error) {
       console.log(error);
     }
-  };
+  }, []);
 
-  const fetchDraft = async (labelId: string) => {
+  const fetchDraft = useCallback(async (labelId: string) => {
     try {
       const response = await apiGet(
         `/api/albums/filter?labelId=${labelId}&status=Draft&limit=3}`
@@ -113,9 +113,9 @@ export default function DashboradSection() {
     } catch (error) {
       console.log(error);
     }
-  };
+  }, []);
 
-  const fetchAllArtist = async (labelId: any) => {
+  const fetchAllArtist = useCallback(async (labelId: any) => {
     try {
       const response = await apiGet(
         `/api/artist/getArtists?labelId=${labelId}&limit=3`
@@ -127,7 +127,7 @@ export default function DashboradSection() {
     } catch (error) {
       console.log("Error");
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (labelId) {
@@ -136,7 +136,7 @@ export default function DashboradSection() {
       fetchDraft(labelId);
       fetchAllArtist(labelId);
     }
-  }, [labelId]);
+  }, [labelId, fetchNumberCounts, fetchNewRelese, fetchDraft, fetchAllArtist]);
 
   return (
     <div className="flex w-full flex-col bg-muted/40">
