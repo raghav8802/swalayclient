@@ -44,12 +44,9 @@ const AlbumForm: React.FC = () => {
   const year = new Date().getFullYear();
   const userLable = context?.user?.lable || "";
 
-  const labelLine =
-    context?.user?.usertype === "normal"  ? `${year} SwaLay Digital` : `${year} ${userLable}`;
+  const labelLine = context?.user?.usertype === "normal"  ? `${year} SwaLay Digital` : `${year} ${userLable}`;
 
-    const userMusiclabel = context?.user?.usertype === "normal" 
-  ? "SwaLay Digital" 
-  : userLable;
+    const userMusiclabel = context?.user?.usertype === "normal" ? "SwaLay Digital" : userLable;
 
   const router = useRouter();
 
@@ -210,9 +207,7 @@ const AlbumForm: React.FC = () => {
 
       toast.dismiss(loadingToastId);
       if (response.success) {
-        setIsUploading(false);
-        toast.success("😉 Success! Album added");
-        router.push(`/albums/viewalbum/${btoa(response.data._id)}`);
+    
         setFormData({
           title: "",
           releaseDate: "",
@@ -225,6 +220,9 @@ const AlbumForm: React.FC = () => {
           cLine: labelLine,
         });
         setSelectedTags([]);
+        toast.success("😉 Success! Album added");
+        setIsUploading(false);
+        router.push(`/albums/viewalbum/${btoa(response.data._id)}`);
       } else {
         console.log("Invalid token");
         toast.error("Invalid Token", {
@@ -249,6 +247,7 @@ const AlbumForm: React.FC = () => {
     <div className="w-full min-h-screen p-6 bg-white rounded-sm ">
       {!isUploading && (
         <>
+
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
@@ -565,9 +564,9 @@ const AlbumForm: React.FC = () => {
                 <div>
                   <button
                     type="submit"
-                    className="inline-flex justify-center py-2 px-5 shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    className="inline-flex justify-center py-3 px-5 shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 w-full"
                   >
-                    Submit{" "}
+                    Submit
                   </button>
                 </div>
               </div>

@@ -9,7 +9,6 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 
-
 import toast from "react-hot-toast";
 import UserContext from "@/context/userContext";
 import { apiGet, apiPost } from "@/helpers/axiosRequest";
@@ -23,75 +22,73 @@ const Payments = () => {
     amount: "",
   });
 
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [paymentData, setPaymentData] = useState();
-  const [payout, setPayout] = useState();
-  const [totalPayoutBalance, setTotalPayoutBalance] = useState(0);
-  const [availableBalance, setAvailableBalance] = useState(0);
+  // const [isModalVisible, setIsModalVisible] = useState(false);
+  // const [paymentData, setPaymentData] = useState();
+  // const [totalPayoutBalance, setTotalPayoutBalance] = useState(0);
+  // const [availableBalance, setAvailableBalance] = useState(0);
 
-  const fetchPayments = async () => {
+  const [payout, setPayout] = useState();
+
+  const fetchPayments = React.useCallback(async () => {
     try {
       const response = await apiGet(
         `/api/payments/getPayments?labelId=${labelId}`
       );
-   
-
       if (response.success) {
-        setPaymentData(response.data.payments);
-        setTotalPayoutBalance(response.data.totalPayoutBalance);
-        setAvailableBalance(response.data.totalBalance);
+        console.log("success");
+        // setPaymentData(response.data.payments);
+        // setTotalPayoutBalance(response.data.totalPayoutBalance);
+        // setAvailableBalance(response.data.totalBalance);
       }
     } catch (error) {
       console.log("error");
     }
-  };
+  }, [labelId]);
 
-  const fetchPayOut = async () => {
-    //
+  const fetchPayOut = React.useCallback(async () => {
     try {
       const response = await apiGet(
         `/api/payments/payout/getPayouts?labelId=${labelId}`
       );
-  
       if (response.success) {
         setPayout(response.data);
       }
     } catch (error) {
       console.log("error");
     }
-  };
+  }, [labelId]);
 
   useEffect(() => {
     if (labelId) {
       fetchPayments();
       fetchPayOut();
     }
-  }, [labelId]);
+  }, [labelId, fetchPayments, fetchPayOut]); // Include dependencies
 
-  const handleSave = async () => {
-    // Handle save logic here
-    try {
-      const response = await apiPost("/api/payments/payout/payoutRequest", {
-        labelId,
-        amount: data.amount,
-      });
+  // const handleSave = async () => {
+  //   // Handle save logic here
+  //   try {
+  //     const response = await apiPost("/api/payments/payout/payoutRequest", {
+  //       labelId,
+  //       amount: data.amount,
+  //     });
 
-      setIsModalVisible(false);
-      if (response.success) {
-        toast.success(response.message);
-        fetchPayOut();
-      } else {
-        toast.error(response.message);
-      }
-      setData({ amount: "" });
-    } catch (error) {
-      toast.error("Internal server");
-    }
-  };
+  //     setIsModalVisible(false);
+  //     if (response.success) {
+  //       toast.success(response.message);
+  //       fetchPayOut();
+  //     } else {
+  //       toast.error(response.message);
+  //     }
+  //     setData({ amount: "" });
+  //   } catch (error) {
+  //     toast.error("Internal server");
+  //   }
+  // };
 
-  const handleClose = () => {
-    setIsModalVisible(false);
-  };
+  // const handleClose = () => {
+  //   setIsModalVisible(false);
+  // };
 
   return (
     <div className="w-full min-h-[80dvh] p-6 bg-white rounded-sm ">

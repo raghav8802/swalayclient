@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema, Model } from 'mongoose';
+import mongoose, { Document, Schema } from 'mongoose';
 
 // Interface for the ProfileBankDetails document
 interface IProfileBankDetails extends Document {
@@ -59,7 +59,7 @@ const ProfileBankDetailsSchema: Schema<IProfileBankDetails> = new Schema({
   gstNo: {
     type: String,
     required: false,
-    unique: true,
+    // unique: true,
     trim: true
   }
 });

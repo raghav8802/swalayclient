@@ -17,7 +17,7 @@ import AlbumsLoading from "@/components/AlbumsLoading";
 import ErrorSection from "@/components/ErrorSection";
 import Link from "next/link";
 
-const albums = ({ params }: { params: { filter: string } }) => {
+const Albums = ({ params }: { params: { filter: string } }) => {
   // const filter = params.filter;
   const filter =
     params.filter.charAt(0).toUpperCase() +
@@ -110,4 +110,4 @@ const albums = ({ params }: { params: { filter: string } }) => {
   );
 };
 
-export default albums;
+export default Albums;

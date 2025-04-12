@@ -1,7 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import Razorpay from 'razorpay';
 
-export async function POST(request: NextRequest) {
+export async function POST() {
+
   try {
     console.log('Starting create-order process');
     
@@ -15,7 +16,7 @@ export async function POST(request: NextRequest) {
       throw new Error('Razorpay credentials are missing');
     }
 
-    console.log('Creating Razorpay instance...');
+
     const razorpay = new Razorpay({
       key_id: process.env.RAZORPAY_KEY_ID,
       key_secret: process.env.RAZORPAY_KEY_SECRET,

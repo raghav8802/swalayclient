@@ -3,7 +3,6 @@ import React, {
   useState,
   ChangeEvent,
   FormEvent,
-  useContext,
   useEffect,
 } from "react";
 import {
@@ -15,12 +14,13 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { useDropzone } from "react-dropzone";
-import UserContext from "@/context/userContext";
+
 import { MultiSelect } from "react-multi-select-component";
 import toast from "react-hot-toast";
 import { apiFormData, apiGet } from "@/helpers/axiosRequest";
 import { useRouter } from "next/navigation";
-import { useParams } from "next/navigation";
+import Image from "next/image";
+
 
 interface FormData {
   title: string;
@@ -30,8 +30,8 @@ interface FormData {
   label: string;
   language: string;
   artwork: File | null;
-  pLine: string;
-  cLine: string;
+  // pLine: string;
+  // cLine: string;
 }
 
 type TagOption = {
@@ -39,17 +39,14 @@ type TagOption = {
   value: string;
 };
 
-type OptionType = {
-  value: string;
-  label: string;
-};
+
 
 const EditAlbumForm = ({ params }: { params: { albumid: string } }) => {
   // const { id } = useParams(); // Use the album ID from URL
 
-  const albumIdParams = params.albumid;
+  
   const [albumId, setAlbumId] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+
 
   useEffect(() => {
     const albumIdParams = params.albumid;
@@ -57,24 +54,10 @@ const EditAlbumForm = ({ params }: { params: { albumid: string } }) => {
       const decodedAlbumId = atob(albumIdParams);
       setAlbumId(decodedAlbumId);
     } catch (e) {
-      setError("Invalid Url");
       console.error("Decoding error:", e);
     }
-  }, [albumIdParams]);
+  }, [params.albumid]); 
 
-
-  const pLineOptions: OptionType[] = [
-    { value: "2024 SL Web Team", label: "2024 SL Web Team" },
-    // Add more p-line options here
-  ];
-
-  const cLineOptions: OptionType[] = [
-    { value: "2024 SL Web Team", label: "2024 SL Web Team" },
-    // Add more c-line options here
-  ];
-
-  const year = new Date().getFullYear();
-  const labelLine = year + " SL Web Team";
 
   const router = useRouter();
 
@@ -87,8 +70,8 @@ const EditAlbumForm = ({ params }: { params: { albumid: string } }) => {
     label: "SwaLay Digital",
     language: "",
     artwork: null,
-    pLine: labelLine,
-    cLine: labelLine,
+    // pLine: labelLine,
+    // cLine: labelLine,
   });
 
   const albumTags = [
@@ -111,12 +94,7 @@ const EditAlbumForm = ({ params }: { params: { albumid: string } }) => {
     { label: "Calm", value: "Calm" },
   ];
   const [selectedTags, setSelectedTags] = useState<TagOption[]>([]);
-  const [selectedGenre, setSelectedGenre] = useState<OptionType | null>(null);
-  const [selectedLanguage, setSelectedLanguage] = useState<OptionType | null>(
-    null
-  );
-  const [selectedPLine, setSelectedPLine] = useState<OptionType | null>(null);
-  const [selectedCLine, setSelectedCLine] = useState<OptionType | null>(null);
+
 
 
   useEffect(() => {
@@ -125,13 +103,9 @@ const EditAlbumForm = ({ params }: { params: { albumid: string } }) => {
         const response = await apiGet(
           `/api/albums/getAlbumsDetails?albumId=${albumId}`
         );
-        console.log("fetch album data");
-        console.log(response);
 
         if (response.success) {
           const album = response.data;
-          console.log("album");
-          console.log(album);
           
           
           setFormData({
@@ -144,8 +118,8 @@ const EditAlbumForm = ({ params }: { params: { albumid: string } }) => {
             label: album.label ?? "SwaLay Digital",
             language: album.language ?? "",
             artwork: null,
-            pLine: album.pline ?? labelLine,
-            cLine: album.cline ?? labelLine,
+            // pLine: album.pline ?? labelLine,
+            // cLine: album.cline ?? labelLine,
           });
 
           setSelectedTags(
@@ -162,12 +136,13 @@ const EditAlbumForm = ({ params }: { params: { albumid: string } }) => {
           // );
 
 
-          setSelectedPLine(
-            pLineOptions.find((option) => option.value === album.pline) || null
-          );
-          setSelectedCLine(
-            cLineOptions.find((option) => option.value === album.cline) || null
-          );
+          // setSelectedPLine(
+          //   pLineOptions.find((option) => option.value === album.pline) || null
+          // );
+          // setSelectedCLine(
+          //   cLineOptions.find((option) => option.value === album.cline) || null
+          // );
+
         } else {
           toast.error("Failed to fetch album data");
         }
@@ -227,7 +202,7 @@ const EditAlbumForm = ({ params }: { params: { albumid: string } }) => {
       }
 
       if (artwork) {
-        const image = new Image();
+        const image = new window.Image();
         image.src = URL.createObjectURL(artwork);
         image.onload = () => {
           if (image.width !== 3000 || image.height !== 3000) {
@@ -243,9 +218,9 @@ const EditAlbumForm = ({ params }: { params: { albumid: string } }) => {
      
       // Create FormData object
       const formDataObj = new FormData();
+
       if (albumId) {
         formDataObj.append("albumId", albumId);
-        console.log("album id added");
       }
 
       formDataObj.append("title", formData.title);
@@ -254,22 +229,15 @@ const EditAlbumForm = ({ params }: { params: { albumid: string } }) => {
       formDataObj.append("genre", formData.genre);
       formDataObj.append("label", formData.label);
       formDataObj.append("language", formData.language);
-      formDataObj.append("pLine", formData.pLine);
-      formDataObj.append("cLine", formData.cLine);
+
+  
+
       formDataObj.append("tags", JSON.stringify(selectedTagValues));
       if (artwork) formDataObj.append("artwork", artwork);
 
-      // const response = await apiFormData(
-      //   // `/api/albums/updateAlbum/${albumId}`,
-      //   `/api/albums/updateAlbum`,
-      //   formDataObj
-      // );
 
       const response = await apiFormData("/api/albums/updateAlbum", formDataObj);
 
-      console.log("update api response");
-      console.log(response);
-      
 
       toast.dismiss(loadingToastId);
       if (response.success) {
@@ -489,7 +457,7 @@ const EditAlbumForm = ({ params }: { params: { albumid: string } }) => {
               />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700">
                   P-Line
@@ -535,7 +503,8 @@ const EditAlbumForm = ({ params }: { params: { albumid: string } }) => {
                   <p className="text-red-500 text-sm mt-1">{errors.cLine[0]}</p>
                 )}
               </div>
-            </div>
+            </div> */}
+
           </div>
 
           <div className="col-span-4 space-y-6 ">
@@ -568,11 +537,13 @@ const EditAlbumForm = ({ params }: { params: { albumid: string } }) => {
                 </p>
               </div>
               {formData.artwork && (
-                <img
-                  src={URL.createObjectURL(formData.artwork)}
-                  alt="Artwork preview"
-                  className="mt-2 w-32 h-32 object-cover"
-                />
+               <Image
+               src={URL.createObjectURL(formData.artwork)}
+               alt="Artwork preview"
+               className="mt-2 w-32 h-32 object-cover"
+               width={128}
+               height={128}
+             />
               )}
               {errors.artwork && (
                 <p className="text-red-500 text-sm mt-1">{errors.artwork[0]}</p>

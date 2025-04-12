@@ -29,46 +29,47 @@ const Navbar = () => {
   };
 
   // Search functionality
-  const handleSearch = async (query: string) => {
-
-    console.log("query : ", query);
-    
-
-    if (!query) {
-      setSearchResults([]);
-      setShowSuggestions(false);
-      return;
-    }
-
-    if(query ===''){
-      setSearchResults([]);
-      setShowSuggestions(false);
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const response = await apiGet(`/api/search?query=${query}&labelid=${labelId}`);
-
-      console.log("response : ");
-      console.log(response);
-
-      if (response.success) {
-        setSearchResults(response.data); // Store search results
-        setShowSuggestions(true); // Show suggestions dropdown
-      } else {
+  const handleSearch = React.useCallback(
+    async (query: string) => {
+      console.log("query : ", query);
+  
+      if (!query) {
         setSearchResults([]);
         setShowSuggestions(false);
+        return;
       }
-    } catch (error) {
-      console.error("Error during search:", error);
-      setSearchResults([]);
-      setShowSuggestions(false);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  
+      if (query === "") {
+        setSearchResults([]);
+        setShowSuggestions(false);
+        return;
+      }
+  
+      setLoading(true);
+      try {
+        const response = await apiGet(`/api/search?query=${query}&labelid=${labelId}`);
+  
+        console.log("response : ");
+        console.log(response);
+  
+        if (response.success) {
+          setSearchResults(response.data); // Store search results
+          setShowSuggestions(true); // Show suggestions dropdown
+        } else {
+          setSearchResults([]);
+          setShowSuggestions(false);
+        }
+      } catch (error) {
+        console.error("Error during search:", error);
+        setSearchResults([]);
+        setShowSuggestions(false);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [labelId] // Add dependencies here
+  );
+  
   useEffect(() => {
     // Trigger search API if search term is not empty
     if (searchTerm.trim().length > 0) {
@@ -76,7 +77,7 @@ const Navbar = () => {
     } else {
       setShowSuggestions(false);
     }
-  }, [searchTerm]);
+  }, [searchTerm, handleSearch]); // Include handleSearch in the dependency array
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {

@@ -18,12 +18,6 @@ import Uploading from "@/components/Uploading";
 import ArtistModalForm from "@/components/ArtistModalForm";
 import CallerTune from "./callertune/callertune";
 
-interface Person {
-  name: string;
-  ipi: string;
-  iprs: "Yes" | "No";
-  role: string;
-}
 
 type ArtistTypeOption = {
   label: string;
@@ -31,7 +25,8 @@ type ArtistTypeOption = {
 };
 
 export default function NewTrack({ params }: { params: { albumid: string } }) {
-  const albumIdParams = params.albumid;
+
+
   const [albumId, setAlbumId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -59,7 +54,7 @@ export default function NewTrack({ params }: { params: { albumid: string } }) {
       setError("Invalid Url");
       console.error("Decoding error:", e);
     }
-  }, [albumIdParams]);
+  }, [params.albumid]); // Add params.albumid to the dependency array
 
   //! here is code for artist type mulit select input
 
@@ -127,7 +122,6 @@ export default function NewTrack({ params }: { params: { albumid: string } }) {
 
   // ! here is code for artist type mulit select input
   // primary singer
-  const [primarySinger, setPrimarySinger] = useState("");
 
   //! fetch artist
   const fetchArtist = async (labelId: string) => {
@@ -151,8 +145,9 @@ export default function NewTrack({ params }: { params: { albumid: string } }) {
     }
   }, [labelId]);
 
-  const [callerTuneTime, setCallerTuneTime] = useState("00:00:00");
-  const [errors, setErrors] = useState<any>({});
+  const [callerTuneTime] = useState("00:00:00");
+
+  const [errors] = useState<any>({});
 
   const convertToSeconds = (time: string) => {
     const [hours, minutes, seconds] = time.split(":").map(Number);
@@ -167,7 +162,7 @@ export default function NewTrack({ params }: { params: { albumid: string } }) {
 
     if (albumId) {
       formData.append("albumId", albumId);
-      console.log("album id added");
+ 
     }
 
     const audioFile = formData.get("audioFile") as File;
@@ -181,15 +176,12 @@ export default function NewTrack({ params }: { params: { albumid: string } }) {
     const loadAudioMetadata = new Promise<void>((resolve, reject) => {
       audio.onloadedmetadata = () => {
         const audioDuration = audio.duration;
-        // console.log("audio.duration");
-        // console.log(audioDuration);
-        // console.log(" | ");
-        // console.log(audioDuration.toString());
+    
         formData.append("duration", audioDuration.toString());
 
         const callerTuneDuration = convertToSeconds(callerTuneTime);
-        console.log("callerTuneDuration");
-        console.log(callerTuneDuration);
+
+
         if (callerTuneDuration > audioDuration) {
           toast.error(
             "Caller Tune Time can't be greater than audio file duration."
@@ -249,11 +241,16 @@ export default function NewTrack({ params }: { params: { albumid: string } }) {
         JSON.stringify(selectedProducers.map((p) => p.value))
       );
 
+      // Add featured artist to form data
+      const featuredArtist = formData.get("featuredArtist");
+      
+      if (featuredArtist) {
+        formData.append("featuredArtist", featuredArtist.toString());
+      }
+
       setIsUploading(true);
       const response = await apiFormData("/api/track/addtrack", formData);
 
-      console.log("add track api response :");
-      console.log(response);
 
       if (response.success) {
         toast.success("Song uploaded successfully!");
@@ -438,8 +435,7 @@ export default function NewTrack({ params }: { params: { albumid: string } }) {
 
                 <div>
                   <label className="block text-sm font-medium mb-2 text-gray-700">
-                    Singers{" "}
-                  </label>
+                    Singers</label>
                   <MultiSelect
                     hasSelectAll={false}
                     options={formatOptions(artistData.singer)}
@@ -453,6 +449,23 @@ export default function NewTrack({ params }: { params: { albumid: string } }) {
                   >
                     <i className="bi bi-plus-circle-fill"></i> Add More Singer
                   </div>
+                </div>
+
+                <div>
+
+                  <label className="block text-sm font-medium mb-2 text-gray-700">
+                  Featured Artist ( <span className="text-sm text-gray-500 italic">
+                    You can use multiple featured artists separated by commas, e.g., Artist1, Artist2
+                  </span>) </label>
+
+                   <input
+                    name="featuredArtist"
+                    type="text"
+                    placeholder="ft. max, bob"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                  
                 </div>
 
                 <div>

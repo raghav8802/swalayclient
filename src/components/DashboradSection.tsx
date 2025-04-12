@@ -3,7 +3,6 @@ import React, { useContext, useEffect, useState } from "react";
 import {
   Card,
   CardHeader,
-  CardDescription,
   CardTitle,
   CardContent,
 } from "@/components/ui/card";
@@ -14,7 +13,7 @@ import { apiGet } from "@/helpers/axiosRequest";
 import { NotificationSection } from "./NotificationSection";
 import Image from "next/image";
 import AnalyticCard from "./AnalyticCard";
-import { FaMusic, FaUsers, FaDollarSign, FaCalendarAlt } from "react-icons/fa";
+
 
 interface Stats {
   albums: number;
@@ -302,7 +301,7 @@ export default function DashboradSection() {
                               key={album._id}
                             >
                               <div className="flex items-center gap-2">
-                                <img
+                                <Image
                                   src={`${process.env.NEXT_PUBLIC_AWS_S3_FOLDER_PATH}albums/07c1a${album._id}ba3/cover/${album.thumbnail}`}
                                   alt="Album Cover"
                                   width={40}
@@ -354,7 +353,7 @@ export default function DashboradSection() {
                               key={album._id}
                             >
                               <div className="flex items-center gap-2">
-                                <img
+                                <Image
                                   src={`${process.env.NEXT_PUBLIC_AWS_S3_FOLDER_PATH}albums/07c1a${album._id}ba3/cover/${album.thumbnail}`}
                                   alt="Album Cover"
                                   width={40}

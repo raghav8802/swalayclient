@@ -13,7 +13,7 @@ interface ArtistNameMap {
 
 
 
-export async function GET(req: NextRequest, res: NextResponse) {
+export async function GET(req: NextRequest) {
   await connect();
 
   const albumId = req.nextUrl.searchParams.get("albumId");

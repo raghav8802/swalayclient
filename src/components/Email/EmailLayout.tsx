@@ -1,4 +1,6 @@
 import React from "react";
+import Image from "next/image";
+
 
 interface EmailLayoutProps {
   children: React.ReactNode;
@@ -18,9 +20,10 @@ const EmailLayout: React.FC<EmailLayoutProps> = ({ children }) => {
         color: "#1a1a1a",
       }}
     >
+      
       {/* Banner */}
       <div style={{ width: "100%" }}>
-        <img
+        <Image
           src="https://swalay-music-files.s3.ap-south-1.amazonaws.com/assets/email/swalayEmailBanner.png"
           alt="SwaLay Banner"
           style={{ width: "100%", height: "auto", display: "block" }}
@@ -61,21 +64,21 @@ const EmailLayout: React.FC<EmailLayoutProps> = ({ children }) => {
         }}>
           <div style={{ marginBottom: '20px' }}>
             <a href="https://www.facebook.com/swalaydigital" style={{ margin: '0 10px' }}>
-              <img 
+              <Image 
                 src="https://swalay-music-files.s3.ap-south-1.amazonaws.com/assets/facebook2x.png" 
                 alt="Facebook"
                 style={{ width: '30px', height: '30px' }}
               />
             </a>
             <a href="https://www.linkedin.com/company/swalay" style={{ margin: '0 10px' }}>
-              <img 
+              <Image 
                 src="https://swalay-music-files.s3.ap-south-1.amazonaws.com/assets/linkedin2x.png" 
                 alt="LinkedIn"
                 style={{ width: '30px', height: '30px' }}
               />
             </a>
             <a href="https://www.instagram.com/swalaydigital" style={{ margin: '0 10px' }}>
-              <img 
+              <Image 
                 src="https://swalay-music-files.s3.ap-south-1.amazonaws.com/assets/instagram2x.png" 
                 alt="Instagram"
                 style={{ width: '30px', height: '30px' }}
@@ -83,7 +86,7 @@ const EmailLayout: React.FC<EmailLayoutProps> = ({ children }) => {
             </a>
           </div>
           <div style={{ color: '#ffffff', fontSize: '14px' }}>
-            © Copyright 2024 By SwaLay Digital
+            © Copyright {year} By SwaLay Digital
           </div>
           <div style={{ color: '#ffffff', fontSize: '12px', marginTop: '8px' }}>
             Powered By TalantonCore

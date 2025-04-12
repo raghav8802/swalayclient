@@ -25,12 +25,9 @@ export async function POST(req: NextRequest) {
       label: formData.get("label")?.toString() ?? "",
       language: formData.get("language")?.toString() ?? "",
       tags: JSON.parse(formData.get("tags")?.toString() ?? "[]"),
-      pline: formData.get("pLine")?.toString() ?? "",
-      cline: formData.get("cLine")?.toString() ?? "",
+      // pline: formData.get("pLine")?.toString() ?? "",
+      // cline: formData.get("cLine")?.toString() ?? "",
     };
-
-    console.log(data);
-    console.log("----------------");
     
 
     const artwork = formData.get("artwork") as File;

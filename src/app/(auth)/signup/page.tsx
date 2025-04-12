@@ -148,11 +148,11 @@ const SignupPage = () => {
                 <div className="p-6 text-center">
                   <h3 className="text-xl font-bold text-gray-900 mb-2">Account Created Successfully</h3>
                   <p className="text-gray-600 mb-4 font-semibold">
-                    We've sent a verification link to your email address. Please check your inbox and verify your account.
-                  </p>
-                  <p className="text-sm text-gray-500 mb-6">
-                    If you didn't receive the email, please check your spam folder or contact our support team.
-                  </p>
+                  We&apos;ve sent a verification link to your email address. Please check your inbox and verify your account.
+                </p>
+                <p className="text-sm text-gray-500 mb-6">
+                  If you didn&apos;t receive the email, please check your spam folder or contact our support team.
+                </p>
 
                 </div>
               </div>
@@ -281,6 +281,8 @@ const SignupForm = ({
     }
 
     setIsLoading(true);
+
+
     try {
       
       const response = await apiPost('/api/user/signup', {

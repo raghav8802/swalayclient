@@ -1,7 +1,7 @@
 import { Modal } from "@/components/Modal";
 import UserContext from "@/context/userContext";
 import { apiPost } from "@/helpers/axiosRequest";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import toast from "react-hot-toast";
 import Loading from "./ui/Loading";
 

@@ -23,9 +23,10 @@ import {
   ShoppingCart,
   ExternalLink,
 } from "lucide-react";
+import Image from "next/image";
 
 // Define the types for the API response
-type Image = {
+type Imagedef = {
   height: number;
   width: number;
   url: string;
@@ -52,7 +53,7 @@ type Album = {
   totalTracks: number;
   releaseDate: string;
   upc: string;
-  image: Image;
+  image: Imagedef;
   label: string;
   copyright: string;
   services: Services;
@@ -66,7 +67,7 @@ type Track = {
   isExplicit: boolean;
   previewUrl: string;
   releaseDate: string;
-  image: Image;
+  image: Imagedef;
   label: string;
   copyright: string;
   services: Services;
@@ -88,6 +89,10 @@ const Page = () => {
   const [activeTab, setActiveTab] = useState("track");
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
+
+  useEffect(() => {
+
+    
   const fetchAlbumDetails = async () => {
     try {
       const response = await axios.get<ApiResponse>(
@@ -107,7 +112,7 @@ const Page = () => {
     }
   };
 
-  useEffect(() => {
+
     if (isrc) {
       fetchAlbumDetails();
     }
@@ -252,7 +257,7 @@ const Page = () => {
             <div className="bg-white border border-gray-200 rounded-lg shadow-sm col-span-1 lg:col-span-2 overflow-hidden">
               <div className="p-6 flex flex-col md:flex-row gap-6 items-start md:items-center">
                 <div className="relative min-w-40 h-40 rounded-md overflow-hidden shadow-md">
-                  <img
+                  <Image
                     src={track.image.url || "/placeholder.svg"}
                     alt={track.name}
                     className="w-full h-full object-cover"
@@ -344,7 +349,7 @@ const Page = () => {
                     <p className="text-sm text-gray-500">Album</p>
                     <div className="flex items-center mt-2">
                       <div className="w-10 h-10 mr-3">
-                        <img
+                        <Image
                           src={track.albums[0].image.url || "/placeholder.svg"}
                           alt={track.albums[0].name}
                           className="w-full h-full object-cover rounded"

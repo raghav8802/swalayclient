@@ -1,6 +1,6 @@
 "use client";
+import React, { useEffect, useState, useActionState } from "react";
 import { apiGet } from "@/helpers/axiosRequest";
-import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import {
   Breadcrumb,
@@ -15,7 +15,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import Loading from "../../loading";
 import Image from "next/image";
 import Link from "next/link";
-import EditArtistModal from "./components/EditArtistModal";
+
 import AlbumCard from "./components/AlbumCard";
 import DeleteArtist from "./components/DeleteArtist";
 
@@ -53,16 +53,14 @@ const ArtistPage = ({ params }: { params: { id: string } }) => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [artist, setArtist] = useState<Artist | null>(null);
-  const [isModalVisible, setIsModalVisible] = useState(false);
+
   const [albumData, setAlbumData] = useState([]);
 
-  const fetchArtistDetails = async () => {
-
+  const fetchArtistDetails = React.useCallback(async () => {
     try {
       const response = await apiGet(
         `/api/artist/getArtistDetails?artistId=${decodedArtistId}`
       );
-
 
       if (response.success) {
         setArtist(response.data.artistData);
@@ -75,16 +73,11 @@ const ArtistPage = ({ params }: { params: { id: string } }) => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [decodedArtistId]); // Add dependencies here
 
   useEffect(() => {
     fetchArtistDetails();
-  }, [decodedArtistId]);
-
-  const handleClose = () => {
-    setIsModalVisible(false);
-    // fetchAllArtist(labelId);
-  };
+  }, [fetchArtistDetails]); // Include fetchArtistDetails in the dependency array
 
   if (isLoading) {
     return <Loading />;
@@ -117,10 +110,7 @@ const ArtistPage = ({ params }: { params: { id: string } }) => {
           Artist Details
         </h1>
 
- 
-
-        <div className="flex justify-between items-center" >
-
+        <div className="flex justify-between items-center">
           {/* <button
             className="bg-black text-white px-4 py-3 rounded me-4"
             onClick={() => setIsModalVisible(true)}
@@ -128,17 +118,18 @@ const ArtistPage = ({ params }: { params: { id: string } }) => {
             <i className="bi bi-pencil-square"></i> Edit
           </button> */}
 
-            {/* className="bg-black text-white px-4 py-3 rounded me-4" */}
-            {/* onClick={() => setIsModalVisible(true)} */}
+          {/* className="bg-black text-white px-4 py-3 rounded me-4" */}
+          {/* onClick={() => setIsModalVisible(true)} */}
 
-          <Link href={`/artists/edit/${artistId}`} className="bg-black text-white px-4 py-3 rounded me-4">
+          <Link
+            href={`/artists/edit/${artistId}`}
+            className="bg-black text-white px-4 py-3 rounded me-4"
+          >
             <i className="bi bi-pencil-square"></i> Edit
-            </Link>
+          </Link>
 
-          <DeleteArtist artistId={decodedArtistId as string } />
-
+          <DeleteArtist artistId={decodedArtistId as string} />
         </div>
-
       </div>
 
       {/* <p>Artist ID: {decodedArtistId}</p> */}
@@ -330,16 +321,6 @@ const ArtistPage = ({ params }: { params: { id: string } }) => {
               ))}
             </div>
           </section> */}
-
-          <EditArtistModal
-            isVisible={isModalVisible}
-            onClose={handleClose}
-            artistData={artist}
-          />
-
-
-
-
         </div>
       </div>
     </div>

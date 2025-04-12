@@ -1,6 +1,7 @@
 import React from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import Link from "next/link"
+import Image from "next/image"
 
 export default function Component() {
   return (
@@ -34,7 +35,7 @@ export default function Component() {
           <span className="text-sm font-medium">Spotify</span>
         </Link>
         <Link href="#" className="flex items-center gap-4 justify-center" prefetch={false}>
-          <img
+          <Image
             src="/placeholder.svg"
             alt="Apple Music"
             width={40}
@@ -56,7 +57,7 @@ export default function Component() {
           <span className="text-sm font-medium">YouTube Music</span>
         </Link>
         <Link href="#" className="flex items-center gap-4 justify-center" prefetch={false}>
-          <img
+          <Image
             src="/placeholder.svg"
             alt="Amazon Music"
             width={40}

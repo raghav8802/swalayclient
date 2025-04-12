@@ -116,57 +116,58 @@ export default function UpdateTrack({
     };
 
   // fetch track details
-  const fetchTrackDetails = async () => {
-    try {
-      const response = await apiGet(
-        `/api/track/getTrackDetails?trackId=${trackId}`
-      );
-
-      if (response.success) {
-        const trackData = response.data;
-        setTrack(trackData);
-        setAlbumId(trackData.albumId || "");
-
-        // Set selected artists
-        setSelectedSingers(
-          trackData.singers.map((s: any) => ({
-            value: s._id,
-            label: s.artistName,
-          }))
-        );
-        setSelectedComposers(
-          trackData.composers.map((c: any) => ({
-            value: c._id,
-            label: c.artistName,
-          }))
-        );
-        setSelectedLyricists(
-          trackData.lyricists.map((l: any) => ({
-            value: l._id,
-            label: l.artistName,
-          }))
-        );
-        setSelectedProducers(
-          trackData.producers.map((p: any) => ({
-            value: p._id,
-            label: p.artistName,
-          }))
-        );
-        setCallerTuneTime(trackData.crbt || "00:00:00");
-      } else {
-        setError(response.message);
-      }
-    } catch (error) {
-      console.error("Error fetching track details:", error);
-      toast.error("Failed to fetch track details");
-    }
-  };
-
   useEffect(() => {
+    const fetchTrackDetails = async () => {
+      try {
+        const response = await apiGet(
+          `/api/track/getTrackDetails?trackId=${trackId}`
+        );
+  
+        if (response.success) {
+          const trackData = response.data;
+          setTrack(trackData);
+          setAlbumId(trackData.albumId || "");
+  
+          // Set selected artists
+          setSelectedSingers(
+            trackData.singers.map((s: any) => ({
+              value: s._id,
+              label: s.artistName,
+            }))
+          );
+          setSelectedComposers(
+            trackData.composers.map((c: any) => ({
+              value: c._id,
+              label: c.artistName,
+            }))
+          );
+          setSelectedLyricists(
+            trackData.lyricists.map((l: any) => ({
+              value: l._id,
+              label: l.artistName,
+            }))
+          );
+          setSelectedProducers(
+            trackData.producers.map((p: any) => ({
+              value: p._id,
+              label: p.artistName,
+            }))
+          );
+          setCallerTuneTime(trackData.crbt || "00:00:00");
+        } else {
+          setError(response.message);
+        }
+      } catch (error) {
+        console.error("Error fetching track details:", error);
+        toast.error("Failed to fetch track details");
+      }
+    };
+  
     if (trackId) {
       fetchTrackDetails();
     }
   }, [trackId]);
+
 
   // fetch artist
   const fetchArtist = async (labelId: string) => {
@@ -210,7 +211,6 @@ export default function UpdateTrack({
   }, [labelId]);
 
   const [callerTuneTime, setCallerTuneTime] = useState("00:00:00");
-  const [errors, setErrors] = useState<any>({});
 
   const convertToSeconds = (time: string) => {
     const [hours, minutes, seconds] = time.split(":").map(Number);
@@ -230,42 +230,47 @@ export default function UpdateTrack({
     }
 
     const audioFile = formData.get("audioFile") as File;
-    if (!audioFile || !["audio/mpeg", "audio/wav"].includes(audioFile.type)) {
-      toast.error("Invalid file type. Please upload an MP3 or WAV file.");
+
+    // If a new audio file is uploaded, process its metadata
+    let audioDuration = track?.duration || "0"; // Use existing duration if
+
+    if (audioFile && audioFile.size > 0) {
+      if (audioFile && !["audio/mpeg", "audio/wav"].includes(audioFile.type)) {
+        toast.error("Invalid file type. Please upload an MP3 or WAV file.");
+        return;
+      }
+
+      const audio = new Audio(URL.createObjectURL(audioFile));
+
+      try {
+        await new Promise<void>((resolve, reject) => {
+          audio.onloadedmetadata = () => {
+            audioDuration = audio.duration.toString();
+            formData.append("duration", audioDuration);
+            resolve();
+          };
+          audio.onerror = () =>
+            reject(new Error("Failed to load audio metadata"));
+        });
+      } catch (error) {
+        toast.error("Failed to process audio file metadata.");
+        return;
+      }
+    } else {
+      // Append the existing duration if no new file is uploaded
+      formData.append("duration", audioDuration);
+    }
+
+    // Validate Caller Tune Time
+    const callerTuneDuration = convertToSeconds(callerTuneTime);
+    if (callerTuneDuration > parseFloat(audioDuration)) {
+      toast.error(
+        "Caller Tune Time can't be greater than audio file duration."
+      );
       return;
     }
 
-    const audio = new Audio(URL.createObjectURL(audioFile));
-
-    const loadAudioMetadata = new Promise<void>((resolve, reject) => {
-      audio.onloadedmetadata = () => {
-        const audioDuration = audio.duration;
-        console.log("audio.duration edit track page");
-        // console.log(audioDuration);
-        // console.log(" | ");
-        // console.log(audioDuration.toString());
-        formData.append("duration", audioDuration.toString());
-
-        const callerTuneDuration = convertToSeconds(callerTuneTime);
-        console.log("callerTuneDuration");
-        console.log(callerTuneDuration);
-        if (callerTuneDuration > audioDuration) {
-          toast.error(
-            "Caller Tune Time can't be greater than audio file duration."
-          );
-          reject(
-            new Error(
-              "Caller Tune Time can't be greater than audio file duration."
-            )
-          );
-        } else {
-          resolve();
-        }
-      };
-      audio.onerror = () => reject(new Error("Failed to load audio metadata"));
-    });
-
-
+    // Append other fields
     formData.append(
       "singers",
       JSON.stringify(selectedSingers.map((s) => s.value))
@@ -283,18 +288,15 @@ export default function UpdateTrack({
       JSON.stringify(selectedProducers.map((p) => p.value))
     );
 
-    for (const [key, value] of Array.from(formData.entries())) {
-      console.log(`${key}:`, value);
-    }
+
 
     try {
-      await loadAudioMetadata; // Wait for audio metadata to load
-
       setIsUploading(true);
       const response = await apiFormData("/api/track/updatetrack", formData);
+
+
       if (response.success) {
         toast.success("Track updated successfully!");
-
         router.push(`/albums/viewalbum/${btoa(albumId!)}`);
       } else {
         toast.error(response.message);

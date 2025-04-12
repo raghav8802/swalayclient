@@ -13,7 +13,6 @@ import ConfirmationDialog from "@/components/ConfirmationDialog";
 import DeleteButton from "./components/DeleteButton";
 import ContentDeliverySheet from "./components/ContentDeliveryReport";
 
-// import MusicPlayer from '../components/MusicPlayer'
 
 interface AlbumDetails {
   artist: string;
@@ -37,16 +36,19 @@ interface AlbumDetails {
 }
 
 enum AlbumProcessingStatus {
+  // eslint-disable-next-line no-unused-vars
   Draft = 0, // on information submit
+  // eslint-disable-next-line no-unused-vars
   Processing = 1, // on final submit
+  // eslint-disable-next-line no-unused-vars
   Approved = 2,
+  // eslint-disable-next-line no-unused-vars
   Rejected = 3,
+  // eslint-disable-next-line no-unused-vars
   Live = 4,
 }
 
-const albums = ({ params }: { params: { albumid: string } }) => {
-
-  const albumIdParams = params.albumid;
+const Albums = ({ params }: { params: { albumid: string } }) => {
   
   const [albumId, setAlbumId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -56,28 +58,25 @@ const albums = ({ params }: { params: { albumid: string } }) => {
 
   useEffect(() => {
     const albumIdParams = params.albumid;
-
     try {
       const decodedAlbumId = atob(albumIdParams);
       setAlbumId(decodedAlbumId);
     } catch (e) {
       setError("Invalid Url");
-      console.error("Decoding error:", e);
     }
-  }, [albumIdParams]);
+  }, [params.albumid]);
 
   const fetchAlbumDetails = async (albumId: string) => {
     try {
       const response = await apiGet(
         `/api/albums/getAlbumsDetails?albumId=${albumId}`
       );
-      console.log(response.data);
-
+    
       if (response.data) {
         setAlbumDetails(response.data);
         setIsLoading(false);
       } else {
-        console.log("go to error");
+  
         setError("Invalid Url");
       }
     } catch (error) {
@@ -92,22 +91,23 @@ const albums = ({ params }: { params: { albumid: string } }) => {
   }, [albumId]);
 
   const onFinalSubmit = () => {
-    console.log("dsfsfs");
+
     setIsDialogOpen(true);
   };
 
   const handleContinue = async () => {
-    console.log("Action continued");
+
 
     const payload = {
       id: albumId,
       status: AlbumProcessingStatus.Processing,
       comment: "",
     };
+
     try {
       const response = await apiPost("/api/albums/updateStatus", payload);
-      console.log("response update staus");
-      console.log(response);
+    
+
       if (response.success) {
         toast.success("Thank you! Your album(s) are currently being processed");
         // check it
@@ -125,7 +125,7 @@ const albums = ({ params }: { params: { albumid: string } }) => {
         toast.error(response.message);
       }
     } catch (error) {
-      console.log("error in api", error);
+   
       toast.error("Internal server error");
     }
   };
@@ -142,7 +142,7 @@ const albums = ({ params }: { params: { albumid: string } }) => {
              <a
              href={`${process.env.NEXT_PUBLIC_AWS_S3_FOLDER_PATH}albums/07c1a${albumId}ba3/cover/${albumDetails.thumbnail}`}
              download={albumDetails.thumbnail as string}
-             target="_blank"
+            rel="noreferrer"
              className="w-full"
            >
             <Image
@@ -159,7 +159,10 @@ const albums = ({ params }: { params: { albumid: string } }) => {
         <div className={`p-3 border rounded ${Style.albumDetails}`}>
           {albumDetails && (
             <div style={{ width: "100%" }}>
-              <AlbumStatus status={albumDetails.status} />
+              <AlbumStatus 
+              status={albumDetails.status}
+              comment={albumDetails.comment ?? ""}
+              />
             </div>
           )}
           <h2 className={Style.albumTitle}>
@@ -338,4 +341,4 @@ const albums = ({ params }: { params: { albumid: string } }) => {
   );
 };
 
-export default albums;
+export default Albums;

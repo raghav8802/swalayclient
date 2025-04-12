@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -11,6 +15,9 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
+    "types": [
+      "react"
+    ],
     "incremental": true,
     "plugins": [
       {
@@ -18,17 +25,26 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ]
     }
   },
-  "include": ["next-env.d.ts",
-   "**/*.ts", 
-   "**/*.tsx", ".next/types/**/*.ts", 
-   "src/dbConfig/dbConfig.ts", "src/context/UserProvider.tsx", 
-   "src/components/HomeStatsCard.tsx", 
-   "src/app/(dashboard)/albums/components/InputElement.js",
-    "src/app/(dashboard)/payments/components/PaymentModal.tsx", 
-    "src/app/(dashboard)/albums/new-release/page.tsx", 
-    "src/app/(dashboard)/albums/components/MultiSelect.js", "src/components/Navbar.tsx"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/dbConfig/dbConfig.ts",
+    "src/context/UserProvider.tsx",
+    "src/components/HomeStatsCard.tsx",
+    "src/app/(dashboard)/albums/components/InputElement.js",
+    "src/app/(dashboard)/payments/components/PaymentModal.tsx",
+    "src/app/(dashboard)/albums/new-release/page.tsx",
+    "src/app/(dashboard)/albums/components/MultiSelect.js",
+    "src/components/Navbar.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

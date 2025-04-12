@@ -9,17 +9,8 @@ export async function POST(req: NextRequest) {
     await connect();
     const formData = await req.formData();
 
-    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"); // Log the form data
-    console.log("Form data received:"); // Log the form data
-    console.log("Form data keys:", Array.from(formData.keys())); // Log the keys in the form data
-    console.log("Form data values:"); // Log the values in the form data
-    formData.forEach((value, key) => {
-      console.log(`${key}: ${value}`); // Log each key-value pair
-    });
-
     const trackId = formData.get("trackId")?.toString();
   
-
     if (!trackId || !mongoose.Types.ObjectId.isValid(trackId)) {
       return NextResponse.json({
         message: "Invalid trackId",
@@ -42,6 +33,7 @@ export async function POST(req: NextRequest) {
     const updateData: {
       songName?: string;
       primarySinger?: string;
+      featuredArtist?: string;
       singers?: string[];
       composers?: string[];
       lyricists?: string[];
@@ -58,12 +50,12 @@ export async function POST(req: NextRequest) {
     // Populate updateData with fields from formData
     updateData.songName = formData.get("songName")?.toString() ?? "";
     updateData.primarySinger = formData.get("primarySinger")?.toString() ?? "";
+    updateData.featuredArtist = formData.get("featuredArtist")?.toString() ?? "";
     updateData.singers = JSON.parse(formData.get("singers")?.toString() ?? "[]");
     updateData.composers = JSON.parse(formData.get("composers")?.toString() ?? "[]");
     updateData.lyricists = JSON.parse(formData.get("lyricists")?.toString() ?? "[]");
     updateData.producers = JSON.parse(formData.get("producers")?.toString() ?? "[]");
-    // updateData.isrc = formData.get("isrc")?.toString() ?? "";
-    updateData.duration = formData.get("duration")?.toString() ?? "";
+
     updateData.crbt = formData.get("crbt")?.toString() ?? "";
     updateData.category = formData.get("category")?.toString() ?? "";
     updateData.version = formData.get("version")?.toString() ?? "";
@@ -72,11 +64,15 @@ export async function POST(req: NextRequest) {
     const audioFile = formData.get("audioFile") as File;
 
     // Handle audio file update
-    if (audioFile) {
-      console.log("Audio file received:", audioFile); // Log the audio file details
-      console.log("Audio file name:", audioFile.name); // Log the audio file name
-      console.log("Audio file size:", audioFile.size); // Log the audio file size
-      console.log("Audio file type:", audioFile.type); // Log the audio file type
+    if (audioFile && audioFile.size > 0) {
+
+      if (!["audio/mpeg", "audio/wav"].includes(audioFile.type)) {
+        return NextResponse.json({
+          message: "Invalid file type. Please upload an MP3 or WAV file.",
+          success: false,
+          status: 400,
+        });
+      }
 
       const songName = (formData.get("songName") as string).trim();
       const songNameNoSpace = songName.replace(/ /g, "-");
@@ -90,8 +86,6 @@ export async function POST(req: NextRequest) {
         folderName: albumId,
       });
 
-      console.log("Upload result:", uploadResult); // Log the upload result
-
       if (!uploadResult.status) {
         return NextResponse.json({
           message: "Failed to upload audio file",
@@ -102,6 +96,7 @@ export async function POST(req: NextRequest) {
 
       // Update the audio file field
       updateData.audioFile = uploadResult.fileName;
+      updateData.duration = formData.get("duration")?.toString() ?? "";
     }
 
     // Perform the update operation

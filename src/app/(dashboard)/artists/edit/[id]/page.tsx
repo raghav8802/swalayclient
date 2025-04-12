@@ -1,6 +1,6 @@
 "use client";
 import { apiFormData, apiGet } from "@/helpers/axiosRequest";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import toast from "react-hot-toast";
 import { useDropzone } from "react-dropzone";
 import Loading from "../../loading";
@@ -39,10 +39,11 @@ interface AlbumData {
 }
 
 export default function EditArtistPage({ params }: { params: { id: string } }) {
+
   const decodedArtistId = atob(params.id);
   const [isLoading, setIsLoading] = useState(true);
   const [artistData, setArtistData] = useState<ArtistData | null>(null);
-  const [albumData, setAlbumData] = useState<AlbumData[]>([]);
+ 
 
   const router = useRouter();
 
@@ -69,7 +70,7 @@ export default function EditArtistPage({ params }: { params: { id: string } }) {
   });
 
   // Handle Dropzone for Image Upload
-  const { getRootProps, getInputProps, acceptedFiles } = useDropzone({
+  const { getRootProps, getInputProps } = useDropzone({
     accept: {
       "image/*": [],
     } as Accept,
@@ -82,21 +83,16 @@ export default function EditArtistPage({ params }: { params: { id: string } }) {
     },
   });
 
-  useEffect(() => {
-    fetchArtistDetails();
-  }, [decodedArtistId]);
-
-  const fetchArtistDetails = async () => {
+  const fetchArtistDetails = React.useCallback(async () => {
     try {
       const response = await apiGet(
         `/api/artist/getArtistDetails?artistId=${decodedArtistId}`
       );
-
+  
       if (response.success) {
         const artist = response.data.artistData;
         setArtistData(artist);
-        setAlbumData(response.data.albums);
-
+  
         // Set form data
         setFormData({
           artistName: artist.artistName || "",
@@ -111,7 +107,7 @@ export default function EditArtistPage({ params }: { params: { id: string } }) {
           iprsNumber: artist.iprsNumber || "",
           profileImage: null,
         });
-
+  
         setArtistType({
           singer: artist.isSinger || false,
           lyricist: artist.isLyricist || false,
@@ -126,7 +122,12 @@ export default function EditArtistPage({ params }: { params: { id: string } }) {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [decodedArtistId]); // Add dependencies here
+  
+  useEffect(() => {
+    fetchArtistDetails();
+  }, [fetchArtistDetails]); // Include fetchArtistDetails in the dependency array
+
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

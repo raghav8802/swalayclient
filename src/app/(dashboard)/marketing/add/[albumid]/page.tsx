@@ -40,7 +40,7 @@ interface FormErrors {
   extraFile?: string[];
 }
 
-const page = ({ params }: { params: { albumid: string } }) => {
+const Page = ({ params }: { params: { albumid: string } }) => {
   const searchParams = useSearchParams();
   const albumName = searchParams.get("albumname");
 
@@ -488,4 +488,4 @@ const page = ({ params }: { params: { albumid: string } }) => {
   );
 };
 
-export default page;
+export default Page;

@@ -56,7 +56,7 @@ const PrivacyPolicy = () => {
             </div>
 
             <div className="space-y-2">
-              <p><strong>Social Media Login Data.</strong> We may provide you with the option to register with us using your existing social media account details, like your Facebook, Twitter, or other social media account. If you choose to register in this way, we will collect the information described in the section called "HOW DO WE HANDLE YOUR SOCIAL LOGINS?" below.</p>
+              <p><strong>Social Media Login Data.</strong> We may provide you with the option to register with us using your existing social media account details, like your Facebook, Twitter, or other social media account. If you choose to register in this way, we will collect the information described in the section called &quot;HOW DO WE HANDLE YOUR SOCIAL LOGINS?&quot; below.</p>
             </div>
 
             <p>
@@ -74,9 +74,9 @@ const PrivacyPolicy = () => {
 
             <p>The information we collect includes:</p>
             <ul className="list-disc pl-6 space-y-2">
-              <li><strong>Log and Usage Data.</strong> Log and usage data is service-related, diagnostic, usage, and performance information our servers automatically collect when you access or use our Services and which we record in log files. Depending on how you interact with us, this log data may include your IP address, device information, browser type, and settings and information about your activity in the Services (such as the date/time stamps associated with your usage, pages and files viewed, searches, and other actions you take such as which features you use), device event information (such as system activity, error reports (sometimes called "crash dumps"), and hardware settings).</li>
+              <li><strong>Log and Usage Data.</strong> Log and usage data is service-related, diagnostic, usage, and performance information our servers automatically collect when you access or use our Services and which we record in log files. Depending on how you interact with us, this log data may include your IP address, device information, browser type, and settings and information about your activity in the Services (such as the date/time stamps associated with your usage, pages and files viewed, searches, and other actions you take such as which features you use), device event information (such as system activity, error reports (sometimes called &quot;crash dumps&quot;), and hardware settings).</li>
               <li><strong>Device Data.</strong> We collect device data such as information about your computer, phone, tablet, or other device you use to access the Services. Depending on the device used, this device data may include information such as your IP address (or proxy server), device and application identification numbers, location, browser type, hardware model, Internet service provider and/or mobile carrier, operating system, and system configuration information.</li>
-              <li><strong>Location Data.</strong> We collect location data such as information about your device's location, which can be either precise or imprecise. How much information we collect depends on the type and settings of the device you use to access the Services. For example, we may use GPS and other technologies to collect geolocation data that tells us your current location (based on your IP address). You can opt out of allowing us to collect this information either by refusing access to the information or by disabling your Location setting on your device. However, if you choose to opt out, you may not be able to use certain aspects of the Services.</li>
+              <li><strong>Location Data.</strong> We collect location data such as information about your device&aposs location, which can be either precise or imprecise. How much information we collect depends on the type and settings of the device you use to access the Services. For example, we may use GPS and other technologies to collect geolocation data that tells us your current location (based on your IP address). You can opt out of allowing us to collect this information either by refusing access to the information or by disabling your Location setting on your device. However, if you choose to opt out, you may not be able to use certain aspects of the Services.</li>
             </ul>
           </div>
         );
@@ -94,7 +94,7 @@ const PrivacyPolicy = () => {
               <li>To send administrative information to you.</li>
               <li>To fulfill and manage your orders.</li>
               <li>To enable user-to-user communications.</li>
-              <li>To save or protect an individual's vital interest.</li>
+              <li>To save or protect an individual&aposs vital interest.</li>
             </ul>
           </div>
         );
@@ -123,7 +123,7 @@ const PrivacyPolicy = () => {
           <div className="space-y-4">
             <p className="italic">In Short: We may share information in specific situations described in this section and/or with the following categories of third parties.</p>
             
-            <p>Vendors, Consultants, and Other Third-Party Service Providers. We may share your data with third-party vendors, service providers, contractors, or agents ("third parties") who perform services for us or on our behalf and require access to such information to do that work. The categories of third parties we may share personal information with are as follows:</p>
+            <p>Vendors, Consultants, and Other Third-Party Service Providers. We may share your data with third-party vendors, service providers, contractors, or agents (&quot;third parties&quot;) who perform services for us or on our behalf and require access to such information to do that work. The categories of third parties we may share personal information with are as follows:</p>
             <ul className="list-disc pl-6 space-y-2">
               <li>Ad Networks</li>
               <li>Affiliate Marketing Programs</li>
@@ -145,7 +145,7 @@ const PrivacyPolicy = () => {
             <p>We also may need to share your personal information in the following situations:</p>
             <ul className="list-disc pl-6 space-y-2">
               <li><strong>Business Transfers.</strong> We may share or transfer your information in connection with, or during negotiations of, any merger, sale of company assets, financing, or acquisition of all or a portion of our business to another company.</li>
-              <li><strong>When we use Google Maps Platform APIs.</strong> We may share your information with certain Google Maps Platform APIs (e.g., Google Maps API, Places API). To find out more about Google's Privacy Policy, please refer to this link.</li>
+              <li><strong>When we use Google Maps Platform APIs.</strong> We may share your information with certain Google Maps Platform APIs (e.g., Google Maps API, Places API). To find out more about Google&aposs Privacy Policy, please refer to this link.</li>
               <li><strong>Affiliates.</strong> We may share your information with our affiliates, in which case we will require those affiliates to honor this privacy notice.</li>
               <li><strong>Business Partners.</strong> We may share your information with our business partners to offer you certain products, services, or promotions.</li>
             </ul>
@@ -188,7 +188,7 @@ const PrivacyPolicy = () => {
           <div className="space-y-4">
             <p className="italic">In Short: In some regions, such as the European Economic Area (EEA), United Kingdom (UK), and Canada, you have rights that allow you greater access to and control over your personal information. You may review, change, or terminate your account at any time.</p>
             
-            <p>In some regions (like the EEA, UK, and Canada), you have certain rights under applicable data protection laws. These may include the right (i) to request access and obtain a copy of your personal information, (ii) to request rectification or erasure; (iii) to restrict the processing of your personal information; and (iv) if applicable, to data portability. In certain circumstances, you may also have the right to object to the processing of your personal information. You can make such a request by contacting us by using the contact details provided in the section "HOW CAN YOU CONTACT US ABOUT THIS NOTICE?" below.</p>
+            <p>In some regions (like the EEA, UK, and Canada), you have certain rights under applicable data protection laws. These may include the right (i) to request access and obtain a copy of your personal information, (ii) to request rectification or erasure; (iii) to restrict the processing of your personal information; and (iv) if applicable, to data portability. In certain circumstances, you may also have the right to object to the processing of your personal information. You can make such a request by contacting us by using the contact details provided in the section &quot;HOW CAN YOU CONTACT US ABOUT THIS NOTICE?&quot; below.</p>
             
             {/* Add more content for privacy rights section */}
           </div>
@@ -198,7 +198,7 @@ const PrivacyPolicy = () => {
         return (
           <div className="space-y-4">
             <p>
-              Most web browsers and some mobile operating systems and mobile applications include a Do-Not-Track ("DNT") feature or setting you can activate to signal your privacy preference not to have data about your online browsing activities monitored and collected. At this stage no uniform technology standard for recognizing and implementing DNT signals has been finalized. As such, we do not currently respond to DNT browser signals or any other mechanism that automatically communicates your choice not to be tracked online. If a standard for online tracking is adopted that we must follow in the future, we will inform you about that practice in a revised version of this privacy notice.
+              Most web browsers and some mobile operating systems and mobile applications include a Do-Not-Track (&quot;DNT&quot;) feature or setting you can activate to signal your privacy preference not to have data about your online browsing activities monitored and collected. At this stage no uniform technology standard for recognizing and implementing DNT signals has been finalized. As such, we do not currently respond to DNT browser signals or any other mechanism that automatically communicates your choice not to be tracked online. If a standard for online tracking is adopted that we must follow in the future, we will inform you about that practice in a revised version of this privacy notice.
             </p>
           </div>
         );
@@ -209,7 +209,7 @@ const PrivacyPolicy = () => {
             <p className="italic">In Short: Yes, if you are a resident of California, you are granted specific rights regarding access to your personal information.</p>
 
             <p>
-              California Civil Code Section 1798.83, also known as the "Shine The Light" law, permits our users who are California residents to request and obtain from us, once a year and free of charge, information about categories of personal information (if any) we disclosed to third parties for direct marketing purposes and the names and addresses of all third parties with which we shared personal information in the immediately preceding calendar year. If you are a California resident and would like to make such a request, please submit your request in writing to us using the contact information provided below.
+              California Civil Code Section 1798.83, also known as the &quot;Shine The Light&quot; law, permits our users who are California residents to request and obtain from us, once a year and free of charge, information about categories of personal information (if any) we disclosed to third parties for direct marketing purposes and the names and addresses of all third parties with which we shared personal information in the immediately preceding calendar year. If you are a California resident and would like to make such a request, please submit your request in writing to us using the contact information provided below.
             </p>
 
             <p>
@@ -217,7 +217,7 @@ const PrivacyPolicy = () => {
             </p>
 
             <h3 className="text-xl font-semibold mt-6 mb-4">CCPA Privacy Notice</h3>
-            <p>The California Code of Regulations defines a "resident" as:</p>
+            <p>The California Code of Regulations defines a &quot;resident&quot; as:</p>
             <ul className="list-disc pl-6 space-y-2">
               <li>every individual who is in the State of California for other than a temporary or transitory purpose and</li>
               <li>every individual who is domiciled in the State of California who is outside the State of California for a temporary or transitory purpose</li>
@@ -232,7 +232,7 @@ const PrivacyPolicy = () => {
             <p className="italic">In Short: Yes, we will update this notice as necessary to stay compliant with relevant laws.</p>
 
             <p>
-              We may update this privacy notice from time to time. The updated version will be indicated by an updated "Revised" date and the updated version will be effective as soon as it is accessible. If we make material changes to this privacy notice, we may notify you either by prominently posting a notice of such changes or by directly sending you a notification. We encourage you to review this privacy notice frequently to be informed of how we are protecting your information.
+              We may update this privacy notice from time to time. The updated version will be indicated by an updated &quot;Revised&quot; date and the updated version will be effective as soon as it is accessible. If we make material changes to this privacy notice, we may notify you either by prominently posting a notice of such changes or by directly sending you a notification. We encourage you to review this privacy notice frequently to be informed of how we are protecting your information.
             </p>
           </div>
         );
@@ -281,7 +281,7 @@ const PrivacyPolicy = () => {
       <div className="prose max-w-none space-y-8">
         <section>
           <p className="text-gray-700">
-            This privacy notice for SwaLay Digital (doing business as SwaLay) ("SwaLay," "we," "us," or "our"), describes how and why we might collect, store, use, and/or share ("process") your information when you use our services ("Services"), such as when you:
+            This privacy notice for SwaLay Digital (doing business as SwaLay) (&quot;SwaLay,&quot; &quot;we,&quot; &quot;us,&quot; or &quot;our&quot;), describes how and why we might collect, store, use, and/or share (&quot;process&quot;) your information when you use our services (&quot;Services&quot;), such as when you:
           </p>
           <ul className="list-disc pl-6 mt-4 space-y-2 text-gray-700">
             <li>Visit our website at https://swalay.in, or any website of ours that links to this privacy notice</li>

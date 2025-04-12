@@ -10,6 +10,7 @@ import ConfirmationDialog from "@/components/ConfirmationDialog";
 
 interface TrackListProps {
   trackId: string;
+  // esnlit-disable-next-line no-unused-vars
   onFetchDetails: (songName: string, url: string) => void;
 }
 
@@ -26,6 +27,7 @@ interface TrackDetail {
   composers: ArtistDetail[] | null;
   lyricists: ArtistDetail[] | null;
   producers: ArtistDetail[] | null;
+  featuredArtist: string | null;
   audioFile: string | null;
   audioFileWav: string | null;
   isrc: string | null;
@@ -49,42 +51,34 @@ const TrackDetails: React.FC<TrackListProps> = ({
   onFetchDetails,
 }) => {
   const [trackDetails, setTrackDetails] = useState<TrackDetail | null>(null);
-  const [error, setError] = useState("");
+
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const audioRef = useRef<HTMLAudioElement>(null);
+  // const audioRef = useRef<HTMLAudioElement>(null);
 
-  const fetchTrackDetails = async () => {
-    console.log("in track details");
-
+  const fetchTrackDetails = React.useCallback(async () => {
     try {
       const response = await apiGet(
         `/api/track/getTrackDetails?trackId=${trackId}`
       );
-
+  
       if (response.success) {
         setTrackDetails(response.data);
-        const songName = response.data.songName;
         const audioUrl = `${process.env.NEXT_PUBLIC_AWS_S3_FOLDER_PATH}albums/07c1a${response.data.albumId}ba3/tracks/${response.data.audioFile}`;
-
-        onFetchDetails(songName, audioUrl);
-      } else {
-        setError(response.message);
+        onFetchDetails(response.data.songName, audioUrl);
       }
-    } catch (error) {
-      console.log("something went wrong");
-      setError("Internal server error");
+    } catch {
+      toast.error("Internal server error");
     }
-  };
+  }, [trackId, onFetchDetails]);
 
   // useEffect(() => {
   //   fetchTrackDetails();
   // }, []);
 
   useEffect(() => {
-    console.log("trackId changed:", trackId);
     fetchTrackDetails();
-  }, [trackId]);
+  }, [fetchTrackDetails]);
 
   const downloadRef = useRef<HTMLAnchorElement>(null);
 
@@ -100,7 +94,7 @@ const TrackDetails: React.FC<TrackListProps> = ({
       .then(() => {
         toast.success("URL copied to clipboard!");
       })
-      .catch((err) => {
+      .catch(() => {
         // console.error('Failed to copy URL: ', err);
         toast.error("Failed to copy URL");
       });
@@ -111,9 +105,7 @@ const TrackDetails: React.FC<TrackListProps> = ({
   };
 
   const handleContinue = async () => {
-    console.log("Action continued");
 
-    console.log(trackId);
 
     try {
       const response = await apiPost("/api/track/deleteTrack", { trackId });
@@ -125,7 +117,7 @@ const TrackDetails: React.FC<TrackListProps> = ({
         toast.error(response.message);
       }
     } catch (error) {
-      console.log("error in api", error);
+ 
       toast.error("Internal server error");
     }
   };
@@ -320,6 +312,23 @@ const TrackDetails: React.FC<TrackListProps> = ({
                           )}
                         </span>
                       ))}
+                    </div>
+                  </li>
+
+                  <li className="flex flex-col">
+                    <span className="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">
+                      Featured
+                    </span>
+                    <div className="flex flex-wrap items-center">
+
+                      {trackDetails?.featuredArtist && (
+                        <span
+                          className="inline-flex items-center"
+                        >
+                            {trackDetails.featuredArtist}   
+                        </span>
+                      )}
+
                     </div>
                   </li>
 

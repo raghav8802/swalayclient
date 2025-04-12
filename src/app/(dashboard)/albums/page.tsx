@@ -10,7 +10,6 @@ import toast from "react-hot-toast";
 import { apiGet } from "@/helpers/axiosRequest";
 import AlbumsLoading from "@/components/AlbumsLoading";
 import AlbumSlider from "./components/AlbumSlider";
-// const color = "#3498db"; // Define the color variable
 const color = "#7808d0"; // Define the color variable
 
 import {
@@ -22,7 +21,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 
-const albums = () => {
+const Albums = () => {
   const context = useContext(UserContext);
   const labelId = context?.user?._id;
 
@@ -142,4 +141,4 @@ const albums = () => {
   );
 };
 
-export default albums;
+export default Albums;

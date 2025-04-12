@@ -2,7 +2,6 @@ import { connect } from "@/dbConfig/dbConfig";
 import Label from "@/models/Label";
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
-import bcryptjs from "bcryptjs";
 import sendMail from "@/helpers/sendMail";
 import RegisterEmail from "@/components/Email/RegisterEmail";
 import React from "react";

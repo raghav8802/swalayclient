@@ -18,6 +18,7 @@ export interface iLabel extends Document {
   state: string;
 }
 
+
 const LabelSchema: Schema<iLabel> = new Schema({
   username: {
     type: String,
@@ -43,7 +44,6 @@ const LabelSchema: Schema<iLabel> = new Schema({
     type: String,
     // required: [true, 'Razorpay contact ID required'],
     trim: true,
-    unique: true,
   },
   password: {
     type: String,

@@ -19,11 +19,11 @@ const RegisterEmail: React.FC<EmailProps> = ({
         <p style={{ marginBottom: '16px' }}>Hi {clientName},</p>
         
         <p style={{ marginBottom: '16px' }}>
-          Welcome to SwaLay! We're thrilled you've joined our exclusive music community.
+          Welcome to SwaLay! We&apos;re thrilled you&apos;ve joined our exclusive music community.
         </p>
         
         <p style={{ marginBottom: '16px' }}>
-          It's time to unlock a world of premium music experiences. Here's how to begin your journey:
+          It&apos;s time to unlock a world of premium music experiences. Here&apos;s how to begin your journey:
         </p>
 
         <ol style={{ paddingLeft: '20px', marginBottom: '24px' }}>
@@ -34,11 +34,11 @@ const RegisterEmail: React.FC<EmailProps> = ({
             </a>
           </li>
           <li style={{ marginBottom: '12px' }}>
-          Visit the "
+          Visit the &quot;
             <a href="https://app.swalayplus.in/signin" style={{ color: '#0066cc', textDecoration: 'none' }}>
             Sign In 
             </a>
-            " page to access your SwaLay Plus Artist account.
+            &quot; page to access your SwaLay Plus Artist account.
           </li>
         </ol>
 
@@ -48,19 +48,18 @@ const RegisterEmail: React.FC<EmailProps> = ({
             color: '#333333',
             fontSize: '16px'
           }}>
-            Ready to explore? Once you've set up your login, dive into the exclusive world of music on SwaLay Plus!
+            Ready to explore? Once you&apos;ve set up your login, dive into the exclusive world of music on SwaLay Plus!
           </p>
         
         <p style={{ marginBottom: '24px' }}>
           Our dedicated support team is here to ensure your experience is flawless. If you need any assistance, 
-          please don't hesitate to reach out to us at{' '}
-          <a href="mailto:swalay.care@talantoncore.in" style={{ color: '#0066cc', textDecoration: 'none' }}>
+          please don&apos;t hesitate to reach out to us at <a href="mailto:swalay.care@talantoncore.in" style={{ color: '#0066cc', textDecoration: 'none' }}>
             swalay.care@talantoncore.in
           </a>.
         </p>
 
         <p style={{ marginBottom: '24px' }}>
-          We're excited to have you embark on this musical journey with SwaLay!
+          We&apos;re excited to have you embark on this musical journey with SwaLay!
         </p>
 
         

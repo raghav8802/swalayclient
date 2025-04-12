@@ -21,7 +21,7 @@ interface BankData {
   pan: string;
 }
 
-const page = () => {
+const Page = () => {
   const context = useContext(UserContext);
   // console.log(context?.user);
 
@@ -118,7 +118,7 @@ const page = () => {
     if (labelId) {
       fetchBankDetails();
     }
-  }, [labelId]);
+  }, [labelId, fetchBankDetails]);
 
   return (
     <div className="grid grid-cols-12 gap-4">
@@ -386,4 +386,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

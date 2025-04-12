@@ -31,6 +31,9 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
   title = "Are you absolutely sure?",
   description = "This action cannot be undone. This will permanently delete your account and remove your data from our servers.",
 }) => {
+
+  console.log("triggerText", triggerText);
+  
   return (
     <AlertDialog open={show} onOpenChange={onClose}>
       <AlertDialogContent>

@@ -62,7 +62,8 @@ const formatChartData = (data: PaymentData[]): ChartData[] => {
 };
 
 export function PaymentChart({ data, totalPayout, availableBalance }: PaymentChartProps) {
-  const [activeChart, setActiveChart] = React.useState<keyof typeof chartConfig>("amount");
+
+  // const [activeChart, setActiveChart] = React.useState<keyof typeof chartConfig>("amount");
 
   // Format the data for the chart
   const chartData = React.useMemo(() => formatChartData(data), [data]);

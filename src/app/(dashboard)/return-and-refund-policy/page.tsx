@@ -49,7 +49,7 @@ const ReturnAndRefundPolicy = () => {
           <h3 className="text-xl font-semibold mb-2">For Music/Content Distribution Service (if applicable)</h3>
           <ul className="list-disc pl-6 space-y-2 text-gray-700">
             <li>A refund will happen in case of your uploaded song does not pass our Quality Check test. In this case, you will be notified about the uploaded content failing our Quality Check and the amount will be refunded to you within 7-8 days</li>
-            <li>A refund can be asked via mail till your song status is processing, QC Pending, QC Approved. Once your song status changes to Song sent to OTT we won't be able to offer a refund.</li>
+            <li>A refund can be asked via mail till your song status is processing, QC Pending, QC Approved. Once your song status changes to Song sent to OTT we won&apos;t be able to offer a refund.</li>
             <li>We will refund the full amount in case your song is not LIVE on any platform within 15 days of upload.</li>
             <li>We will refund your song if we will take down your song from our end</li>
           </ul>

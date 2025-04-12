@@ -35,7 +35,7 @@ const PricingAndPaymentPolicy = () => {
             <li>Press Releases & Blog Features</li>
           </ul>
           <p className="mb-4">
-            Pricing for promotions varies based on the campaign's reach, duration, and customization requirements. Fees for these services will be provided upon request.
+            Pricing for promotions varies based on the campaign&apos;s reach, duration, and customization requirements. Fees for these services will be provided upon request.
           </p>
 
           <h3 className="text-xl font-semibold mb-3">C. Subscription Plans</h3>
@@ -89,7 +89,7 @@ const PricingAndPaymentPolicy = () => {
 
         <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-4">3. Razorpay Compliance & Payment Gateway Information</h2>
-          <p className="mb-4">As part of our compliance with Razorpay's payment gateway requirements, we provide the following details:</p>
+          <p className="mb-4">As part of our compliance with Razorpay&apos;s payment gateway requirements, we provide the following details:</p>
           <ul className="list-none space-y-2 mb-6">
             <li>• Business Name: SwaLay Digital</li>
             <li>• Main Website: https://swalay.talantoncore.in</li>

@@ -54,7 +54,7 @@ const Page = () => {
             >
 
              <div style={{ width: "30%" }} className="mx-auto mt-5 mb-2 min-h-[100px]">
-                <img
+                <Image
                     src="https://swalay-music-files.s3.ap-south-1.amazonaws.com/assets/SwaLay+-2.png"
                     alt="SwaLay Banner"
                     style={{ width: "100%", height: "auto", display: "block", }}
@@ -74,7 +74,7 @@ const Page = () => {
         ) : (
           <div className="max-w-md w-full bg-white rounded-lg shadow-md overflow-hidden">
             <div style={{ width: "30%" }} className="mx-auto mt-5 mb-2 ">
-              <img
+              <Image
                 src="https://swalay-music-files.s3.ap-south-1.amazonaws.com/assets/SwaLay+-2.png"
                 alt="SwaLay Banner"
                 style={{ width: "100%", height: "auto", display: "block" }}

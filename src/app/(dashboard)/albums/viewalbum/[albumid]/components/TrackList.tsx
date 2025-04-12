@@ -26,6 +26,7 @@ interface Track {
 
 interface TrackListProps {
   albumId: string;
+  // esnlit-disable-next-line no-unused-vars
   onTrackClick: (trackId: string) => void;
 }
 
@@ -50,8 +51,7 @@ const TrackList: React.FC<TrackListProps> = ({ albumId, onTrackClick }) => {
           `/api/track/getTracks?albumId=${albumId}`
         );
 
-        console.log("=-=-=-=-=-==-:"); // Log the response
-        console.log("Tracks response:", response); // Log the response
+
 
         if (response.data) {
           const reversedTracks = response.data.reverse(); // Reverse the tracks array
@@ -73,6 +73,7 @@ const TrackList: React.FC<TrackListProps> = ({ albumId, onTrackClick }) => {
   }, [albumId]);
 
   // Handle track item click
+  // eslint-disable-next-line no-unused-vars
   const handleTrackClick = (trackId: string) => {
     setActiveTrackId(trackId);
     onTrackClick(trackId);
@@ -86,7 +87,7 @@ const TrackList: React.FC<TrackListProps> = ({ albumId, onTrackClick }) => {
     <ul className={`mt-3 ${Style.trackList}`}>
       {tracks.length > 0 ? (
         tracks.map((track, index) => {
-          console.log(track.duration); // Log track duration
+
           
           return (
             <li

@@ -20,13 +20,13 @@ const TrackSection: React.FC<TrackSectionProps> = ({ albumId }) => {
 
   const handleTrackClick = (trackId: string) => {
     setShowTrackDetails(true);
-    console.log("Track ID clicked in section :", trackId);
+
     setTrackId(trackId);
   };
 
   const getSongNameUrl = (songName: string, audioUrl: string) => {
     setShowAudioPlayer(true);
-    console.log("Track ID clicked in section :", trackId);
+
     setAudio({ songName, songUrl: audioUrl });
   };
 

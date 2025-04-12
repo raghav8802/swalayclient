@@ -54,7 +54,7 @@ export const VerifyEmail: React.FC<VerifyEmailEmailTemplateProps> = ({
 
  
       <p style={{ marginBottom: '16px' }}>
-        If you didn't request this, 
+        If you didn&apos;t request this, 
         please ignore this email or contact support if you have questions.
       </p>
       

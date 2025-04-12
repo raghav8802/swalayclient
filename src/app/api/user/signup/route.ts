@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
   try {
     const reqBody = await request.json();
 
-    const { username, email, password, contact, usertype } = reqBody;
+    const { username, email, password, contact, userType } = reqBody;
 
     if (!username || !email || !contact) {
 
@@ -41,24 +41,31 @@ export async function POST(request: NextRequest) {
     const hashedPassword = await bcryptjs.hash(password, 10);
 
     let labelType = "normal";
-    if (usertype === "label") {
+    let MusicLabelName = "";
+
+
+    if (userType === "label") {
       labelType = "super";
+      MusicLabelName = username;
     }
+
 
     const newUser = new Label({
       username,
       email,
       contact,
       usertype: labelType,
+      lable: MusicLabelName,
       // state,
       // razor_contact: razorpayContactId, // Ensure this matches the schema
       // razor_contact: "321320321", // Ensure this matches the schema
       password: hashedPassword,
     });
 
+
     const response = await newUser.save();
 
-    // token for email verification
+    //  token for email verification
     const hashedToken = await bcryptjs.hash(
       (response as any)._id.toString(),
       12

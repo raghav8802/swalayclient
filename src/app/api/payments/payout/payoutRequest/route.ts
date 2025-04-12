@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connect } from "@/dbConfig/dbConfig";
-import PaymentRequest, { PaymentStatus } from "@/models/paymentRequest";
+import PaymentRequest from "@/models/paymentRequest";
 
 export async function POST(req: NextRequest) {
   try {

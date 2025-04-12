@@ -35,7 +35,7 @@ interface Album {
 
 
 
-const page = () => {
+const Page = () => {
   const context = useContext(UserContext);
   const labelId = context?.user?._id ?? "";
   const [marketingData, setMarketingData] = useState<Album[]>([]);
@@ -125,4 +125,4 @@ const page = () => {
   </div>);
 };
 
-export default page;
+export default Page;

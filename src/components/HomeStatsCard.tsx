@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import Style from "../app/styles/HomeStatsCard.module.css";
 
 import UserContext from "@/context/userContext";

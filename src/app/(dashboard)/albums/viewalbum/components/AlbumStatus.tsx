@@ -2,10 +2,11 @@ import React from "react";
 
 interface AlbumStatusProps {
   status: number;
+  comment: string | null;
 }
 
 
-const AlbumStatus: React.FC<AlbumStatusProps> = ({ status = 0 }) => {
+const AlbumStatus: React.FC<AlbumStatusProps> = ({ status = 0, comment='' }) => {
   let statusInfo = {
     text: "",
     colorClass: "",
@@ -38,7 +39,7 @@ const AlbumStatus: React.FC<AlbumStatusProps> = ({ status = 0 }) => {
       break;
     case 3:
       statusInfo = {
-        text: "Rejected",
+        text: `Rejected! ${comment}`,
         colorClass: "text-red-800 border-t-4 border-red-300 bg-red-50 dark:text-red-400 dark:bg-gray-800 dark:border-red-800",
       };
       break;

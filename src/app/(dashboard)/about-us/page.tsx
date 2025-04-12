@@ -46,7 +46,7 @@ const AboutUs = () => {
         <ul className="list-disc pl-8 mb-8 space-y-4">
         <li>Seamless Distribution: Hassle-free music distribution with quick turnaround times.</li>
         <li>Fair & Transparent Revenue Model: Ensuring artists get paid fairly and on time.</li>
-        <li>Cutting-Edge Technology: Leveraging the latest digital tools and analytics to maximize an artist's reach.</li>
+        <li>Cutting-Edge Technology: Leveraging the latest digital tools and analytics to maximize an artist&apos;s reach.</li>
         <li>Dedicated Artist Support: Assistance at every step of the journey.</li>
         <li>Comprehensive Music Solutions: From distribution to marketing and revenue management, we provide complete support.</li>
         </ul>

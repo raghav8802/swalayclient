@@ -13,36 +13,34 @@ import { apiGet } from "@/helpers/axiosRequest";
 import { OldAlbumsDataTable } from "./components/oldAlbumsDataTable";
 import UserContext from "@/context/userContext";
 
-const page = () => {
+const Page = () => {
   const context = useContext(UserContext);
 
   const lableName = context?.user?.lable;
 
-  console.log("lableName old data :: ");
-  console.log(lableName);
-  
 
   const [albumsData, setAlbumsData] = useState([]);
 
-  const fetchData = async () => {
-    console.log("call");
-    
-    try {
-      const response = await apiGet(`/api/olddata/get?labelName=${lableName}`);
-      console.log("dsads");
-      console.log(response);
-      
-      setAlbumsData(response.data);
-    } catch (error: any) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      console.log("call");
+  
+      try {
+        const response = await apiGet(`/api/olddata/get?labelName=${lableName}`);
+        console.log("dsads");
+        console.log(response);
+  
+        setAlbumsData(response.data);
+      } catch (error: any) {
+        console.log(error);
+      }
+    };
+  
     if (lableName) {
       fetchData();
     }
   }, [lableName]);
+
 
   return (
     <div className="w-full h-dvh p-6 bg-white rounded-sm">
@@ -67,7 +65,7 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
 
 
 

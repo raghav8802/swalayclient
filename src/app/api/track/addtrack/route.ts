@@ -48,6 +48,7 @@ export async function POST(req: NextRequest) {
       albumId: new mongoose.Types.ObjectId(albumId),
       songName: formData.get("songName")?.toString() ?? "",
       primarySinger: formData.get("primarySinger")?.toString() ?? "",
+      featuredArtist: formData.get("featuredArtist")?.toString() ?? "",
       singers: JSON.parse(formData.get("singers")?.toString() ?? "[]"),
       composers: JSON.parse(formData.get("composers")?.toString() ?? "[]"),
       lyricists: JSON.parse(formData.get("lyricists")?.toString() ?? "[]"),
@@ -60,6 +61,8 @@ export async function POST(req: NextRequest) {
       trackType: formData.get("trackType")?.toString() ?? "",
     };
 
+    console.log("data from input");
+    console.log(data);
 
     const audioFile = formData.get("audioFile") as File;
 
@@ -89,9 +92,7 @@ export async function POST(req: NextRequest) {
       folderName: albumId,
     });
 
-    console.log("----------uploadResult from s3-----------------------");
-    console.log(uploadResult);
-    
+
 
     if (!uploadResult.status) {
       return NextResponse.json({
@@ -106,6 +107,9 @@ export async function POST(req: NextRequest) {
       audioFile: uploadResult.fileName
     });
     const savedTrack = await newTrack.save();
+
+    console.log("savedTrack");
+    console.log(savedTrack);
 
     // here i want to update total track count to increase 1 but album id in album schema
     await Album.findByIdAndUpdate(albumId, {

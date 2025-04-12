@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -31,12 +31,12 @@ const Payments = () => {
   const [totalPayoutBalance, setTotalPayoutBalance] = useState(0);
   const [availableBalance, setAvailableBalance] = useState(0);
 
-  const fetchPayments = async () => {
+  const fetchPayments = useCallback(async () => {
     try {
       const response = await apiGet(
         `/api/payments/getPayments?labelId=${labelId}`
       );
-
+  
       if (response.success) {
         setPaymentData(response.data.payments);
         setTotalPayoutBalance(response.data.totalPayoutBalance);
@@ -45,13 +45,13 @@ const Payments = () => {
     } catch (error) {
       console.log("error");
     }
-  };
-
+  }, [labelId]);
+  
   useEffect(() => {
     if (labelId) {
       fetchPayments();
     }
-  }, [labelId]);
+  }, [labelId, fetchPayments]);
 
 
   const handleSave = async () => {

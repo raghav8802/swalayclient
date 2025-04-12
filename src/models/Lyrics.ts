@@ -1,9 +1,14 @@
 import mongoose, { Schema, Document } from "mongoose";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export enum AlbumStatus {
+  //eslint-disable @typescript-eslint/no-unused-vars
   Draft = 0,
+  //eslint-disable @typescript-eslint/no-unused-vars
   Processing = 1,
+  //eslint-disable @typescript-eslint/no-unused-vars
   Approved = 2,
+  //eslint-disable @typescript-eslint/no-unused-vars
   Rejected = 3,
 }
 
@@ -36,6 +41,7 @@ const lyricsSchema: Schema<ILyric> = new Schema({
   },
 });
 
-const Lyrics = mongoose.models.TLyrics || mongoose.model<ILyric>("TLyrics", lyricsSchema);
+const Lyrics =
+  mongoose.models.TLyrics || mongoose.model<ILyric>("TLyrics", lyricsSchema);
 
 export default Lyrics;
