@@ -35,25 +35,22 @@ interface AlbumDetails {
   _id: string;
 }
 
+/* eslint-disable no-unused-vars */
 enum AlbumProcessingStatus {
-  // eslint-disable-next-line no-unused-vars
   Draft = 0, // on information submit
-  // eslint-disable-next-line no-unused-vars
   Processing = 1, // on final submit
-  // eslint-disable-next-line no-unused-vars
   Approved = 2,
-  // eslint-disable-next-line no-unused-vars
   Rejected = 3,
-  // eslint-disable-next-line no-unused-vars
   Live = 4,
 }
+/* eslint-enable no-unused-vars */
 
 const Albums = ({ params }: { params: { albumid: string } }) => {
   
   const [albumId, setAlbumId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [albumDetails, setAlbumDetails] = useState<AlbumDetails | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
@@ -74,7 +71,7 @@ const Albums = ({ params }: { params: { albumid: string } }) => {
     
       if (response.data) {
         setAlbumDetails(response.data);
-        setIsLoading(false);
+     
       } else {
   
         setError("Invalid Url");

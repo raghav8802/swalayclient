@@ -1,14 +1,10 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// This enum is used in the status field of the schema
 export enum AlbumStatus {
-  //eslint-disable @typescript-eslint/no-unused-vars
   Draft = 0,
-  //eslint-disable @typescript-eslint/no-unused-vars
   Processing = 1,
-  //eslint-disable @typescript-eslint/no-unused-vars
   Approved = 2,
-  //eslint-disable @typescript-eslint/no-unused-vars
   Rejected = 3,
 }
 

@@ -1,14 +1,10 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// This enum is used in the status field of the schema
 export enum PaymentStatus {
-  //eslint-disable @typescript-eslint/no-unused-vars
   PENDING = "PENDING",
-  //eslint-disable @typescript-eslint/no-unused-vars
   APPROVED = "APPROVED",
-  //eslint-disable @typescript-eslint/no-unused-vars
   FAILED = "FAILED",
-  //eslint-disable @typescript-eslint/no-unused-vars
   REJECTED = "REJECTED",
 }
 

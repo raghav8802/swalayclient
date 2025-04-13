@@ -9,18 +9,15 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 
-import toast from "react-hot-toast";
+
 import UserContext from "@/context/userContext";
-import { apiGet, apiPost } from "@/helpers/axiosRequest";
+import { apiGet } from "@/helpers/axiosRequest";
 import { PayoutList } from "../components/PayoutList";
 
 const Payments = () => {
   const context = useContext(UserContext) || null;
   const labelId = context?.user?._id;
 
-  const [data, setData] = useState({
-    amount: "",
-  });
 
   // const [isModalVisible, setIsModalVisible] = useState(false);
   // const [paymentData, setPaymentData] = useState();

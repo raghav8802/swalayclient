@@ -10,7 +10,7 @@ import fetch from 'node-fetch';
 
 // Function to generate MD5 checksum
 const generateMD5Checksum = (buffer: Buffer): string => {
-  return crypto.createHash('md5').update(buffer).digest('hex');
+  return crypto.createHash('md5').update(new Uint8Array(buffer)).digest('hex');
 };
 
 // Function to fetch image from URL and generate checksum and size
@@ -248,7 +248,7 @@ export async function POST(req: Request) {
       return NextResponse.json(responseData, { status: externalApiResponse.status });
     }
 
-    const { signed_albums } = responseData.data;
+    const { signed_albums } = (responseData as { data: { signed_albums: any[] } }).data;
 
     // Fetch the album art and upload it using the signed URL
     const albumArtBuffer = await fetchFileFromS3(thumbnailUrl);

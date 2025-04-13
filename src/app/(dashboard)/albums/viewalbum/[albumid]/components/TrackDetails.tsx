@@ -10,9 +10,10 @@ import ConfirmationDialog from "@/components/ConfirmationDialog";
 
 interface TrackListProps {
   trackId: string;
-  // esnlit-disable-next-line no-unused-vars
+  // eslint-disable-next-line no-unused-vars
   onFetchDetails: (songName: string, url: string) => void;
 }
+
 
 interface ArtistDetail {
   _id: string;

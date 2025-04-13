@@ -7,7 +7,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import Style from "../../../styles/Albums.module.css";
 import { AlbumDataTable } from "../components/AlbumDataTable";
 import UserContext from "@/context/userContext";
@@ -17,33 +17,27 @@ import AlbumsLoading from "@/components/AlbumsLoading";
 import ErrorSection from "@/components/ErrorSection";
 import Link from "next/link";
 
+const validFilters = [
+  "All",
+  "Draft",
+  "Processing",
+  "Approved",
+  "Rejected",
+  "Live",
+];
+
 const Albums = ({ params }: { params: { filter: string } }) => {
   // const filter = params.filter;
   const filter =
     params.filter.charAt(0).toUpperCase() +
     params.filter.slice(1).toLowerCase();
 
-  const validFilters = [
-    "All",
-    "Draft",
-    "Processing",
-    "Approved",
-    "Rejected",
-    "Live",
-  ];
-  if (!validFilters.includes(filter)) {
-    return <ErrorSection message="Invalid URL or Not Found" />;
-  }
-  // i want if filter is none of them then it show invalid url or url not NotFound
-
   const context = useContext(UserContext);
   const labelId = context?.user?._id;
-
   const [albumList, setAlbumList] = useState([]);
-
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchAlbums = async (labelId: string) => {
+  const fetchAlbums = useCallback(async (labelId: string) => {
     try {
       const response = await apiGet(
         `/api/albums/filter?labelId=${labelId}&status=${filter}`
@@ -56,13 +50,17 @@ const Albums = ({ params }: { params: { filter: string } }) => {
       toast.error("Internal server error");
     }
     setIsLoading(false);
-  };
+  }, [filter]);
 
   useEffect(() => {
     if (labelId) {
       fetchAlbums(labelId);
     }
-  }, [labelId]);
+  }, [labelId, fetchAlbums]);
+
+  if (!validFilters.includes(filter)) {
+    return <ErrorSection message="Invalid URL or Not Found" />;
+  }
 
   if (isLoading) {
     return <AlbumsLoading />;

@@ -5,6 +5,7 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons"
 import useEmblaCarousel, {
   type UseEmblaCarouselType,
 } from "embla-carousel-react"
+import PropTypes from "prop-types"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -18,7 +19,7 @@ type CarouselProps = {
   opts?: CarouselOptions
   plugins?: CarouselPlugin
   orientation?: "horizontal" | "vertical"
-  setApi?: (api: CarouselApi) => void
+  setApi?: (api: CarouselApi | null) => void
 }
 
 type CarouselContextProps = {
@@ -124,7 +125,7 @@ const Carousel = React.forwardRef<
       <CarouselContext.Provider
         value={{
           carouselRef,
-          api: api,
+          api,
           opts,
           orientation:
             orientation || (opts?.axis === "y" ? "vertical" : "horizontal"),
@@ -149,6 +150,11 @@ const Carousel = React.forwardRef<
   }
 )
 Carousel.displayName = "Carousel"
+Carousel.propTypes = {
+  orientation: PropTypes.oneOf(["horizontal", "vertical"]),
+  className: PropTypes.string,
+  children: PropTypes.node
+}
 
 const CarouselContent = React.forwardRef<
   HTMLDivElement,
@@ -171,6 +177,10 @@ const CarouselContent = React.forwardRef<
   )
 })
 CarouselContent.displayName = "CarouselContent"
+CarouselContent.propTypes = {
+  className: PropTypes.string,
+  children: PropTypes.node
+}
 
 const CarouselItem = React.forwardRef<
   HTMLDivElement,
@@ -193,6 +203,10 @@ const CarouselItem = React.forwardRef<
   )
 })
 CarouselItem.displayName = "CarouselItem"
+CarouselItem.propTypes = {
+  className: PropTypes.string,
+  children: PropTypes.node
+}
 
 const CarouselPrevious = React.forwardRef<
   HTMLButtonElement,
@@ -222,6 +236,11 @@ const CarouselPrevious = React.forwardRef<
   )
 })
 CarouselPrevious.displayName = "CarouselPrevious"
+CarouselPrevious.propTypes = {
+  className: PropTypes.string,
+  variant: PropTypes.oneOf(["default", "destructive", "outline", "secondary", "ghost", "link"]),
+  size: PropTypes.oneOf(["default", "sm", "lg", "icon"])
+}
 
 const CarouselNext = React.forwardRef<
   HTMLButtonElement,
@@ -251,6 +270,11 @@ const CarouselNext = React.forwardRef<
   )
 })
 CarouselNext.displayName = "CarouselNext"
+CarouselNext.propTypes = {
+  className: PropTypes.string,
+  variant: PropTypes.oneOf(["default", "destructive", "outline", "secondary", "ghost", "link"]),
+  size: PropTypes.oneOf(["default", "sm", "lg", "icon"])
+}
 
 export {
   type CarouselApi,
