@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-// This enum is used in the status field of the schema
+/* eslint-disable no-unused-vars */
 export enum AlbumStatus {
   Draft = 0, // on information submit
   Processing = 1, // on final submit
@@ -8,6 +8,7 @@ export enum AlbumStatus {
   Rejected = 3,
   Live = 4,
 }
+/* eslint-enable no-unused-vars */
 
 // Define the interface for the Album document
 interface IAlbum extends Document {

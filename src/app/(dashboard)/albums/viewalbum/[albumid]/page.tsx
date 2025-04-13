@@ -43,14 +43,14 @@ enum AlbumProcessingStatus {
   Rejected = 3,
   Live = 4,
 }
-/* eslint-enable no-unused-vars */
+/* eslint-disable no-unused-vars */
 
 const Albums = ({ params }: { params: { albumid: string } }) => {
   
   const [albumId, setAlbumId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [albumDetails, setAlbumDetails] = useState<AlbumDetails | null>(null);
-
+  const [isLoading, setIsLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
@@ -71,7 +71,7 @@ const Albums = ({ params }: { params: { albumid: string } }) => {
     
       if (response.data) {
         setAlbumDetails(response.data);
-     
+        setIsLoading(false);
       } else {
   
         setError("Invalid Url");

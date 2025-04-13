@@ -78,8 +78,8 @@ const SheetContent = React.forwardRef<
 ))
 SheetContent.displayName = SheetPrimitive.Content.displayName
 SheetContent.propTypes = {
-  side: PropTypes.oneOf(["left", "right", "top", "bottom"]),
   className: PropTypes.string,
+  side: PropTypes.oneOf(["top", "bottom", "left", "right"]),
   children: PropTypes.node
 }
 

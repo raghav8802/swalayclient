@@ -13,7 +13,8 @@ const Breadcrumb = React.forwardRef<
 >(({ ...props }, ref) => <nav ref={ref} aria-label="breadcrumb" {...props} />)
 Breadcrumb.displayName = "Breadcrumb"
 Breadcrumb.propTypes = {
-  separator: PropTypes.node
+  separator: PropTypes.node,
+  className: PropTypes.string,
 }
 
 const BreadcrumbList = React.forwardRef<
@@ -31,7 +32,11 @@ const BreadcrumbList = React.forwardRef<
 ))
 BreadcrumbList.displayName = "BreadcrumbList"
 BreadcrumbList.propTypes = {
+<<<<<<< HEAD
   className: PropTypes.string
+=======
+  className: PropTypes.string,
+>>>>>>> 445477dd48587fbdc5eabefe39f1cea0141a708a
 }
 
 const BreadcrumbItem = React.forwardRef<
@@ -46,7 +51,11 @@ const BreadcrumbItem = React.forwardRef<
 ))
 BreadcrumbItem.displayName = "BreadcrumbItem"
 BreadcrumbItem.propTypes = {
+<<<<<<< HEAD
   className: PropTypes.string
+=======
+  className: PropTypes.string,
+>>>>>>> 445477dd48587fbdc5eabefe39f1cea0141a708a
 }
 
 const BreadcrumbLink = React.forwardRef<
@@ -67,8 +76,13 @@ const BreadcrumbLink = React.forwardRef<
 })
 BreadcrumbLink.displayName = "BreadcrumbLink"
 BreadcrumbLink.propTypes = {
+<<<<<<< HEAD
   className: PropTypes.string,
   asChild: PropTypes.bool
+=======
+  asChild: PropTypes.bool,
+  className: PropTypes.string,
+>>>>>>> 445477dd48587fbdc5eabefe39f1cea0141a708a
 }
 
 const BreadcrumbPage = React.forwardRef<
@@ -86,7 +100,11 @@ const BreadcrumbPage = React.forwardRef<
 ))
 BreadcrumbPage.displayName = "BreadcrumbPage"
 BreadcrumbPage.propTypes = {
+<<<<<<< HEAD
   className: PropTypes.string
+=======
+  className: PropTypes.string,
+>>>>>>> 445477dd48587fbdc5eabefe39f1cea0141a708a
 }
 
 const BreadcrumbSeparator = ({
@@ -105,8 +123,13 @@ const BreadcrumbSeparator = ({
 )
 BreadcrumbSeparator.displayName = "BreadcrumbSeparator"
 BreadcrumbSeparator.propTypes = {
+<<<<<<< HEAD
   className: PropTypes.string,
   children: PropTypes.node
+=======
+  children: PropTypes.node,
+  className: PropTypes.string,
+>>>>>>> 445477dd48587fbdc5eabefe39f1cea0141a708a
 }
 
 const BreadcrumbEllipsis = ({
@@ -125,7 +148,11 @@ const BreadcrumbEllipsis = ({
 )
 BreadcrumbEllipsis.displayName = "BreadcrumbElipssis"
 BreadcrumbEllipsis.propTypes = {
+<<<<<<< HEAD
   className: PropTypes.string
+=======
+  className: PropTypes.string,
+>>>>>>> 445477dd48587fbdc5eabefe39f1cea0141a708a
 }
 
 export {

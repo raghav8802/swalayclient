@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 // import Image from "next/image";
 import Style from "../../styles/Profile.module.css";
 import toast from "react-hot-toast";
@@ -114,11 +114,16 @@ const Page = () => {
     }
   };
 
+  const fetchAlbumBymarketing = useCallback(async () => {
+    // ... function implementation ...
+  }, [labelId]);
+
   useEffect(() => {
     if (labelId) {
       fetchBankDetails();
+      fetchAlbumBymarketing();
     }
-  }, [labelId, fetchBankDetails]);
+  }, [labelId, fetchBankDetails, fetchAlbumBymarketing]);
 
   return (
     <div className="grid grid-cols-12 gap-4">

@@ -1,12 +1,13 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-// This enum is used in the status field of the schema
+/* eslint-disable no-unused-vars */
 export enum PaymentStatus {
   PENDING = "PENDING",
   APPROVED = "APPROVED",
   FAILED = "FAILED",
   REJECTED = "REJECTED",
 }
+/* eslint-enable no-unused-vars */
 
 interface IPaymentRequest extends Document {
   labelId: string;

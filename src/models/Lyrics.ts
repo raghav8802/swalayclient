@@ -1,12 +1,13 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-// This enum is used in the status field of the schema
+/* eslint-disable no-unused-vars */
 export enum AlbumStatus {
   Draft = 0,
   Processing = 1,
   Approved = 2,
   Rejected = 3,
 }
+/* eslint-enable no-unused-vars */
 
 interface ILyric extends Document {
   trackId: mongoose.Schema.Types.ObjectId;
