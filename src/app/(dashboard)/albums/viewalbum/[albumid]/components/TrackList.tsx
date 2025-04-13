@@ -26,10 +26,7 @@ interface Track {
 
 interface TrackListProps {
   albumId: string;
-<<<<<<< HEAD
-  // eslint-disable-next-line no-unused-vars
-=======
->>>>>>> 445477dd48587fbdc5eabefe39f1cea0141a708a
+  //eslint-disable-next-line no-unused-vars
   onTrackClick: (trackId: string) => void;
 }
 
@@ -58,11 +55,6 @@ const TrackList: React.FC<TrackListProps> = ({ albumId, onTrackClick }) => {
         const response = await apiGet(
           `/api/track/getTracks?albumId=${albumId}`
         );
-<<<<<<< HEAD
-  
-=======
-
->>>>>>> 445477dd48587fbdc5eabefe39f1cea0141a708a
         if (response.data) {
           const reversedTracks = response.data.reverse(); // Reverse the tracks array
           setTracks(reversedTracks);
@@ -81,17 +73,6 @@ const TrackList: React.FC<TrackListProps> = ({ albumId, onTrackClick }) => {
   
     fetchTracks();
   }, [albumId, onTrackClick]);
-<<<<<<< HEAD
-  
-
-  // Handle track item click
-  // eslint-disable-next-line no-unused-vars
-  const handleTrackClick = (trackId: string) => {
-    setActiveTrackId(trackId);
-    onTrackClick(trackId);
-  };
-=======
->>>>>>> 445477dd48587fbdc5eabefe39f1cea0141a708a
 
   if (isLoading) {
     return <div>Loading...</div>;

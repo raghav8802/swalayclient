@@ -28,7 +28,6 @@ const SignIn = () => {
   };
 
   const onSignIn = async () => {
-
     setIsSending(true);
 
     if (!validateEmail(user.email)) {
@@ -69,7 +68,6 @@ const SignIn = () => {
       className={`flex items-center justify-center w-full h-screen ${Styles.mainContainer}`}
     >
       <div className={` ${Styles.containerLeft}`}>
-
         <div className={`mb-5 ${Styles.mobileResponsiveLogo}`}>
           <Image
             src={
@@ -80,7 +78,6 @@ const SignIn = () => {
             height={150}
           />
           <p>Get Your Music On Global Platforms</p>
-
         </div>
 
         <div className={Styles.containerLeftInner}>
@@ -128,19 +125,24 @@ const SignIn = () => {
 
               <div className={`${Styles.formGroup} ${Styles.formbutton} `}>
                 <button
-                 className={Styles.submitButton} 
-                 onClick={onSignIn}
-                 style={{
-                  cursor: isSending ? 'not-allowed' : 'pointer',
-                }}
-                 >
-                  {isSending ? 'Sign In ...' : 'Sign In'}
+                  className={Styles.submitButton}
+                  onClick={onSignIn}
+                  style={{
+                    cursor: isSending ? "not-allowed" : "pointer",
+                  }}
+                >
+                  {isSending ? "Sign In ..." : "Sign In"}
                 </button>
               </div>
 
-              <div>
-                <p className={Styles.forgotPassword}>
-                  <Link href="/forgotpassword">Forgot Password?</Link>
+              <div className={Styles.otherLinks}>
+                <p className={Styles.dontHaveAccount}>
+                  Forgot Password?{" "}
+                  <Link href="/forgotpassword"> Reset here</Link>
+                </p>
+
+                <p className={Styles.dontHaveAccount}>
+                  Don&apos;t have an account? <Link href="/signup"> Sign Up</Link>
                 </p>
               </div>
             </div>

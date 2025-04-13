@@ -279,7 +279,7 @@ function Register() {
                 </button>
               </div>
 
-              <p className={`${Styles.inputLable} ${Styles.labelagreeterm}`}>
+              <p className={` ${Styles.inputLable} ${Styles.labelagreeterm}`}>
                 Already have an account?{" "}
                 <Link href="/signin" className={Styles.termservice}>
                   Sign In

@@ -57,7 +57,7 @@ const Page = () => {
     }));
   };
 
-  const fetchBankDetails = async () => {
+  const fetchBankDetails = useCallback(async () => {
     console.log("labelId : ", labelId);
 
     try {
@@ -76,7 +76,7 @@ const Page = () => {
       toast.error("Internal server down");
       console.log(error);
     }
-  };
+  }, [labelId]); 
 
   const handleClose = () => {
     setIsModalVisible(false);
@@ -114,16 +114,13 @@ const Page = () => {
     }
   };
 
-  const fetchAlbumBymarketing = useCallback(async () => {
-    // ... function implementation ...
-  }, [labelId]);
+
 
   useEffect(() => {
     if (labelId) {
       fetchBankDetails();
-      fetchAlbumBymarketing();
     }
-  }, [labelId, fetchBankDetails, fetchAlbumBymarketing]);
+  }, [labelId, fetchBankDetails, ]);
 
   return (
     <div className="grid grid-cols-12 gap-4">

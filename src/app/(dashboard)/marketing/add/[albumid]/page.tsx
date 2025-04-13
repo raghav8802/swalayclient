@@ -49,7 +49,6 @@ const Page = ({ params }: { params: { albumid: string } }) => {
 
   const router = useRouter();
 
-  const albumIdParams = params.albumid;
   const [albumId, setAlbumId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true)
@@ -257,7 +256,7 @@ const Page = ({ params }: { params: { albumid: string } }) => {
       setError("Invalid Url");
       console.error("Decoding error:", e);
     }
-  }, [albumIdParams]);
+  }, [params.albumid]);
 
   useEffect(() => {
     if (

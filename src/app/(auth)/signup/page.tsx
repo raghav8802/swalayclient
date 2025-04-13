@@ -162,7 +162,7 @@ const SignupPage = () => {
             </div>
             )}
 
-          <p className="mt-5 text-center fw-bold text-sm text-gray-600">
+          <p className="mt-4 text-center fw-bold text-sm text-gray-600 pb-5 mb-3">
             Already have an account?{" "}
             <Link href="/signin" className={Styles.termservice}>
               Sign In

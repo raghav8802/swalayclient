@@ -11,7 +11,6 @@ interface VerifyEmailEmailTemplateProps {
 export const VerifyEmail: React.FC<VerifyEmailEmailTemplateProps> = ({
   recipientName,
   resetLink,
-  
 }) => {
   return (
     <EmailLayout>

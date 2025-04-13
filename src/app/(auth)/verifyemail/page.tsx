@@ -1,7 +1,7 @@
 "use client";
 import { apiPost } from "@/helpers/axiosRequest";
-import { useRouter, useSearchParams } from "next/navigation";
-import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import {
   Card,
@@ -14,9 +14,16 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
 
+
 const Page = () => {
-  const searchParams = useSearchParams();
-  const token = searchParams.get("token");
+
+  const [token, setToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    setToken(searchParams.get("token"));
+  }, []);
+
   const router = useRouter();
 
   const [error, setError] = useState(false);
@@ -57,6 +64,8 @@ const Page = () => {
                 <Image
                     src="https://swalay-music-files.s3.ap-south-1.amazonaws.com/assets/SwaLay+-2.png"
                     alt="SwaLay Banner"
+                    width={100}
+                    height={100}
                     style={{ width: "100%", height: "auto", display: "block", }}
                 />
                 </div>
@@ -77,6 +86,8 @@ const Page = () => {
               <Image
                 src="https://swalay-music-files.s3.ap-south-1.amazonaws.com/assets/SwaLay+-2.png"
                 alt="SwaLay Banner"
+                width={100}
+                height={100}
                 style={{ width: "100%", height: "auto", display: "block" }}
               />
             </div>
