@@ -12,6 +12,7 @@ interface User {
   email: string;
   contact: number;
   joinedAt: Date;
+  subscriptionAvailable: boolean;
 }
 
 

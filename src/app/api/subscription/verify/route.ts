@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { connect } from "@/dbConfig/dbConfig";
 import Subscription from "@/models/Subscription";
+import sendMail from "@/helpers/sendMail";
+import SubscriptionSuccessEmail from "@/components/Email/SubscriptionSuccessEmail";
+import React from "react";
 
 
 const generatedSignature = (
@@ -75,6 +78,7 @@ export async function POST(request: NextRequest) {
        planId: planDetails.planId,
        planName: planDetails.name,
        price: planDetails.price,
+       trackCount: planDetails.trackCount,
        startDate,
        endDate,
        paymentId: razorpayPaymentId,
@@ -85,9 +89,26 @@ export async function POST(request: NextRequest) {
  
      await subscription.save();
      console.log("Subscription saved successfully:", subscription);
- 
 
+     // Send subscription confirmation email
+     try {
+       const emailTemplate = React.createElement(SubscriptionSuccessEmail, {
+         clientName: userDetails.name,
+         planName: planDetails.name,
+         price: planDetails.price,
+         startDate: startDate.toLocaleDateString(),
+       });
+       
+       await sendMail({
+         to: userDetails.email,
+         subject: `Your SwaLay Subscription is Active!`,
+         emailTemplate,
+       });
 
+       console.log("Subscription confirmation email sent to", userDetails.email);
+     } catch (emailError) {
+       console.error("Failed to send subscription confirmation email:", emailError);
+     }
 
     return NextResponse.json(
       { message: "payment verified successfully", isOk: true },

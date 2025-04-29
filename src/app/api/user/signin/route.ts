@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import bcryptjs from 'bcryptjs';
 import { connect } from "@/dbConfig/dbConfig";
 import Label from "@/models/Label";
+import Subscription from "@/models/Subscription";
 
 
 export async function POST(request: NextRequest) {
@@ -41,9 +42,20 @@ export async function POST(request: NextRequest) {
             });
         }
 
+         // Check subscription availability
+         const currentDate = new Date();
+         const subscription = await Subscription.findOne({ userId: user._id }).sort({ createdAt: -1 });
+ 
+         let subscriptionAvailable = false;
+         if (subscription) {
+             const { trackCount, endDate } = subscription;
+             subscriptionAvailable = trackCount.toLowerCase() !== 'unlimited' && new Date(endDate) > currentDate;
+         }
+
         const tokenData = {
             id: user._id,
-            username: user.username
+            username: user.username,
+            subscriptionAvailable: subscriptionAvailable,
         };
 
         const token = jwt.sign(tokenData, process.env.TOKEN_SECRET!, { expiresIn: '1d' });

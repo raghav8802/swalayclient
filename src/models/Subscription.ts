@@ -5,7 +5,8 @@ export interface ISubscription extends Document {
   userId: string; // Reference to the user
   planId: number; // ID of the selected plan
   planName: string; // Name of the selected plan
-  price: string; // Price of the plan
+  price: string; // Price of the plan  
+  trackCount: number | string; // Number of tracks allowed (can be a number or string)
   features: string[]; // Features of the plan
   startDate: Date; // Subscription start date
   endDate: Date; // Subscription end date
@@ -36,7 +37,11 @@ const SubscriptionSchema: Schema = new Schema<ISubscription>(
       type: String,
       required: true,
     },
-    
+    trackCount: {
+      type: Schema.Types.Mixed, // Allow mixed types (number or string)
+      required: true,
+      default: 0,
+    },
     startDate: {
       type: Date,
       required: true,
@@ -71,6 +76,6 @@ const SubscriptionSchema: Schema = new Schema<ISubscription>(
 
 // Export the Subscription model
 
-const Subscription = mongoose.models.Subscription || mongoose.model<ISubscription>('Support', SubscriptionSchema);
+const Subscription = mongoose.models.Subscription || mongoose.model<ISubscription>('Subscription', SubscriptionSchema);
 
 export default Subscription;

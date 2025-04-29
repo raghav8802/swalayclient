@@ -268,9 +268,19 @@ const Navbar = () => {
                   className="nav__link "
                   onClick={handleLinkClick}
                 >
-                  <i className="bi bi bi-mic nav__icon"></i>
+                  <i className="bi bi-mic nav__icon"></i>
                   <span className="nav__name">Artists</span>
                 </Link>
+                
+                <Link
+                  href="/subscriptions"
+                  className="nav__link "
+                  onClick={handleLinkClick}
+                >
+                  <i className="bi bi-star-fill nav__icon" style={{ color: "gold" }}></i>
+                  <span className="nav__name">Subscriptions</span>
+                </Link>
+
                 <Link
                   href="/profile"
                   className="nav__link "
@@ -282,7 +292,7 @@ const Navbar = () => {
 
                 <Link href="/my-tickets" className="nav__link">
                   <i className="bi bi-chat-left nav__icon"></i>
-                  <span className="nav__name">my-tickets</span>
+                  <span className="nav__name">My Tickets</span>
                 </Link>
               </div>
             </div>

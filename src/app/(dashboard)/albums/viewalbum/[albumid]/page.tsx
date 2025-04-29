@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Style from "../../../../styles/ViewAlbums.module.css";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,7 +12,8 @@ import TrackSection from "./components/TrackSection";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
 import DeleteButton from "./components/DeleteButton";
 import ContentDeliverySheet from "./components/ContentDeliveryReport";
-
+import SubscriptionEndAlert from "@/components/SubcriptionEndAlert";
+import UserContext from "@/context/userContext";
 
 interface AlbumDetails {
   artist: string;
@@ -46,12 +47,14 @@ enum AlbumProcessingStatus {
 /* eslint-disable no-unused-vars */
 
 const Albums = ({ params }: { params: { albumid: string } }) => {
-  
   const [albumId, setAlbumId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [albumDetails, setAlbumDetails] = useState<AlbumDetails | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const user = useContext(UserContext);
+  const subcriptionAvailable = user?.user?.subscriptionAvailable;
 
   useEffect(() => {
     const albumIdParams = params.albumid;
@@ -68,12 +71,11 @@ const Albums = ({ params }: { params: { albumid: string } }) => {
       const response = await apiGet(
         `/api/albums/getAlbumsDetails?albumId=${albumId}`
       );
-    
+
       if (response.data) {
         setAlbumDetails(response.data);
         setIsLoading(false);
       } else {
-  
         setError("Invalid Url");
       }
     } catch (error) {
@@ -88,13 +90,10 @@ const Albums = ({ params }: { params: { albumid: string } }) => {
   }, [albumId]);
 
   const onFinalSubmit = () => {
-
     setIsDialogOpen(true);
   };
 
   const handleContinue = async () => {
-
-
     const payload = {
       id: albumId,
       status: AlbumProcessingStatus.Processing,
@@ -103,7 +102,6 @@ const Albums = ({ params }: { params: { albumid: string } }) => {
 
     try {
       const response = await apiPost("/api/albums/updateStatus", payload);
-    
 
       if (response.success) {
         toast.success("Thank you! Your album(s) are currently being processed");
@@ -122,7 +120,6 @@ const Albums = ({ params }: { params: { albumid: string } }) => {
         toast.error(response.message);
       }
     } catch (error) {
-   
       toast.error("Internal server error");
     }
   };
@@ -133,22 +130,25 @@ const Albums = ({ params }: { params: { albumid: string } }) => {
 
   return (
     <div>
+          {!subcriptionAvailable && <SubscriptionEndAlert />}
       <div className={Style.albumContainer}>
+
+
         <div className={Style.albumThumbnailContainer}>
           {albumDetails && albumDetails.thumbnail && (
-             <a
-             href={`${process.env.NEXT_PUBLIC_AWS_S3_FOLDER_PATH}albums/07c1a${albumId}ba3/cover/${albumDetails.thumbnail}`}
-             download={albumDetails.thumbnail as string}
-            rel="noreferrer"
-             className="w-full"
-           >
-            <Image
-              src={`${process.env.NEXT_PUBLIC_AWS_S3_FOLDER_PATH}albums/07c1a${albumId}ba3/cover/${albumDetails.thumbnail}`}
-              alt="album thumbnail"
-              width={480}
-              height={480}
-              className={Style.albumThumbnail}
-            />
+            <a
+              href={`${process.env.NEXT_PUBLIC_AWS_S3_FOLDER_PATH}albums/07c1a${albumId}ba3/cover/${albumDetails.thumbnail}`}
+              download={albumDetails.thumbnail as string}
+              rel="noreferrer"
+              className="w-full"
+            >
+              <Image
+                src={`${process.env.NEXT_PUBLIC_AWS_S3_FOLDER_PATH}albums/07c1a${albumId}ba3/cover/${albumDetails.thumbnail}`}
+                alt="album thumbnail"
+                width={480}
+                height={480}
+                className={Style.albumThumbnail}
+              />
             </a>
           )}
         </div>
@@ -156,9 +156,9 @@ const Albums = ({ params }: { params: { albumid: string } }) => {
         <div className={`p-3 border rounded ${Style.albumDetails}`}>
           {albumDetails && (
             <div style={{ width: "100%" }}>
-              <AlbumStatus 
-              status={albumDetails.status}
-              comment={albumDetails.comment ?? ""}
+              <AlbumStatus
+                status={albumDetails.status}
+                comment={albumDetails.comment ?? ""}
               />
             </div>
           )}
@@ -189,12 +189,14 @@ const Albums = ({ params }: { params: { albumid: string } }) => {
             </li>
             <li className={`mb-2 ${Style.albumInfoItem}`}>
               <span className="text-sm font-medium text-gray-900 truncate dark:text-white">
-                Language: </span>
+                Language:{" "}
+              </span>
               {albumDetails?.language}
             </li>
             <li className={`mb-2 ${Style.albumInfoItem}`}>
               <span className="text-sm font-medium text-gray-900 truncate dark:text-white">
-                UPC: </span>
+                UPC:{" "}
+              </span>
               {albumDetails?.upc}
             </li>
             <li className={`mb-2 ${Style.albumInfoItem}`}>
@@ -234,82 +236,81 @@ const Albums = ({ params }: { params: { albumid: string } }) => {
             </li>
           </ul>
 
-          <div className="flex items-center">
-            {albumId &&
-              albumDetails &&
-              (albumDetails.status === AlbumProcessingStatus.Draft ||
-                albumDetails.status === AlbumProcessingStatus.Rejected)&& (
-                <Link
-                  href={`/albums/edit/${btoa(albumId as string)}`}
-                  className={`mt-4 mb-2 ${Style.albumEditBtn} p-3`}
-                >
-                  <i className="me-2 bi bi-pencil-square"></i>
-                  Edit Album
-                </Link>
-              )}
+          {subcriptionAvailable && (
+            <div className="flex items-center">
+              {albumId &&
+                albumDetails &&
+                (albumDetails.status === AlbumProcessingStatus.Draft ||
+                  albumDetails.status === AlbumProcessingStatus.Rejected) && (
+                  <Link
+                    href={`/albums/edit/${btoa(albumId as string)}`}
+                    className={`mt-4 mb-2 ${Style.albumEditBtn} p-3`}
+                  >
+                    <i className="me-2 bi bi-pencil-square"></i>
+                    Edit Album
+                  </Link>
+                )}
 
-            {albumId &&
-              albumDetails &&
-              (albumDetails.status === AlbumProcessingStatus.Draft ||
-                albumDetails.status === AlbumProcessingStatus.Rejected) && (
-                <Link
-                  href={`/albums/addtrack/${btoa(albumId as string)}`}
-                  className={`mt-4 ms-5 mb-2 btn ${Style.albumAddTrack} p-3`}
-                >
-                  <i className="me-2 bi bi-plus-circle"></i>
-                  Add track
-                </Link>
-              )}
+              {albumId &&
+                albumDetails &&
+                (albumDetails.status === AlbumProcessingStatus.Draft ||
+                  albumDetails.status === AlbumProcessingStatus.Rejected) && (
+                  <Link
+                    href={`/albums/addtrack/${btoa(albumId as string)}`}
+                    className={`mt-4 ms-5 mb-2 btn ${Style.albumAddTrack} p-3`}
+                  >
+                    <i className="me-2 bi bi-plus-circle"></i>
+                    Add track
+                  </Link>
+                )}
 
-            {albumDetails &&
-              (albumDetails.status === AlbumProcessingStatus.Draft ||
-                albumDetails.status === AlbumProcessingStatus.Rejected) &&
-              albumDetails.totalTracks > 0 && (
-                <button
-                  type="button"
-                  className={`mt-4 ms-5 mb-2 ${Style.albumSuccessBtn} p-3`}
-                  onClick={onFinalSubmit}
-                >
-                  Final Submit <i className="me-2 bi bi-send-fill"></i>
-                </button>
-              )}
+              {albumDetails &&
+                (albumDetails.status === AlbumProcessingStatus.Draft ||
+                  albumDetails.status === AlbumProcessingStatus.Rejected) &&
+                albumDetails.totalTracks > 0 && (
+                  <button
+                    type="button"
+                    className={`mt-4 ms-5 mb-2 ${Style.albumSuccessBtn} p-3`}
+                    onClick={onFinalSubmit}
+                  >
+                    Final Submit <i className="me-2 bi bi-send-fill"></i>
+                  </button>
+                )}
 
-            {albumId &&
-              albumDetails &&
-              albumDetails.status == AlbumProcessingStatus.Draft && (
-                <DeleteButton albumId={albumId} />
-              )}
+              {albumId &&
+                albumDetails &&
+                albumDetails.status == AlbumProcessingStatus.Draft && (
+                  <DeleteButton albumId={albumId} />
+                )}
 
-            {albumId &&
-              albumDetails &&
-             ( albumDetails.status === AlbumProcessingStatus.Approved ||
-              albumDetails.status === AlbumProcessingStatus.Live )&&
-              (
-                <Link
-                  // href={`/marketing/add/${btoa(albumId as string)}`}
-                  href={`/marketing/add/${btoa(
-                    albumId as string
-                  )}?albumname=${encodeURIComponent(albumDetails?.title)}`}
-                  className={`mt-4 ms-5 mb-2 btn me-2 ${Style.albumAddTrack} p-3`}
-                >
-                  <i className="me-2 bi bi-megaphone "></i>
-                  Marketing
-                </Link>
-              )}
+              {albumId &&
+                albumDetails &&
+                (albumDetails.status === AlbumProcessingStatus.Approved ||
+                  albumDetails.status === AlbumProcessingStatus.Live) && (
+                  <Link
+                    // href={`/marketing/add/${btoa(albumId as string)}`}
+                    href={`/marketing/add/${btoa(
+                      albumId as string
+                    )}?albumname=${encodeURIComponent(albumDetails?.title)}`}
+                    className={`mt-4 ms-5 mb-2 btn me-2 ${Style.albumAddTrack} p-3`}
+                  >
+                    <i className="me-2 bi bi-megaphone "></i>
+                    Marketing
+                  </Link>
+                )}
 
+              {albumId &&
+                albumDetails &&
+                (albumDetails.status === AlbumProcessingStatus.Approved ||
+                  albumDetails.status === AlbumProcessingStatus.Live) && (
+                  <ContentDeliverySheet
+                    contentTitle={albumDetails.title}
+                    approvalDate={albumDetails.updatedAt}
+                  />
+                )}
+            </div>
+          )}
 
-            {albumId &&
-              albumDetails &&
-              (albumDetails.status === AlbumProcessingStatus.Approved ||
-                albumDetails.status === AlbumProcessingStatus.Live) && (
-                <ContentDeliverySheet
-                  contentTitle={albumDetails.title}
-                  approvalDate={albumDetails.updatedAt}
-                />
-              )}
-
-
-          </div>
         </div>
       </div>
 
