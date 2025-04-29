@@ -88,7 +88,7 @@ export const subscriptionColumns: ColumnDef<Subscription>[] = [
             return (
                 <Link
                     className="ms-2 text-blue-600"
-                    href={`/invoices/${subscription._id}`}
+                    href={`/subscriptions/invoice/${btoa(subscription._id)}`}
                 >
                     <span className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1  text-blue-700 ring-1 ring-inset ring-blue-600/20">
                     <i className="bi bi-file-earmark-arrow-down-fill me-1"></i>
