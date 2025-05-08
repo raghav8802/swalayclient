@@ -21,8 +21,13 @@ export const apiRequest = async ({
       headers: headers,
     });
     return response.data;
-  } catch (error) {
-    return error;
+  } catch (error: any) {
+    // Return a consistent error response format
+    return {
+      success: false,
+      message: error.response?.data?.message || error.message || "An error occurred",
+      status: error.response?.status || 500
+    };
   }
 };
 
@@ -42,7 +47,6 @@ export const apiGet = (endpoint: string, data: any = null): Promise<any> => {
 };
 
 export const apiFormData = async (endpoint:string, formDataObj:any) => {
-
   try {
     const response = await axios.post(endpoint, formDataObj, {
       headers: {
@@ -50,9 +54,11 @@ export const apiFormData = async (endpoint:string, formDataObj:any) => {
       },
     });
     return response.data;
-  } catch (error) {
-    console.error("Error adding album:", error);
-    throw error;
+  } catch (error: any) {
+    return {
+      success: false,
+      message: error.response?.data?.message || error.message || "An error occurred",
+      status: error.response?.status || 500
+    };
   }
-
 };
