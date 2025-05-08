@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import axios from 'axios';
 import Youtube from '@/models/youtube';
 import { connect } from '@/dbConfig/dbConfig';
+import { release } from 'os';
 
 // Function to extract the YouTube video ID from the provided URL
 const extractVideoId = (url: string): string => {
@@ -11,6 +12,7 @@ const extractVideoId = (url: string): string => {
 };
 
 export async function POST(request: NextRequest) {
+
   try {
     await connect();
 
@@ -90,7 +92,8 @@ export async function POST(request: NextRequest) {
     }
 
   }
-}
 
+
+}
 
 
