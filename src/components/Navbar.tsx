@@ -272,14 +272,14 @@ const Navbar = () => {
                   <span className="nav__name">Artists</span>
                 </Link>
                 
-                <Link
+                {/* <Link
                   href="/subscriptions"
                   className="nav__link "
                   onClick={handleLinkClick}
                 >
                   <i className="bi bi-star-fill nav__icon" style={{ color: "gold" }}></i>
                   <span className="nav__name">Subscriptions</span>
-                </Link>
+                </Link> */}
 
                 <Link
                   href="/profile"
