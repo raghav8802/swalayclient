@@ -10,8 +10,10 @@ import ConfirmationDialog from "@/components/ConfirmationDialog";
 
 interface TrackListProps {
   trackId: string;
-  onFetchDetails: () => void;
+  // eslint-disable-next-line no-unused-vars
+  onFetchDetails: (songName: string, url: string) => void;
 }
+
 
 interface ArtistDetail {
   _id: string;
@@ -64,7 +66,7 @@ const TrackDetails: React.FC<TrackListProps> = ({
       if (response.success) {
         setTrackDetails(response.data);
         const audioUrl = `${process.env.NEXT_PUBLIC_AWS_S3_FOLDER_PATH}albums/07c1a${response.data.albumId}ba3/tracks/${response.data.audioFile}`;
-        onFetchDetails();
+        onFetchDetails(response.data.songName, audioUrl);
       }
     } catch {
       toast.error("Internal server error");

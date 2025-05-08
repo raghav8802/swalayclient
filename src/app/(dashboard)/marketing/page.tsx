@@ -1,8 +1,7 @@
 "use client";
 import UserContext from "@/context/userContext";
 import { apiGet } from "@/helpers/axiosRequest";
-import React, { useContext, useEffect, useState } from "react";
-// import { MarketingList } from "./components/MarketingList";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -53,26 +52,26 @@ const Page = () => {
   //   }
   // };
   
-  const fetchAlbumBymarketing = async () => {
+  
+  const fetchAlbumBymarketing = useCallback(async () => {
     try {
       const response = await apiGet(`/api/marketing/fetchAlbumBymarketing?labelId=${labelId}`);
       console.log("new marketing response : ");
       console.log(response);
       if (response.success) {
         console.log(response.data);
-          setMarketingData(response.data)
+        setMarketingData(response.data);
       }
     } catch (error) {
       console.log(error);
     }
-  };
+  }, [labelId]); // Add labelId as a dependency
 
   useEffect(() => {
     if (labelId) {
-      // fetchMarketingDetails();
-      fetchAlbumBymarketing()
+      fetchAlbumBymarketing();
     }
-  }, [labelId]);
+  }, [labelId, fetchAlbumBymarketing]);
 
   return (   
     

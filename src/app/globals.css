@@ -439,6 +439,14 @@ img {
   }
 }
 
+@media print {
+  .bg-gradient-to-r {
+    background: linear-gradient(to right, #42c5be, #1e3a8a) !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
 
 .border-thin-gray {
   border: 1px solid #b0afafc4;

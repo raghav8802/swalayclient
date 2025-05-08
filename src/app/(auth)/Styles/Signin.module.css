@@ -209,6 +209,44 @@
     display: none;
 }
 
+.dontHaveAccount{
+    margin-top: 15px;
+}
+.dontHaveAccount a{
+  color: #4e37e0;
+}
+.dontHaveAccount a:hover{
+  text-decoration: underline;
+}
+
+
+.accountActions {
+    margin-top: 1.5rem;
+    text-align: center;
+  }
+  
+  .actionText {
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    color: #555;
+  }
+  
+  .actionText span {
+    margin-right: 0.3rem;
+  }
+  
+  .actionLink {
+    color: #0070f3;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .actionLink:hover {
+    text-decoration: underline;
+  }
+
+
+
 @media screen and (max-width: 600px)
 {
 
@@ -232,5 +270,15 @@
         align-items: center;
     }
 
+    .otherLinks{
+        text-align: center;
+    }
+
+    .submitButton{
+        width: 100%;
+    }
+
 
 }
+
+

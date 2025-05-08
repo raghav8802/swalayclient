@@ -17,6 +17,7 @@ import AlbumsLoading from "@/components/AlbumsLoading";
 import ErrorSection from "@/components/ErrorSection";
 import Link from "next/link";
 
+
 const Albums = ({ params }: { params: { filter: string } }) => {
   const context = useContext(UserContext);
   const labelId = context?.user?._id;

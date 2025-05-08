@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client"
 
 import * as React from "react"
@@ -19,7 +20,8 @@ type CarouselProps = {
   opts?: CarouselOptions
   plugins?: CarouselPlugin
   orientation?: "horizontal" | "vertical"
-  setApi?: (api: CarouselApi) => void
+    // eslint-disable-next-line no-unused-vars
+  setApi?: (api: CarouselApi | null) => void
 }
 
 type CarouselContextProps = {
@@ -69,6 +71,7 @@ const Carousel = React.forwardRef<
     const [canScrollNext, setCanScrollNext] = React.useState(false)
 
     const onSelect = React.useCallback((api: CarouselApi) => {
+        // eslint-disable-next-line no-unused-vars
       if (!api) {
         return
       }

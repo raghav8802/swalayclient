@@ -1,3 +1,6 @@
+/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable react/prop-types */ // Disable prop-types validation for the entire file
+
 "use client"
 
 import * as React from "react"
@@ -7,6 +10,8 @@ import { cn } from "@/lib/utils"
 
 // Format: { THEME_NAME: CSS_SELECTOR }
 const THEMES = { light: "", dark: ".dark" } as const
+
+
 
 export type ChartConfig = {
   [key: string]: {
@@ -34,6 +39,9 @@ function useChart() {
   return context
 }
 
+
+
+// eslint-disable-next-line react/prop-types
 const ChartContainer = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div"> & {

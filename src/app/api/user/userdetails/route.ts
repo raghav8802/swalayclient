@@ -1,7 +1,9 @@
 import { connect } from "@/dbConfig/dbConfig";
 import Label from "@/models/Label";
+import Subscription from "@/models/Subscription";
 import jwt from "jsonwebtoken";
 import { NextRequest, NextResponse } from "next/server";
+
 
 interface TokenPayload {
     id: string;
@@ -27,9 +29,41 @@ export async function GET(request: NextRequest) {
             })
         }
 
+         // Check subscription availability
+         const currentDate = new Date();
+         const subscription = await Subscription.findOne({ userId: userid }).sort({ createdAt: -1 });
+ 
+         let subscriptionAvailable = false;
+         if (subscription) {
+            const { trackCount, endDate } = subscription;
+        
+            // Check if trackCount is "unlimited"
+            const isUnlimited = typeof trackCount === "string" && trackCount.toLowerCase() === "unlimited";
+        
+            // Check if endDate has exceeded the current date
+            const isEndDateValid = new Date(endDate) > currentDate;
+        
+            // Determine subscriptionAvailable based on the logic
+            if (isUnlimited) {
+                subscriptionAvailable = isEndDateValid; // true if endDate is valid, false otherwise
+            } else {
+                subscriptionAvailable = trackCount > 0 && isEndDateValid; // true if trackCount > 0 and endDate is valid
+            }
+        }
+         console.log("Subscription available:", subscriptionAvailable);
+            // If the subscription is unlimited, set subscriptionAvailable to true
+
+
+         subscriptionAvailable =  false; // Set to false for testing purposes
+         // Add subscriptionAvailable to UserData
+        const userResponse = {
+            ...UserData.toObject(),
+            subscriptionAvailable
+        };
+
         return NextResponse.json({
             status: 200,
-            data: UserData,
+            data: userResponse,
             message: "user find successfully",
             success: true
         })
@@ -44,6 +78,9 @@ export async function GET(request: NextRequest) {
     }
 
 }
+
+
+
 
 
 

@@ -57,8 +57,6 @@ export async function POST(request: NextRequest) {
       usertype: labelType,
       lable: MusicLabelName,
       // state,
-      // razor_contact: razorpayContactId, // Ensure this matches the schema
-      // razor_contact: "321320321", // Ensure this matches the schema
       password: hashedPassword,
     });
 
@@ -74,17 +72,22 @@ export async function POST(request: NextRequest) {
     await Label.findByIdAndUpdate(response._id, 
         {$set : {verifyCode: hashedToken, verifyCodeExpiry: Date.now() + 3600000}});
 
+    // const emailTemplate = React.createElement(VerifyEmail, {
+    //   recipientName: username as string,
+    //   resetLink: `${process.env.NEXT_PUBLIC_BASE_URL}/verifyemail?token=${hashedToken}`,
+    // });
+
     const emailTemplate = React.createElement(VerifyEmail, {
       recipientName: username as string,
       resetLink: `${process.env.NEXT_PUBLIC_BASE_URL}/verifyemail?token=${hashedToken}`,
     });
+
 
     await sendMail({
       to: email,
       subject: "Verify your email address",
       emailTemplate,
     });
-
 
 
     return NextResponse.json({

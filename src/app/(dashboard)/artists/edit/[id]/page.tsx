@@ -1,6 +1,6 @@
 "use client";
 import { apiFormData, apiGet } from "@/helpers/axiosRequest";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDropzone } from "react-dropzone";
 import Loading from "../../loading";
@@ -34,9 +34,7 @@ interface ArtistData {
   isProducer: boolean;
 }
 
-interface AlbumData {
-  // Add album data interface if needed
-}
+
 
 export default function EditArtistPage({ params }: { params: { id: string } }) {
 

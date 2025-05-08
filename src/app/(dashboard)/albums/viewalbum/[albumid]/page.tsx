@@ -12,41 +12,71 @@ import TrackSection from "./components/TrackSection";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
 import DeleteButton from "./components/DeleteButton";
 import ContentDeliverySheet from "./components/ContentDeliveryReport";
+import SubscriptionEndAlert from "@/components/SubcriptionEndAlert";
 import UserContext from "@/context/userContext";
-import { useRouter } from "next/navigation";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
-import TrackList from "./components/TrackList";
-import TrackDetails from "./components/TrackDetails";
-import AlbumDetails from "./components/AlbumDetails";
-import { Card, CardContent } from "@/components/ui/card";
 
-interface Album {
-  _id: string;
-  title: string;
+interface AlbumDetails {
   artist: string;
-  thumbnail: string;
-  totalTracks: number;
-  status: number;
+  cline: string;
+  comment: string | null;
+  date: string;
+  updatedAt: string;
+  genre: string;
   labelId: string;
+  language: string;
+  platformLinks: string | null;
+  pline: string;
+  releasedate: string;
+  status: number;
+  tags: string[];
+  thumbnail: string;
+  title: string;
+  totalTracks: number;
+  upc: string | null;
+  _id: string;
 }
 
-const Albums = ({ params }: { params: { albumid: string } }) => {
-  const router = useRouter();
-  const context = useContext(UserContext);
-  const labelId = context?.user?._id;
+/* eslint-disable no-unused-vars */
+enum AlbumProcessingStatus {
+  Draft = 0, // on information submit
+  Processing = 1, // on final submit
+  Approved = 2,
+  Rejected = 3,
+  Live = 4,
+}
+/* eslint-disable no-unused-vars */
 
-  const [album, setAlbum] = useState<Album | null>(null);
-  const [activeTrackId, setActiveTrackId] = useState<string | null>(null);
+const Albums = ({ params }: { params: { albumid: string } }) => {
+  const [albumId, setAlbumId] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [albumDetails, setAlbumDetails] = useState<AlbumDetails | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const fetchAlbumDetails = async () => {
+  const user = useContext(UserContext);
+  const subcriptionAvailable = user?.user?.subscriptionAvailable;
+
+  useEffect(() => {
+    const albumIdParams = params.albumid;
+    try {
+      const decodedAlbumId = atob(albumIdParams);
+      setAlbumId(decodedAlbumId);
+    } catch (e) {
+      setError("Invalid Url");
+    }
+  }, [params.albumid]);
+
+  const fetchAlbumDetails = async (albumId: string) => {
     try {
       const response = await apiGet(
-        `/api/albums/getAlbumDetails?albumId=${atob(params.albumid)}`
+        `/api/albums/getAlbumsDetails?albumId=${albumId}`
       );
 
-      if (response.success) {
-        setAlbum(response.data);
+      if (response.data) {
+        setAlbumDetails(response.data);
+        setIsLoading(false);
+      } else {
+        setError("Invalid Url");
       }
     } catch (error) {
       toast.error("Internal server error");
@@ -54,14 +84,10 @@ const Albums = ({ params }: { params: { albumid: string } }) => {
   };
 
   useEffect(() => {
-    if (labelId) {
-      fetchAlbumDetails();
+    if (albumId) {
+      fetchAlbumDetails(albumId);
     }
-  }, [labelId]);
-
-  const handleTrackClick = (trackId: string) => {
-    setActiveTrackId(trackId);
-  };
+  }, [albumId]);
 
   const onFinalSubmit = () => {
     setIsDialogOpen(true);
@@ -69,23 +95,23 @@ const Albums = ({ params }: { params: { albumid: string } }) => {
 
   const handleContinue = async () => {
     const payload = {
-      id: atob(params.albumid),
-      status: 1, // Assuming 1 is the processing status
+      id: albumId,
+      status: AlbumProcessingStatus.Processing,
       comment: "",
     };
 
     try {
       const response = await apiPost("/api/albums/updateStatus", payload);
-    
+
       if (response.success) {
         toast.success("Thank you! Your album(s) are currently being processed");
         // check it
-        if (album) {
-          setAlbum((prevAlbum) =>
-            prevAlbum
+        if (albumDetails) {
+          setAlbumDetails((prevDetails) =>
+            prevDetails
               ? {
-                  ...prevAlbum,
-                  status: 1,
+                  ...prevDetails,
+                  status: AlbumProcessingStatus.Processing,
                 }
               : null
           );
@@ -98,90 +124,53 @@ const Albums = ({ params }: { params: { albumid: string } }) => {
     }
   };
 
+  if (error) {
+    return <ErrorSection message="Invalid Url" />;
+  }
+
   return (
-    <div className="w-full min-h-screen p-6 bg-white rounded-sm">
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink>Home</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink>Albums</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>View Album</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
-
-      <div className="grid grid-cols-12 gap-4 mt-4">
-        <div className="col-span-4">
-          <AlbumDetails album={album} />
-        </div>
-        <div className="col-span-8">
-          <Card>
-            <CardContent className="p-4">
-              <div className="grid grid-cols-12 gap-4">
-                <div className="col-span-4">
-                  <TrackList
-                    albumId={atob(params.albumid)}
-                    onTrackClick={handleTrackClick}
-                  />
-                </div>
-                <div className="col-span-8">
-                  {activeTrackId && (
-                    <TrackDetails
-                      trackId={activeTrackId}
-                      onFetchDetails={() => {}}
-                    />
-                  )}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-
+    <div>
+          {!subcriptionAvailable && <SubscriptionEndAlert />}
       <div className={Style.albumContainer}>
+
+
         <div className={Style.albumThumbnailContainer}>
-          {album && album.thumbnail && (
-             <a
-             href={`${process.env.NEXT_PUBLIC_AWS_S3_FOLDER_PATH}albums/07c1a${atob(params.albumid)}ba3/cover/${album.thumbnail}`}
-             download={album.thumbnail as string}
-            rel="noreferrer"
-             className="w-full"
-           >
-            <Image
-              src={`${process.env.NEXT_PUBLIC_AWS_S3_FOLDER_PATH}albums/07c1a${atob(params.albumid)}ba3/cover/${album.thumbnail}`}
-              alt="album thumbnail"
-              width={480}
-              height={480}
-              className={Style.albumThumbnail}
-            />
+          {albumDetails && albumDetails.thumbnail && (
+            <a
+              href={`${process.env.NEXT_PUBLIC_AWS_S3_FOLDER_PATH}albums/07c1a${albumId}ba3/cover/${albumDetails.thumbnail}`}
+              download={albumDetails.thumbnail as string}
+              rel="noreferrer"
+              className="w-full"
+            >
+              <Image
+                src={`${process.env.NEXT_PUBLIC_AWS_S3_FOLDER_PATH}albums/07c1a${albumId}ba3/cover/${albumDetails.thumbnail}`}
+                alt="album thumbnail"
+                width={480}
+                height={480}
+                className={Style.albumThumbnail}
+              />
             </a>
           )}
         </div>
 
         <div className={`p-3 border rounded ${Style.albumDetails}`}>
-          {album && (
+          {albumDetails && (
             <div style={{ width: "100%" }}>
-              <AlbumStatus 
-              status={album.status}
-              comment={""}
+              <AlbumStatus
+                status={albumDetails.status}
+                comment={albumDetails.comment ?? ""}
               />
             </div>
           )}
           <h2 className={Style.albumTitle}>
-            {album && album.title}
+            {albumDetails && albumDetails.title}
           </h2>
           <p className={`${Style.albumArtist} mb-2`}>
-            {album && album.artist}
+            {albumDetails && albumDetails.artist}
           </p>
           <div className="flex mb-3">
-            {album &&
-              album.tags.map((tag) => (
+            {albumDetails &&
+              albumDetails.tags.map((tag) => (
                 <span
                   key={tag}
                   className="me-2 inline-flex items-center rounded-md bg-indigo-50 px-2 py-1 text-xs font-medium text-indigo-700 ring-1 ring-inset ring-indigo-700/10"
@@ -196,24 +185,26 @@ const Albums = ({ params }: { params: { albumid: string } }) => {
               <span className="text-sm font-medium text-gray-900 truncate dark:text-white">
                 Genre:{" "}
               </span>
-              {album?.genre}
+              {albumDetails?.genre}
             </li>
             <li className={`mb-2 ${Style.albumInfoItem}`}>
               <span className="text-sm font-medium text-gray-900 truncate dark:text-white">
-                Language: </span>
-              {album?.language}
+                Language:{" "}
+              </span>
+              {albumDetails?.language}
             </li>
             <li className={`mb-2 ${Style.albumInfoItem}`}>
               <span className="text-sm font-medium text-gray-900 truncate dark:text-white">
-                UPC: </span>
-              {album?.upc}
+                UPC:{" "}
+              </span>
+              {albumDetails?.upc}
             </li>
             <li className={`mb-2 ${Style.albumInfoItem}`}>
               <span className="text-sm font-medium text-gray-900 truncate dark:text-white">
                 Release Date:{" "}
               </span>
-              {album?.releasedate
-                ? new Date(album.releasedate).toLocaleDateString(
+              {albumDetails?.releasedate
+                ? new Date(albumDetails.releasedate).toLocaleDateString(
                     "en-US",
                     { year: "numeric", month: "long", day: "numeric" }
                   )
@@ -223,97 +214,117 @@ const Albums = ({ params }: { params: { albumid: string } }) => {
               <span className="text-sm font-medium text-gray-900 truncate dark:text-white">
                 C Line:{" "}
               </span>
-              {album ? `© ${album.cline}` : ""}
+              {albumDetails ? `© ${albumDetails.cline}` : ""}
             </li>
+            {/* <li className={`mb-2 ${Style.albumInfoItem}`}>
+              <span className="text-sm font-medium text-gray-900 truncate dark:text-white">
+                Submission Date:
+              </span>
+              {albumDetails?.date
+                ? new Date(albumDetails.date).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })
+                : ""}
+            </li> */}
             <li className={`mb-2 ${Style.albumInfoItem}`}>
               <span className="text-sm font-medium text-gray-900 truncate dark:text-white">
                 P Line:{" "}
               </span>
-              {album ? `℗ ${album.pline}` : ""}
+              {albumDetails ? `℗ ${albumDetails.pline}` : ""}
             </li>
           </ul>
 
-          <div className="flex items-center">
-            {atob(params.albumid) &&
-              album &&
-              (album.status === 0 || album.status === 3) && (
-                <Link
-                  href={`/albums/edit/${btoa(atob(params.albumid) as string)}`}
-                  className={`mt-4 mb-2 ${Style.albumEditBtn} p-3`}
-                >
-                  <i className="me-2 bi bi-pencil-square"></i>
-                  Edit Album
-                </Link>
-              )}
+          {subcriptionAvailable && (
+            <div className="flex items-center">
+              {albumId &&
+                albumDetails &&
+                (albumDetails.status === AlbumProcessingStatus.Draft ||
+                  albumDetails.status === AlbumProcessingStatus.Rejected) && (
+                  <Link
+                    href={`/albums/edit/${btoa(albumId as string)}`}
+                    className={`mt-4 mb-2 ${Style.albumEditBtn} p-3`}
+                  >
+                    <i className="me-2 bi bi-pencil-square"></i>
+                    Edit Album
+                  </Link>
+                )}
 
-            {atob(params.albumid) &&
-              album &&
-              (album.status === 0 || album.status === 3) && (
-                <Link
-                  href={`/albums/addtrack/${btoa(atob(params.albumid) as string)}`}
-                  className={`mt-4 ms-5 mb-2 btn ${Style.albumAddTrack} p-3`}
-                >
-                  <i className="me-2 bi bi-plus-circle"></i>
-                  Add track
-                </Link>
-              )}
+              {albumId &&
+                albumDetails &&
+                (albumDetails.status === AlbumProcessingStatus.Draft ||
+                  albumDetails.status === AlbumProcessingStatus.Rejected) && (
+                  <Link
+                    href={`/albums/addtrack/${btoa(albumId as string)}`}
+                    className={`mt-4 ms-5 mb-2 btn ${Style.albumAddTrack} p-3`}
+                  >
+                    <i className="me-2 bi bi-plus-circle"></i>
+                    Add track
+                  </Link>
+                )}
 
-            {album &&
-              (album.status === 0 || album.status === 3) &&
-              album.totalTracks > 0 && (
-                <button
-                  type="button"
-                  className={`mt-4 ms-5 mb-2 ${Style.albumSuccessBtn} p-3`}
-                  onClick={onFinalSubmit}
-                >
-                  Final Submit <i className="me-2 bi bi-send-fill"></i>
-                </button>
-              )}
+              {albumDetails &&
+                (albumDetails.status === AlbumProcessingStatus.Draft ||
+                  albumDetails.status === AlbumProcessingStatus.Rejected) &&
+                albumDetails.totalTracks > 0 && (
+                  <button
+                    type="button"
+                    className={`mt-4 ms-5 mb-2 ${Style.albumSuccessBtn} p-3`}
+                    onClick={onFinalSubmit}
+                  >
+                    Final Submit <i className="me-2 bi bi-send-fill"></i>
+                  </button>
+                )}
 
-            {atob(params.albumid) &&
-              album &&
-              album.status == 0 && (
-                <DeleteButton albumId={atob(params.albumid)} />
-              )}
+              {albumId &&
+                albumDetails &&
+                albumDetails.status == AlbumProcessingStatus.Draft && (
+                  <DeleteButton albumId={albumId} />
+                )}
 
-            {atob(params.albumid) &&
-              album &&
-             ( album.status === 2 ||
-              album.status === 4 )&&
-              (
-                <Link
-                  href={`/marketing/add/${btoa(
-                    atob(params.albumid) as string
-                  )}?albumname=${encodeURIComponent(album?.title)}`}
-                  className={`mt-4 ms-5 mb-2 btn me-2 ${Style.albumAddTrack} p-3`}
-                >
-                  <i className="me-2 bi bi-megaphone "></i>
-                  Marketing
-                </Link>
-              )}
+              {albumId &&
+                albumDetails &&
+                (albumDetails.status === AlbumProcessingStatus.Approved ||
+                  albumDetails.status === AlbumProcessingStatus.Live) && (
+                  <Link
+                    // href={`/marketing/add/${btoa(albumId as string)}`}
+                    href={`/marketing/add/${btoa(
+                      albumId as string
+                    )}?albumname=${encodeURIComponent(albumDetails?.title)}`}
+                    className={`mt-4 ms-5 mb-2 btn me-2 ${Style.albumAddTrack} p-3`}
+                  >
+                    <i className="me-2 bi bi-megaphone "></i>
+                    Marketing
+                  </Link>
+                )}
 
-            {atob(params.albumid) &&
-              album &&
-              (album.status === 2 ||
-                album.status === 4) && (
-                <ContentDeliverySheet
-                  contentTitle={album.title}
-                  approvalDate={album.updatedAt}
-                />
-              )}
-          </div>
+              {albumId &&
+                albumDetails &&
+                (albumDetails.status === AlbumProcessingStatus.Approved ||
+                  albumDetails.status === AlbumProcessingStatus.Live) && (
+                  <ContentDeliverySheet
+                    contentTitle={albumDetails.title}
+                    approvalDate={albumDetails.updatedAt}
+                  />
+                )}
+            </div>
+          )}
+
         </div>
       </div>
 
       {/* list of tracks  */}
 
-      {album && album.totalTracks > 0 ? (
-        atob(params.albumid) && <TrackSection albumId={atob(params.albumid)} />
+      {albumDetails && albumDetails.totalTracks > 0 ? (
+        albumId && <TrackSection albumId={albumId} />
       ) : (
         <div className="mt-5 pt-4">
           <h1 className="text-center text-2xl mt-5">No track found</h1>
         </div>
       )}
+
+      {/* {albumId && <TrackSection albumId={albumId} />} */}
 
       <ConfirmationDialog
         show={isDialogOpen}
@@ -322,6 +333,8 @@ const Albums = ({ params }: { params: { albumid: string } }) => {
         title="Are You Sure ?"
         description="Please note that once you submit your final details, you will not be able to make any further changes."
       />
+
+      {/* list of tracks  */}
     </div>
   );
 };

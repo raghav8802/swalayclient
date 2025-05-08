@@ -37,7 +37,7 @@ const LabelSchema: Schema<iLabel> = new Schema({
     type: String, // Changed from Number to String
     required: [true, 'Number required'],
     trim: true,
-    unique: true,
+    // unique: true,
     match: [/^(\+?\d{1,4}[\s.-]?)?(\(?\d{3}\)?[\s.-]?)?[\d\s.-]{7,10}$/, 'Please use a valid contact number'],
   },
   razor_contact: {

@@ -15,9 +15,7 @@ import toast from "react-hot-toast";
 import { apiFormData } from "@/helpers/axiosRequest";
 import { useRouter } from "next/navigation";
 import Uploading from "@/components/Uploading";
-// import { albumSchema } from '../../../Schema/albumSchema';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faUpload } from '@fortawesome/free-solid-svg-icons';
+import SubscriptionEndAlert from "@/components/SubcriptionEndAlert";
 
 interface FormData {
   title: string;
@@ -38,15 +36,21 @@ type TagOption = {
 
 const AlbumForm: React.FC = () => {
   const context = useContext(UserContext);
-  
+
   const labelId = context?.user?._id ?? "";
+
+  const subscriptionAvailable = context?.user?.subscriptionAvailable ?? true;
 
   const year = new Date().getFullYear();
   const userLable = context?.user?.lable || "";
 
-  const labelLine = context?.user?.usertype === "normal"  ? `${year} SwaLay Digital` : `${year} ${userLable}`;
+  const labelLine =
+    context?.user?.usertype === "normal"
+      ? `${year} SwaLay Digital`
+      : `${year} ${userLable}`;
 
-    const userMusiclabel = context?.user?.usertype === "normal" ? "SwaLay Digital" : userLable;
+  const userMusiclabel =
+    context?.user?.usertype === "normal" ? "SwaLay Digital" : userLable;
 
   const router = useRouter();
 
@@ -64,7 +68,7 @@ const AlbumForm: React.FC = () => {
   });
 
   const albumTags = [
-   { label: "Romantic", value: "Romantic" },
+    { label: "Romantic", value: "Romantic" },
     { label: "Happy", value: "Happy" },
     { label: "Sad", value: "Sad" },
     { label: "Dance", value: "Dance" },
@@ -99,7 +103,8 @@ const AlbumForm: React.FC = () => {
   // Handling file drop for artwork
   const onDrop = (acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
-    if (file && file.size > 10 * 1024 * 1024) { // Check if file size exceeds 10 MB
+    if (file && file.size > 10 * 1024 * 1024) {
+      // Check if file size exceeds 10 MB
       toast.error("File size is too large. Maximum allowed size is 10 MB.");
       return;
     }
@@ -207,7 +212,6 @@ const AlbumForm: React.FC = () => {
 
       toast.dismiss(loadingToastId);
       if (response.success) {
-    
         setFormData({
           title: "",
           releaseDate: "",
@@ -245,36 +249,42 @@ const AlbumForm: React.FC = () => {
 
   return (
     <div className="w-full min-h-screen p-6 bg-white rounded-sm ">
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink>Home</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>Albums</BreadcrumbPage>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>New Release</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+
+      <h1 className="text-3xl font-bold mb-4 mt-5 text-blue-600">
+        Album Details
+      </h1>
+
+      {/* Show SubscriptionEndAlert if subscription is not available */}
+      {!subscriptionAvailable && <SubscriptionEndAlert />}
+
       {!isUploading && (
         <>
-
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink>Home</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbPage>Albums</BreadcrumbPage>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbPage>New Release</BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
-
-          <h1 className="text-3xl font-bold mb-4 mt-5 text-blue-600">
-            Album Details
-          </h1>
-
           <form onSubmit={handleSubmit} className="w-full ">
             {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4 "> */}
             <div className="grid grid-cols-12 gap-6 ">
               <div className="col-span-8 space-y-6 ">
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
-                    Song Title <span className="formRequired" title="Required field"></span>
+                    Song Title{" "}
+                    <span
+                      className="formRequired"
+                      title="Required field"
+                    ></span>
                   </label>
                   <input
                     type="text"
@@ -295,7 +305,11 @@ const AlbumForm: React.FC = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
-                      Main Artist <span className="formRequired" title="Required field"></span>
+                      Main Artist{" "}
+                      <span
+                        className="formRequired"
+                        title="Required field"
+                      ></span>
                     </label>
                     <input
                       type="text"
@@ -315,7 +329,11 @@ const AlbumForm: React.FC = () => {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
-                      Genre <span className="formRequired" title="Required field"></span>
+                      Genre{" "}
+                      <span
+                        className="formRequired"
+                        title="Required field"
+                      ></span>
                     </label>
                     <select
                       name="genre"
@@ -364,7 +382,11 @@ const AlbumForm: React.FC = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
-                      Release Date <span className="formRequired" title="Required field"></span>
+                      Release Date{" "}
+                      <span
+                        className="formRequired"
+                        title="Required field"
+                      ></span>
                     </label>
                     <input
                       type="date"
@@ -383,7 +405,11 @@ const AlbumForm: React.FC = () => {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
-                      Language <span className="formRequired" title="Required field"></span>
+                      Language{" "}
+                      <span
+                        className="formRequired"
+                        title="Required field"
+                      ></span>
                     </label>
                     <select
                       name="language"
@@ -393,76 +419,202 @@ const AlbumForm: React.FC = () => {
                       required
                     >
                       <option value="">Select Song Language</option>
-                      
 
-                        <option label="Ahirani" value="Ahirani">Ahirani</option>
-                        <option label="Arabic" value="Arabic">Arabic</option>
-                        <option label="Assamese" value="Assamese">Assamese</option>
-                        <option label="Awadhi" value="Awadhi">Awadhi</option>
-                        <option label="Banjara" value="Banjara">Banjara</option>
-                        <option label="Bengali" value="Bengali">Bengali</option>
-                        <option label="Bhojpuri" value="Bhojpuri">Bhojpuri</option>
-                        <option label="Burmese" value="Burmese">Burmese</option>
-                        <option label="Chhattisgarhi" value="Chhattisgarhi">Chhattisgarhi</option>
-                        <option label="Chinese" value="Chinese">Chinese</option>
-                        <option label="Dogri" value="Dogri">Dogri</option>
-                        <option label="English" value="English">English</option>
-                        <option label="French" value="French">French</option>
-                        <option label="Garhwali" value="Garhwali">Garhwali</option>
-                        <option label="Garo" value="Garo">Garo</option>
-                        <option label="Gujarati" value="Gujarati">Gujarati</option>
-                        <option label="Haryanvi" value="Haryanvi">Haryanvi</option>
-                        <option label="Himachali" value="Himachali">Himachali</option>
-                        <option label="Hindi" value="Hindi">Hindi</option>
-                        <option label="Iban" value="Iban">Iban</option>
-                        <option label="Indonesian" value="Indonesian">Indonesian</option>
-                        <option label="Instrumental" value="Instrumental">Instrumental</option>
-                        <option label="Italian" value="Italian">Italian</option>
-                        <option label="Japanese" value="Japanese">Japanese</option>
-                        <option label="Javanese" value="Javanese">Javanese</option>
-                        <option label="Kannada" value="Kannada">Kannada</option>
-                        <option label="Kashmiri" value="Kashmiri">Kashmiri</option>
-                        <option label="Khasi" value="Khasi">Khasi</option>
-                        <option label="Kokborok" value="Kokborok">Kokborok</option>
-                        <option label="Konkani" value="Konkani">Konkani</option>
-                        <option label="Korean" value="Korean">Korean</option>
-                        <option label="Kumauni" value="Kumauni">Kumauni</option>
-                        <option label="Latin" value="Latin">Latin</option>
-                        <option label="Maithili" value="Maithili">Maithili</option>
-                        <option label="Malay" value="Malay">Malay</option>
-                        <option label="Malayalam" value="Malayalam">Malayalam</option>
-                        <option label="Mandarin" value="Mandarin">Mandarin</option>
-                        <option label="Manipuri" value="Manipuri">Manipuri</option>
-                        <option label="Marathi" value="Marathi">Marathi</option>
-                        <option label="Marwari" value="Marwari">Marwari</option>
-                        <option label="Naga" value="Naga">Naga</option>
-                        <option label="Nagpuri" value="Nagpuri">Nagpuri</option>
-                        <option label="Nepali" value="Nepali">Nepali</option>
-                        <option label="Odia" value="Odia">Odia</option>
-                        <option label="Pali" value="Pali">Pali</option>
-                        <option label="Persian" value="Persian">Persian</option>
-                        <option label="Punjabi" value="Punjabi">Punjabi</option>
-                        <option label="Rajasthani" value="Rajasthani">Rajasthani</option>
-                        <option label="Sainthili" value="Sainthili">Sainthili</option>
-                        <option label="Sambalpuri" value="Sambalpuri">Sambalpuri</option>
-                        <option label="Sanskrit" value="Sanskrit">Sanskrit</option>
-                        <option label="Santali" value="Santali">Santali</option>
-                        <option label="Sindhi" value="Sindhi">Sindhi</option>
-                        <option label="Sinhala" value="Sinhala">Sinhala</option>
-                        <option label="Spanish" value="Spanish">Spanish</option>
-                        <option label="Swahili" value="Swahili">Swahili</option>
-                        <option label="Tamil" value="Tamil">Tamil</option>
-                        <option label="Telugu" value="Telugu">Telugu</option>
-                        <option label="Thai" value="Thai">Thai</option>
-                        <option label="Tibetan" value="Tibetan">Tibetan</option>
-                        <option label="Tulu" value="Tulu">Tulu</option>
-                        <option label="Turkish" value="Turkish">Turkish</option>
-                        <option label="Ukrainian" value="Ukrainian">Ukrainian</option>
-                        <option label="Urdu" value="Urdu">Urdu</option>
-                        <option label="Zxx" value="Zxx">Zxx</option>
-
-
-
+                      <option label="Ahirani" value="Ahirani">
+                        Ahirani
+                      </option>
+                      <option label="Arabic" value="Arabic">
+                        Arabic
+                      </option>
+                      <option label="Assamese" value="Assamese">
+                        Assamese
+                      </option>
+                      <option label="Awadhi" value="Awadhi">
+                        Awadhi
+                      </option>
+                      <option label="Banjara" value="Banjara">
+                        Banjara
+                      </option>
+                      <option label="Bengali" value="Bengali">
+                        Bengali
+                      </option>
+                      <option label="Bhojpuri" value="Bhojpuri">
+                        Bhojpuri
+                      </option>
+                      <option label="Burmese" value="Burmese">
+                        Burmese
+                      </option>
+                      <option label="Chhattisgarhi" value="Chhattisgarhi">
+                        Chhattisgarhi
+                      </option>
+                      <option label="Chinese" value="Chinese">
+                        Chinese
+                      </option>
+                      <option label="Dogri" value="Dogri">
+                        Dogri
+                      </option>
+                      <option label="English" value="English">
+                        English
+                      </option>
+                      <option label="French" value="French">
+                        French
+                      </option>
+                      <option label="Garhwali" value="Garhwali">
+                        Garhwali
+                      </option>
+                      <option label="Garo" value="Garo">
+                        Garo
+                      </option>
+                      <option label="Gujarati" value="Gujarati">
+                        Gujarati
+                      </option>
+                      <option label="Haryanvi" value="Haryanvi">
+                        Haryanvi
+                      </option>
+                      <option label="Himachali" value="Himachali">
+                        Himachali
+                      </option>
+                      <option label="Hindi" value="Hindi">
+                        Hindi
+                      </option>
+                      <option label="Iban" value="Iban">
+                        Iban
+                      </option>
+                      <option label="Indonesian" value="Indonesian">
+                        Indonesian
+                      </option>
+                      <option label="Instrumental" value="Instrumental">
+                        Instrumental
+                      </option>
+                      <option label="Italian" value="Italian">
+                        Italian
+                      </option>
+                      <option label="Japanese" value="Japanese">
+                        Japanese
+                      </option>
+                      <option label="Javanese" value="Javanese">
+                        Javanese
+                      </option>
+                      <option label="Kannada" value="Kannada">
+                        Kannada
+                      </option>
+                      <option label="Kashmiri" value="Kashmiri">
+                        Kashmiri
+                      </option>
+                      <option label="Khasi" value="Khasi">
+                        Khasi
+                      </option>
+                      <option label="Kokborok" value="Kokborok">
+                        Kokborok
+                      </option>
+                      <option label="Konkani" value="Konkani">
+                        Konkani
+                      </option>
+                      <option label="Korean" value="Korean">
+                        Korean
+                      </option>
+                      <option label="Kumauni" value="Kumauni">
+                        Kumauni
+                      </option>
+                      <option label="Latin" value="Latin">
+                        Latin
+                      </option>
+                      <option label="Maithili" value="Maithili">
+                        Maithili
+                      </option>
+                      <option label="Malay" value="Malay">
+                        Malay
+                      </option>
+                      <option label="Malayalam" value="Malayalam">
+                        Malayalam
+                      </option>
+                      <option label="Mandarin" value="Mandarin">
+                        Mandarin
+                      </option>
+                      <option label="Manipuri" value="Manipuri">
+                        Manipuri
+                      </option>
+                      <option label="Marathi" value="Marathi">
+                        Marathi
+                      </option>
+                      <option label="Marwari" value="Marwari">
+                        Marwari
+                      </option>
+                      <option label="Naga" value="Naga">
+                        Naga
+                      </option>
+                      <option label="Nagpuri" value="Nagpuri">
+                        Nagpuri
+                      </option>
+                      <option label="Nepali" value="Nepali">
+                        Nepali
+                      </option>
+                      <option label="Odia" value="Odia">
+                        Odia
+                      </option>
+                      <option label="Pali" value="Pali">
+                        Pali
+                      </option>
+                      <option label="Persian" value="Persian">
+                        Persian
+                      </option>
+                      <option label="Punjabi" value="Punjabi">
+                        Punjabi
+                      </option>
+                      <option label="Rajasthani" value="Rajasthani">
+                        Rajasthani
+                      </option>
+                      <option label="Sainthili" value="Sainthili">
+                        Sainthili
+                      </option>
+                      <option label="Sambalpuri" value="Sambalpuri">
+                        Sambalpuri
+                      </option>
+                      <option label="Sanskrit" value="Sanskrit">
+                        Sanskrit
+                      </option>
+                      <option label="Santali" value="Santali">
+                        Santali
+                      </option>
+                      <option label="Sindhi" value="Sindhi">
+                        Sindhi
+                      </option>
+                      <option label="Sinhala" value="Sinhala">
+                        Sinhala
+                      </option>
+                      <option label="Spanish" value="Spanish">
+                        Spanish
+                      </option>
+                      <option label="Swahili" value="Swahili">
+                        Swahili
+                      </option>
+                      <option label="Tamil" value="Tamil">
+                        Tamil
+                      </option>
+                      <option label="Telugu" value="Telugu">
+                        Telugu
+                      </option>
+                      <option label="Thai" value="Thai">
+                        Thai
+                      </option>
+                      <option label="Tibetan" value="Tibetan">
+                        Tibetan
+                      </option>
+                      <option label="Tulu" value="Tulu">
+                        Tulu
+                      </option>
+                      <option label="Turkish" value="Turkish">
+                        Turkish
+                      </option>
+                      <option label="Ukrainian" value="Ukrainian">
+                        Ukrainian
+                      </option>
+                      <option label="Urdu" value="Urdu">
+                        Urdu
+                      </option>
+                      <option label="Zxx" value="Zxx">
+                        Zxx
+                      </option>
                     </select>
                     {errors.language && (
                       <p className="text-red-500 text-sm mt-1">
@@ -473,7 +625,11 @@ const AlbumForm: React.FC = () => {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
-                      P Line <span className="formRequired" title="Required field"></span>
+                      P Line{" "}
+                      <span
+                        className="formRequired"
+                        title="Required field"
+                      ></span>
                     </label>
 
                     <select
@@ -494,7 +650,11 @@ const AlbumForm: React.FC = () => {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
-                      C Line <span className="formRequired" title="Required field"></span>
+                      C Line{" "}
+                      <span
+                        className="formRequired"
+                        title="Required field"
+                      ></span>
                     </label>
                     <select
                       name="cLine"
@@ -533,7 +693,11 @@ const AlbumForm: React.FC = () => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
-                    Album Cover (File Type: png, jpg | File Size: 3000 x 3000) <span className="formRequired" title="Required field"></span>
+                    Album Cover (File Type: png, jpg | File Size: 3000 x 3000){" "}
+                    <span
+                      className="formRequired"
+                      title="Required field"
+                    ></span>
                   </label>
                   <div
                     {...getRootProps()}
@@ -562,12 +726,17 @@ const AlbumForm: React.FC = () => {
                 </div>
 
                 <div>
-                  <button
+                    <button
                     type="submit"
-                    className="inline-flex justify-center py-3 px-5 shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 w-full"
-                  >
+                    className={`inline-flex justify-center py-3 px-5 shadow-sm text-sm font-medium rounded-md text-white w-full ${
+                      subscriptionAvailable
+                      ? "bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                      : "bg-gray-400 cursor-not-allowed"
+                    }`}
+                    disabled={!subscriptionAvailable}
+                    >
                     Submit
-                  </button>
+                    </button>
                 </div>
               </div>
             </div>

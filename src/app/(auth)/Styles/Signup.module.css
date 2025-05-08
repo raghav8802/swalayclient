@@ -150,6 +150,42 @@
 
 
 
+@media screen and (max-width: 600px)
+{
+
+    .containerRight{
+        display: none;
+    }
+
+    .containerLeft{
+        /* border: 2px solid black; */
+        width: 100%;
+    }
+
+    .containerLeftInner{
+        width: 80%;
+    }
+
+    .mobileResponsiveLogo{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .otherLinks{
+        text-align: center;
+    }
+
+    .submitButton{
+        width: 100%;
+    }
+
+
+}
+
+
+
 
 
 
