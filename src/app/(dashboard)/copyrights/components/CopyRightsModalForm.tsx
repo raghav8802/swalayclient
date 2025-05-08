@@ -21,32 +21,44 @@ const CopyRightsModalForm = ({
   });
 
   const handleSave = async () => {
+    if (!labelId) {
+      toast.error("User information not loaded. Please try again.");
+      return;
+    }
 
     if (!formData.youtubeUrl && formData.youtubeUrl === "") {
       toast.error("Please paste your youtube link");
       return;
     }
 
-    toast.loading("Loading...");
+    const loadingToast = toast.loading("Loading...");
 
-    const response = await apiPost("/api/copyright/addCopyright", {
-      labelId,
-      link: formData.youtubeUrl,
-    });
-    
-    console.log("add copyright response");
-    console.log(response);
+    try {
+      const response = await apiPost("/api/copyright/addCopyright", {
+        labelId,
+        link: formData.youtubeUrl,
+      });
+      
+      console.log("add copyright response");
+      console.log(response);
 
-    if (response.success) {
+      if (response.success) {
+        toast.dismiss(loadingToast);
+        onClose();
+        toast.success("New Copyright added");
+        setFormData({ youtubeUrl: "" });
+        window.location.reload();
+      } else {
+        toast.dismiss(loadingToast);
+        onClose();
+        toast.error(response.message || "Failed to add copyright");
+      }
+    } catch (error) {
+      toast.dismiss(loadingToast);
       onClose();
-      toast.success("New Copyright added");
-      setFormData({ youtubeUrl: "" });
-      window.location.reload();
-    } else {
-      onClose();
-      toast.success("Internal server error");
+      toast.error("An unexpected error occurred");
+      console.error("Error adding copyright:", error);
     }
-
   };
 
   return (
