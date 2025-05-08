@@ -14,11 +14,12 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-white rounded ">
       <HomeStatsCard />
-      {!subcriptionAvailable && (
-        <div className="mt-4 mb-2">
-          <SubscriptionEndAlert />
-        </div>
-      )}
+      {user?.user?.subscriptionAvailable !== undefined &&
+        !subcriptionAvailable && (
+          <div className="mt-4 mb-2">
+            <SubscriptionEndAlert />
+          </div>
+        )}
 
       <div className={`mt-4  ${Style.toolContainer}`}>
         <DashboradSection />

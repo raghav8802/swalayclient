@@ -39,7 +39,7 @@ const AlbumForm: React.FC = () => {
 
   const labelId = context?.user?._id ?? "";
 
-  const subscriptionAvailable = context?.user?.subscriptionAvailable ?? true;
+  const subscriptionAvailable = context?.user?.subscriptionAvailable;
 
   const year = new Date().getFullYear();
   const userLable = context?.user?.lable || "";
@@ -270,7 +270,9 @@ const AlbumForm: React.FC = () => {
       </h1>
 
       {/* Show SubscriptionEndAlert if subscription is not available */}
-      {!subscriptionAvailable && <SubscriptionEndAlert />}
+      {subscriptionAvailable !== undefined && !subscriptionAvailable && (
+        <SubscriptionEndAlert />
+      )}
 
       {!isUploading && (
         <>
@@ -726,17 +728,17 @@ const AlbumForm: React.FC = () => {
                 </div>
 
                 <div>
-                    <button
+                  <button
                     type="submit"
                     className={`inline-flex justify-center py-3 px-5 shadow-sm text-sm font-medium rounded-md text-white w-full ${
                       subscriptionAvailable
-                      ? "bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                      : "bg-gray-400 cursor-not-allowed"
+                        ? "bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                        : "bg-gray-400 cursor-not-allowed"
                     }`}
                     disabled={!subscriptionAvailable}
-                    >
+                  >
                     Submit
-                    </button>
+                  </button>
                 </div>
               </div>
             </div>
