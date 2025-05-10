@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
             // If the subscription is unlimited, set subscriptionAvailable to true
 
 
-         subscriptionAvailable =  true; // Set to false for testing purposes
+        //  subscriptionAvailable =  true; // Set to false for testing purposes
          // Add subscriptionAvailable to UserData
         const userResponse = {
             ...UserData.toObject(),

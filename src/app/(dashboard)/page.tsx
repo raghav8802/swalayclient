@@ -12,8 +12,15 @@ const Home = () => {
   const subcriptionAvailable = user?.user?.subscriptionAvailable;
 
   return (
-    <div className="min-h-screen bg-white rounded ">
+    <div className="min-h-screen  rounded ">
       <HomeStatsCard />
+      
+      <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mt-4">
+        <p className="text-sm">
+          Your subscription details have been updated. If you experience any issues, please do not hesitate to contact us. We are here to assist you.
+        </p>
+      </div>
+
       {user?.user?.subscriptionAvailable !== undefined &&
         !subcriptionAvailable && (
           <div className="mt-4 mb-2">

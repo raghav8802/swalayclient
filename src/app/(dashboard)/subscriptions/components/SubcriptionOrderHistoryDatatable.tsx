@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useContext } from "react";
 import {
     ColumnDef,
     SortingState,
@@ -11,7 +11,6 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-
 import { Button } from "@/components/ui/button";
 import {
     Table,
@@ -21,7 +20,11 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import Link from "next/link";
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import { InvoiceTemplate } from "./InvoiceTemplate";
+import { createRoot } from 'react-dom/client';
+import UserContext from "@/context/userContext";
 
 export type Subscription = {
     _id: string;
@@ -31,7 +34,45 @@ export type Subscription = {
     endDate: string;
     isExpired: boolean;
     status: string;
+    invoiceId: string;
     createdAt: string;
+    startDate: string;
+    orderId: string;
+};
+
+const generatePDF = async (subscription: Subscription, userDetails: any) => {
+    // Create a temporary div to render the invoice
+    const tempDiv = document.createElement('div');
+    document.body.appendChild(tempDiv);
+    console.log("Subscription:", subscription);
+    // Render the invoice template
+    const root = createRoot(tempDiv);
+    root.render(<InvoiceTemplate subscription={subscription} userDetails={userDetails} />);
+
+    // Wait for images to load
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    try {
+        // Convert the rendered template to canvas
+        const canvas = await html2canvas(document.getElementById('invoice-template')!, {
+            scale: 2,
+            useCORS: true,
+            logging: false
+        });
+
+        // Create PDF
+        const imgWidth = 210; // A4 width in mm
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const imgData = canvas.toDataURL('image/png');
+
+        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+        pdf.save(`invoice-${subscription.orderId.slice(-8)}.pdf`);
+    } finally {
+        // Clean up
+        root.unmount();
+        document.body.removeChild(tempDiv);
+    }
 };
 
 export const subscriptionColumns: ColumnDef<Subscription>[] = [
@@ -85,16 +126,31 @@ export const subscriptionColumns: ColumnDef<Subscription>[] = [
         header: "Invoice",
         cell: ({ row }) => {
             const subscription = row.original;
+            const userContext = useContext(UserContext);
+            
             return (
-                <Link
+                <button
+                    onClick={async () => {
+                        try {
+                            const response = await fetch(`/api/subscription/generate-invoice?subscriptionId=${subscription._id}`);
+                            if (!response.ok) throw new Error('Failed to fetch invoice data');
+                            const data = await response.json();
+                            console.log("Invoice data:", data); 
+                            if (!data.success) throw new Error(data.message);
+                            
+                            await generatePDF(data.subscription, userContext?.user);
+                        } catch (error) {
+                            console.error('Error downloading invoice:', error);
+                            alert('Failed to download invoice. Please try again.');
+                        }
+                    }}
                     className="ms-2 text-blue-600"
-                    href={`/subscriptions/invoice/${btoa(subscription._id)}`}
                 >
                     <span className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1  text-blue-700 ring-1 ring-inset ring-blue-600/20">
                     <i className="bi bi-file-earmark-arrow-down-fill me-1"></i>
                         Download Invoice
                     </span>
-                </Link>
+                </button>
             );
         },
     },

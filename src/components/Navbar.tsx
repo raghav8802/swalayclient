@@ -6,6 +6,9 @@ import { apiGet, apiPost } from "@/helpers/axiosRequest";
 import { useRouter } from "next/navigation";
 import UserContext from "@/context/userContext";
 import Image from "next/image";
+import { Wallet } from "lucide-react";
+
+
 
 const Navbar = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -113,7 +116,7 @@ const Navbar = () => {
         <div className="header__container">
           <Link href="/" className="header__logo">
             <Image
-              src={"https://swalay-music-files.s3.ap-south-1.amazonaws.com/assets/SwaLay+-2.png"}
+              src={"https://swalay-music-files.s3.ap-south-1.amazonaws.com/assets/SwaLay-logo.png"}
               alt="logo"
               width={100}
               height={70}
@@ -272,14 +275,17 @@ const Navbar = () => {
                   <span className="nav__name">Artists</span>
                 </Link>
                 
-                {/* <Link
+                <Link
                   href="/subscriptions"
                   className="nav__link "
                   onClick={handleLinkClick}
                 >
-                  <i className="bi bi-star-fill nav__icon" style={{ color: "gold" }}></i>
+                  <Wallet size={20} strokeWidth={1.75} style={{ color: "gold" }} className="nav__icon" />
+                  {/* <Wallet style={{ color: "gold" }} className="nav__icon" /> */}
+
                   <span className="nav__name">Subscriptions</span>
-                </Link> */}
+
+                </Link>
 
                 <Link
                   href="/profile"

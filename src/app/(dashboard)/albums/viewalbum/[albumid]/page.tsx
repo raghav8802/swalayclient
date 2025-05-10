@@ -36,6 +36,7 @@ interface AlbumDetails {
   _id: string;
 }
 
+
 /* eslint-disable no-unused-vars */
 enum AlbumProcessingStatus {
   Draft = 0, // on information submit
@@ -130,17 +131,14 @@ const Albums = ({ params }: { params: { albumid: string } }) => {
 
   return (
     <div>
-      
-        {user?.user?.subscriptionAvailable !== undefined && !subcriptionAvailable && (
-  <div className="mt-4 mb-2">
-    <SubscriptionEndAlert />
-  </div>
-)}
-
+      {user?.user?.subscriptionAvailable !== undefined &&
+        !subcriptionAvailable && (
+          <div className="mt-4 mb-2">
+            <SubscriptionEndAlert />
+          </div>
+        )}
 
       <div className={Style.albumContainer}>
-
-
         <div className={Style.albumThumbnailContainer}>
           {albumDetails && albumDetails.thumbnail && (
             <a
@@ -244,80 +242,78 @@ const Albums = ({ params }: { params: { albumid: string } }) => {
           </ul>
 
           {subcriptionAvailable && (
-            <div className="flex items-center">
+            <div className={`flex flex-wrap items-center gap-4 ${Style.btnGroup}`}>
               {albumId &&
-                albumDetails &&
-                (albumDetails.status === AlbumProcessingStatus.Draft ||
-                  albumDetails.status === AlbumProcessingStatus.Rejected) && (
-                  <Link
-                    href={`/albums/edit/${btoa(albumId as string)}`}
-                    className={`mt-4 mb-2 ${Style.albumEditBtn} p-3`}
-                  >
-                    <i className="me-2 bi bi-pencil-square"></i>
-                    Edit Album
-                  </Link>
-                )}
+              albumDetails &&
+              (albumDetails.status === AlbumProcessingStatus.Draft ||
+                albumDetails.status === AlbumProcessingStatus.Rejected) && (
+                <Link
+                href={`/albums/edit/${btoa(albumId as string)}`}
+                className={`mt-4 mb-2 ${Style.albumEditBtn} p-3`}
+                >
+                <i className="me-2 bi bi-pencil-square"></i>
+                Edit Album
+                </Link>
+              )}
 
               {albumId &&
-                albumDetails &&
-                (albumDetails.status === AlbumProcessingStatus.Draft ||
-                  albumDetails.status === AlbumProcessingStatus.Rejected) && (
-                  <Link
-                    href={`/albums/addtrack/${btoa(albumId as string)}`}
-                    className={`mt-4 ms-5 mb-2 btn ${Style.albumAddTrack} p-3`}
-                  >
-                    <i className="me-2 bi bi-plus-circle"></i>
-                    Add track
-                  </Link>
-                )}
+              albumDetails &&
+              (albumDetails.status === AlbumProcessingStatus.Draft ||
+                albumDetails.status === AlbumProcessingStatus.Rejected) && (
+                <Link
+                href={`/albums/addtrack/${btoa(albumId as string)}`}
+                className={`mt-4 mb-2 btn ${Style.albumAddTrack} p-3`}
+                >
+                <i className="me-2 bi bi-plus-circle"></i>
+                Add track
+                </Link>
+              )}
 
               {albumDetails &&
-                (albumDetails.status === AlbumProcessingStatus.Draft ||
-                  albumDetails.status === AlbumProcessingStatus.Rejected) &&
-                albumDetails.totalTracks > 0 && (
-                  <button
-                    type="button"
-                    className={`mt-4 ms-5 mb-2 ${Style.albumSuccessBtn} p-3`}
-                    onClick={onFinalSubmit}
-                  >
-                    Final Submit <i className="me-2 bi bi-send-fill"></i>
-                  </button>
-                )}
+              (albumDetails.status === AlbumProcessingStatus.Draft ||
+                albumDetails.status === AlbumProcessingStatus.Rejected) &&
+              albumDetails.totalTracks > 0 && (
+                <button
+                type="button"
+                className={`mt-4 mb-2 ${Style.albumSuccessBtn} p-3`}
+                onClick={onFinalSubmit}
+                >
+                Final Submit <i className="me-2 bi bi-send-fill"></i>
+                </button>
+              )}
 
               {albumId &&
-                albumDetails &&
-                albumDetails.status == AlbumProcessingStatus.Draft && (
-                  <DeleteButton albumId={albumId} />
-                )}
+              albumDetails &&
+              albumDetails.status == AlbumProcessingStatus.Draft && (
+                <DeleteButton albumId={albumId} />
+              )}
 
               {albumId &&
-                albumDetails &&
-                (albumDetails.status === AlbumProcessingStatus.Approved ||
-                  albumDetails.status === AlbumProcessingStatus.Live) && (
-                  <Link
-                    // href={`/marketing/add/${btoa(albumId as string)}`}
-                    href={`/marketing/add/${btoa(
-                      albumId as string
-                    )}?albumname=${encodeURIComponent(albumDetails?.title)}`}
-                    className={`mt-4 ms-5 mb-2 btn me-2 ${Style.albumAddTrack} p-3`}
-                  >
-                    <i className="me-2 bi bi-megaphone "></i>
-                    Marketing
-                  </Link>
-                )}
+              albumDetails &&
+              (albumDetails.status === AlbumProcessingStatus.Approved ||
+                albumDetails.status === AlbumProcessingStatus.Live) && (
+                <Link
+                href={`/marketing/add/${btoa(
+                  albumId as string
+                )}?albumname=${encodeURIComponent(albumDetails?.title)}`}
+                className={`mt-4 mb-2 btn ${Style.albumAddTrack} p-3`}
+                >
+                <i className="me-2 bi bi-megaphone"></i>
+                Marketing
+                </Link>
+              )}
 
               {albumId &&
-                albumDetails &&
-                (albumDetails.status === AlbumProcessingStatus.Approved ||
-                  albumDetails.status === AlbumProcessingStatus.Live) && (
-                  <ContentDeliverySheet
-                    contentTitle={albumDetails.title}
-                    approvalDate={albumDetails.updatedAt}
-                  />
-                )}
+              albumDetails &&
+              (albumDetails.status === AlbumProcessingStatus.Approved ||
+                albumDetails.status === AlbumProcessingStatus.Live) && (
+                <ContentDeliverySheet
+                contentTitle={albumDetails.title}
+                approvalDate={albumDetails.updatedAt}
+                />
+              )}
             </div>
           )}
-
         </div>
       </div>
 

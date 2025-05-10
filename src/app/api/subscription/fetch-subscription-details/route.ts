@@ -8,6 +8,9 @@ export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
     const subscriptionId = searchParams.get('subscriptionId');
+    
+    console.log("in fetch-subscription-details route.ts");
+    console.log('Subscription ID:', subscriptionId);
 
     if (!subscriptionId) {
       return NextResponse.json(

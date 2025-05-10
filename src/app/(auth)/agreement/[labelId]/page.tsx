@@ -39,8 +39,6 @@ function Agreement({ params }: { params: { labelId: string } }) {
     try {
       const response = await apiGet("/api/user/userdetails");
       if (response.success) {
-        console.log("user details");
-        console.log(response.data);
         
         const userInfo: User = response.data;
         setUser(userInfo);
@@ -92,13 +90,10 @@ function Agreement({ params }: { params: { labelId: string } }) {
     formData.append("labelId", labelId!); // Assuming labelId is not null when submitting
     formData.append("signature", signatureFile);
 
-    formData.forEach((value, key) => {
-      console.log(`${key}:`, value);
-    });
 
     try {
       const response = await apiFormData("/api/user/agreement", formData);
-      console.log(response);
+      
 
       if (response.success) {
         toast.success("Agreement successfully submitted!");

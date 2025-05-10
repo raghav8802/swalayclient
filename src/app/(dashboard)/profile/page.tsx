@@ -124,83 +124,85 @@ const Page = () => {
 
   return (
     <div className="grid grid-cols-12 gap-4">
+
       <div className={`col-span-12 h-screen relative`}>
         <div className={Style.profileContainer}>
           <div className="flex items-center justify-between">
             <h3 className={Style.labelHeader}>Label Information</h3>
           </div>
 
-          <div className="grid grid-cols-12 gap-4 mt-3 mb-3">
-            <div className={`mb-3 col-span-4 `}>
+            <div className="grid grid-cols-12 gap-4 mt-3 mb-3">
+            <div className={`mb-3 col-span-12 md:col-span-6 lg:col-span-4`}>
               <p className={Style.labelSubHeader}>Label Name</p>
               {labelId === "6784b1d257ce42ea2334c86a" ? (
-                <div className="flex items-center gap-2">
-                  {isEditingLabel ? (
-                    <>
-                      <input
-                        type="text"
-                        value={newLabelName}
-                        onChange={(e) => setNewLabelName(e.target.value)}
-                        className="border rounded px-2 py-1"
-                      />
-                      <button
-                        onClick={handleLabelUpdate}
-                        className="text-green-600"
-                      >
-                        <i className="bi bi-check-lg"></i>
-                      </button>
-                      <button
-                        onClick={() => {
-                          setIsEditingLabel(false);
-                          setNewLabelName(lableName || "SwaLay Digital");
-                        }}
-                        className="text-red-600"
-                      >
-                        <i className="bi bi-x-lg"></i>
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <p>{lableName ? lableName : "SwaLay Digital"}</p>
-                      <button
-                        onClick={() => setIsEditingLabel(true)}
-                        className="text-blue-600"
-                      >
-                        <i className="bi bi-pencil"></i>
-                      </button>
-                    </>
-                  )}
-                </div>
+              <div className="flex items-center gap-2">
+                {isEditingLabel ? (
+                <>
+                  <input
+                  type="text"
+                  value={newLabelName}
+                  onChange={(e) => setNewLabelName(e.target.value)}
+                  className="border rounded px-2 py-1 w-full md:w-auto"
+                  />
+                  <button
+                  onClick={handleLabelUpdate}
+                  className="text-green-600"
+                  >
+                  <i className="bi bi-check-lg"></i>
+                  </button>
+                  <button
+                  onClick={() => {
+                    setIsEditingLabel(false);
+                    setNewLabelName(lableName || "SwaLay Digital");
+                  }}
+                  className="text-red-600"
+                  >
+                  <i className="bi bi-x-lg"></i>
+                  </button>
+                </>
+                ) : (
+                <>
+                  <p>{lableName ? lableName : "SwaLay Digital"}</p>
+                  <button
+                  onClick={() => setIsEditingLabel(true)}
+                  className="text-blue-600"
+                  >
+                  <i className="bi bi-pencil"></i>
+                  </button>
+                </>
+                )}
+              </div>
               ) : (
-                <p>{lableName ? lableName : "SwaLay Digital"}</p>
+              <p>{lableName ? lableName : "SwaLay Digital"}</p>
               )}
             </div>
-            <div className={`mb-3 col-span-4 `}>
+            <div className={`mb-3 col-span-12 md:col-span-6 lg:col-span-4`}>
               <p className={Style.labelSubHeader}>Label Owner Name</p>
               <p>{username} </p>
             </div>
-            <div className={`mb-3 col-span-4 `}>
+            <div className={`mb-3 col-span-12 md:col-span-6 lg:col-span-4`}>
               <p className={Style.labelSubHeader}>Joining Date </p>
               <p>
-                {joinedat
-                  ? new Date(joinedat).toLocaleDateString("en-IN", {
-                      weekday: "long",
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })
-                  : "N/A"}
+              {joinedat
+                ? new Date(joinedat).toLocaleDateString("en-IN", {
+                  weekday: "long",
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })
+                : "N/A"}
               </p>
             </div>
-            <div className={`mb-3 col-span-4 `}>
+            <div className={`mb-3 col-span-12 md:col-span-6 lg:col-span-4`}>
               <p className={Style.labelSubHeader}>Email</p>
               <p>{email}</p>
             </div>
-            <div className={`mb-3 col-span-4 `}>
+            <div className={`mb-3 col-span-12 md:col-span-6 lg:col-span-4`}>
               <p className={Style.labelSubHeader}>Contact</p>
               <p>{contact}</p>
             </div>
-          </div>
+            </div>
+
         </div>
 
         <div className={`mt-5 ${Style.profileContainer}`}>
@@ -214,153 +216,153 @@ const Page = () => {
 
    
             {bankData && (
-              <div className="grid grid-cols-12 gap-4 mt-3 mb-3">
-                <div className={`mb-3 col-span-3`}>
+                <div className="grid grid-cols-12 gap-4 mt-3 mb-3">
+                <div className={`mb-3 col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3`}>
                   <p className={Style.labelSubHeader}>Account Holder Name</p>
                   <div className="flex items-center">
-                    {visibleFields.accountHolderName ? (
-                      <p>{bankData.accountHolderName}</p>
-                    ) : (
-                      <p>*******</p>
-                    )}
-                    <i
-                      onClick={() => toggleVisibility("accountHolderName")}
-                      className={`ml-2 cursor-pointer ${
-                        visibleFields.accountHolderName
-                          ? "bi bi-eye-slash"
-                          : "bi bi-eye-fill"
-                      }`}
-                    ></i>
+                  {visibleFields.accountHolderName ? (
+                    <p>{bankData.accountHolderName}</p>
+                  ) : (
+                    <p>*******</p>
+                  )}
+                  <i
+                    onClick={() => toggleVisibility("accountHolderName")}
+                    className={`ml-2 cursor-pointer ${
+                    visibleFields.accountHolderName
+                      ? "bi bi-eye-slash"
+                      : "bi bi-eye-fill"
+                    }`}
+                  ></i>
                   </div>
                 </div>
 
-                <div className={`col-span-3`}>
+                <div className={`mb-3 col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3`}>
                   <p className={Style.labelSubHeader}>Bank Name</p>
                   <div className="flex items-center">
-                    {visibleFields.bankName ? (
-                      <p>{bankData.bankName}</p>
-                    ) : (
-                      <p>*******</p>
-                    )}
-                    <i
-                      onClick={() => toggleVisibility("bankName")}
-                      className={`ml-2 cursor-pointer ${
-                        visibleFields.bankName
-                          ? "bi bi-eye-slash"
-                          : "bi bi-eye-fill"
-                      }`}
-                    ></i>
+                  {visibleFields.bankName ? (
+                    <p>{bankData.bankName}</p>
+                  ) : (
+                    <p>*******</p>
+                  )}
+                  <i
+                    onClick={() => toggleVisibility("bankName")}
+                    className={`ml-2 cursor-pointer ${
+                    visibleFields.bankName
+                      ? "bi bi-eye-slash"
+                      : "bi bi-eye-fill"
+                    }`}
+                  ></i>
                   </div>
                 </div>
 
-                <div className={`mb-3 col-span-3`}>
+                <div className={`mb-3 col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3`}>
                   <p className={Style.labelSubHeader}>Branch Name</p>
                   <div className="flex items-center">
-                    {visibleFields.branchName ? (
-                      <p>{bankData.branchName}</p>
-                    ) : (
-                      <p>*******</p>
-                    )}
-                    <i
-                      onClick={() => toggleVisibility("branchName")}
-                      className={`ml-2 cursor-pointer ${
-                        visibleFields.branchName
-                          ? "bi bi-eye-slash"
-                          : "bi bi-eye-fill"
-                      }`}
-                    ></i>
+                  {visibleFields.branchName ? (
+                    <p>{bankData.branchName}</p>
+                  ) : (
+                    <p>*******</p>
+                  )}
+                  <i
+                    onClick={() => toggleVisibility("branchName")}
+                    className={`ml-2 cursor-pointer ${
+                    visibleFields.branchName
+                      ? "bi bi-eye-slash"
+                      : "bi bi-eye-fill"
+                    }`}
+                  ></i>
                   </div>
                 </div>
 
-                <div className={`mb-3 col-span-3`}>
+                <div className={`mb-3 col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3`}>
                   <p className={Style.labelSubHeader}>Account Number</p>
                   <div className="flex items-center">
-                    {visibleFields.accountNumber ? (
-                      <p>{bankData.accountNumber}</p>
-                    ) : (
-                      <p>*******</p>
-                    )}
-                    <i
-                      onClick={() => toggleVisibility("accountNumber")}
-                      className={`ml-2 cursor-pointer ${
-                        visibleFields.accountNumber
-                          ? "bi bi-eye-slash"
-                          : "bi bi-eye-fill"
-                      }`}
-                    ></i>
+                  {visibleFields.accountNumber ? (
+                    <p>{bankData.accountNumber}</p>
+                  ) : (
+                    <p>*******</p>
+                  )}
+                  <i
+                    onClick={() => toggleVisibility("accountNumber")}
+                    className={`ml-2 cursor-pointer ${
+                    visibleFields.accountNumber
+                      ? "bi bi-eye-slash"
+                      : "bi bi-eye-fill"
+                    }`}
+                  ></i>
                   </div>
                 </div>
 
-                <div className={`mb-3 col-span-3`}>
+                <div className={`mb-3 col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3`}>
                   <p className={Style.labelSubHeader}>IFSC Code</p>
                   <div className="flex items-center">
-                    {visibleFields.ifscCode ? (
-                      <p>{bankData.ifscCode}</p>
-                    ) : (
-                      <p>*******</p>
-                    )}
-                    <i
-                      onClick={() => toggleVisibility("ifscCode")}
-                      className={`ml-2 cursor-pointer ${
-                        visibleFields.ifscCode
-                          ? "bi bi-eye-slash"
-                          : "bi bi-eye-fill"
-                      }`}
-                    ></i>
+                  {visibleFields.ifscCode ? (
+                    <p>{bankData.ifscCode}</p>
+                  ) : (
+                    <p>*******</p>
+                  )}
+                  <i
+                    onClick={() => toggleVisibility("ifscCode")}
+                    className={`ml-2 cursor-pointer ${
+                    visibleFields.ifscCode
+                      ? "bi bi-eye-slash"
+                      : "bi bi-eye-fill"
+                    }`}
+                  ></i>
                   </div>
                 </div>
 
-                <div className={`mb-3 col-span-3`}>
+                <div className={`mb-3 col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3`}>
                   <p className={Style.labelSubHeader}>UPI Id</p>
                   <div className="flex items-center">
-                    {visibleFields.upiId ? (
-                      <p>{bankData.upiId}</p>
-                    ) : (
-                      <p>*******</p>
-                    )}
-                    <i
-                      onClick={() => toggleVisibility("upiId")}
-                      className={`ml-2 cursor-pointer ${
-                        visibleFields.upiId
-                          ? "bi bi-eye-slash"
-                          : "bi bi-eye-fill"
-                      }`}
-                    ></i>
+                  {visibleFields.upiId ? (
+                    <p>{bankData.upiId}</p>
+                  ) : (
+                    <p>*******</p>
+                  )}
+                  <i
+                    onClick={() => toggleVisibility("upiId")}
+                    className={`ml-2 cursor-pointer ${
+                    visibleFields.upiId
+                      ? "bi bi-eye-slash"
+                      : "bi bi-eye-fill"
+                    }`}
+                  ></i>
                   </div>
                 </div>
 
-                <div className={`mb-3 col-span-3`}>
+                <div className={`mb-3 col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3`}>
                   <p className={Style.labelSubHeader}>PAN</p>
                   <div className="flex items-center">
-                    {visibleFields.pan ? <p>{bankData.pan}</p> : <p>*******</p>}
-                    <i
-                      onClick={() => toggleVisibility("pan")}
-                      className={`ml-2 cursor-pointer ${
-                        visibleFields.pan ? "bi bi-eye-slash" : "bi bi-eye-fill"
-                      }`}
-                    ></i>
+                  {visibleFields.pan ? <p>{bankData.pan}</p> : <p>*******</p>}
+                  <i
+                    onClick={() => toggleVisibility("pan")}
+                    className={`ml-2 cursor-pointer ${
+                    visibleFields.pan ? "bi bi-eye-slash" : "bi bi-eye-fill"
+                    }`}
+                  ></i>
                   </div>
                 </div>
 
-                <div className={`mb-3 col-span-3`}>
+                <div className={`mb-3 col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3`}>
                   <p className={Style.labelSubHeader}>GST NO</p>
                   <div className="flex items-center">
-                    {visibleFields.gstNo ? (
-                      <p>{bankData.gstNo}</p>
-                    ) : (
-                      <p>*******</p>
-                    )}
-                    <i
-                      onClick={() => toggleVisibility("gstNo")}
-                      className={`ml-2 cursor-pointer ${
-                        visibleFields.gstNo
-                          ? "bi bi-eye-slash"
-                          : "bi bi-eye-fill"
-                      }`}
-                    ></i>
+                  {visibleFields.gstNo ? (
+                    <p>{bankData.gstNo}</p>
+                  ) : (
+                    <p>*******</p>
+                  )}
+                  <i
+                    onClick={() => toggleVisibility("gstNo")}
+                    className={`ml-2 cursor-pointer ${
+                    visibleFields.gstNo
+                      ? "bi bi-eye-slash"
+                      : "bi bi-eye-fill"
+                    }`}
+                  ></i>
                   </div>
                 </div>
-              </div>
+                </div>
             )}
           
 

@@ -11,6 +11,7 @@ export async function middleware(request: NextRequest) {
     const isPublicPath = path === '/xg6jtv54ghv' || path === '/signin' || path === '/register' || path === '/verifyemail' || path === '/forgotpassword' || path === '/agreement' || path === '/reset-password' || path === '/message' || path === '/signup';
 
     const token = request.cookies.get('token')?.value || '';
+
  
     // Allow API routes to bypass the token check
     if (path.startsWith('/api')) {

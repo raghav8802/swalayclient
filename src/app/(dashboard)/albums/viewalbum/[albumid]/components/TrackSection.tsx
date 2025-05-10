@@ -38,15 +38,8 @@ const TrackSection: React.FC<TrackSectionProps> = ({ albumId }) => {
     <div>
       <div className={`mt-3 ${Style.trackContainer}`}>
         <div className={`p-1 ${Style.tracksContainer}`}>
-          {/* <h5 className={Style.subheading}><i className="bi bi-music-note"></i> Tracks</h5> */}
           <div className={`mt-3 ${Style.trackDetailsTop}`}>
             <h5 className={Style.subheading}>Tracks</h5>
-            {/* <Link
-              href={`/albums/addtrack/${btoa(albumId as string)}`}
-              className={buttonVariants({ variant: "default" })}
-            >
-              <i className="bi bi-plus-circle mr-2"></i> Add Track
-            </Link> */}
           </div>
 
           {albumId && (
@@ -54,19 +47,17 @@ const TrackSection: React.FC<TrackSectionProps> = ({ albumId }) => {
           )}
         </div>
 
-        {showTrackDetails && trackId && (
-          <TrackDetails trackId={trackId} onFetchDetails={getSongNameUrl} />
-        )}
+        
+          {showTrackDetails && trackId && (
+            <TrackDetails trackId={trackId} onFetchDetails={getSongNameUrl} />
+          )}
+        
+
       </div>
 
       {showAudioPlayer && (
-        <AudioPlayer
-          trackName={audio.songName}
-          audioSrc={audio.songUrl}
-          />
-        )}
-
-      
+        <AudioPlayer trackName={audio.songName} audioSrc={audio.songUrl} />
+      )}
     </div>
   );
 };

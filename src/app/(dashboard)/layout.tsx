@@ -37,7 +37,8 @@ export default function RootLayout({
         <Navbar />
 
         {/* <main style={{ padding: "1rem", minHeight: "80vh" }}> */}
-        <main style={{ padding: "0.7rem", minHeight: "80vh" }}>
+        {/* <main style={{ padding: "0.5rem", minHeight: "80vh" }}> */}
+        <main style={{ minHeight: "80vh" }} className="rootLayoutMain">
           {/* <section style={{ border: "2px solid green" }}> */}
           <Toaster position="top-center" 
             reverseOrder={false} 

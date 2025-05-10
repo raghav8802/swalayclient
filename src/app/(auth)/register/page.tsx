@@ -55,8 +55,7 @@ function Register() {
 
     try {
       const response = await apiPost("/api/user/signup", userData);
-      console.log("api response");
-      console.log(response);
+      
 
         if (!response.success) {
           toast.error(response.message);

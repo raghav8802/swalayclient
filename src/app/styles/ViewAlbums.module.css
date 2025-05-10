@@ -19,6 +19,8 @@
     height: 500px;
     overflow: hidden; /* Ensure the image does not overflow */
     padding: 3px;
+    /* border: 2px solid red; */
+
 }
 
 .albumThumbnail {
@@ -31,7 +33,7 @@
 
 
 .albumDetails{
-    /* border: 2px solid rgb(34, 226, 111); */
+    border: 2px solid rgb(34, 50, 226);
     width: 64%;
     height: 500px;
     margin: auto;
@@ -431,6 +433,70 @@
     background-color: #f1f5f9;
     border-radius: 0.5rem;
 }
+
+
+
+@media screen and (max-width: 425px) {
+    .albumContainer{
+        flex-direction: column;
+    }
+
+    .albumThumbnailContainer{
+        width: 100%;
+        height: 300px;
+    }
+
+    .albumDetails{
+        width: 100%;
+        height: auto;
+    }
+
+    .albumInfoList{
+        flex-direction: column;
+        align-items: start;
+    }
+
+    /* .btnGroup{
+        border: 2px solid red;
+    } */
+    .tracksContainer{
+        width: 100%;
+        padding: 0;
+    }
+/* 
+    .trackItem{
+        border: 2px solid black;
+    } */
+    .controllers{
+        display: none;
+    }
+
+    .trackItemIconBox{
+        height: 40px;
+    }
+
+    .MusicPlayercontainer{
+        padding: 10px;
+    }
+
+    .playingTrack{
+        display: none;
+    }
+    .trackControllerMusicPlayRound{
+        margin: 2px!important;
+    }
+
+    .rangeContainer{
+        width: 80%;
+    }
+
+    .albumInfoItem{
+        width: 100%;
+    }
+
+  
+  }
+
 
 
 

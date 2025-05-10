@@ -13,6 +13,7 @@ export interface ISubscription extends Document {
   paymentId: string; // Razorpay payment ID
   orderId: string; // Razorpay order ID
   razorpayPaymentId: string; // Razorpay payment ID
+  invoiceId: string; // Invoice ID for the subscription
   status: "active" | "expired" | "cancelled"; // Subscription status
   createdAt: Date; // Timestamp for when the subscription was created
   updatedAt: Date; // Timestamp for when the subscription was last updated
@@ -60,6 +61,10 @@ const SubscriptionSchema: Schema = new Schema<ISubscription>(
       required: true,
     },
     razorpayPaymentId: {
+      type: String,
+      required: true,
+    },
+    invoiceId: {
       type: String,
       required: true,
     },

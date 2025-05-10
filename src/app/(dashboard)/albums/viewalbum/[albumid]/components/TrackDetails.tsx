@@ -124,7 +124,7 @@ const TrackDetails: React.FC<TrackListProps> = ({
   };
 
   return (
-    <div className={`p-1 ${Style.trackDetails}`}>
+    <div className={`p-1 display-none-mobile ${Style.trackDetails}`}>
       <div className={Style.trackDetailsTop}>
         <h5 className={`mt-3 ${Style.subheading}`}> Track Details</h5>
 

@@ -48,7 +48,12 @@
 
 
 
-
+@media screen and (max-width: 320px) {
+    .Card{
+        width: 100%;
+    }
+    
+}
 
 
 

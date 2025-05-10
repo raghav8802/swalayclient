@@ -6,7 +6,6 @@ import sendMail from "@/helpers/sendMail";
 import SubscriptionSuccessEmail from "@/components/Email/SubscriptionSuccessEmail";
 import React from "react";
 
-
 const generatedSignature = (
   razorpayOrderId: string,
   razorpayPaymentId: string
@@ -15,7 +14,8 @@ const generatedSignature = (
   console.log("Razorpay Credentials Check2:", {
     keyIdExists: !!process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
     keySecretExists: !!process.env.RAZORPAY_KEY_SECRET,
-    keyIdValue: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID?.substring(0, 4) + "...",
+    keyIdValue:
+      process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID?.substring(0, 4) + "...",
   });
 
   const keySecret = process.env.RAZORPAY_KEY_SECRET;
@@ -34,8 +34,7 @@ const generatedSignature = (
 export async function POST(request: NextRequest) {
   console.log("Verifying payment...");
   try {
-
-      await connect();
+    await connect();
 
     const data = await request.json(); // Read body once
     console.log("Request body:", data);
@@ -68,60 +67,81 @@ export async function POST(request: NextRequest) {
       );
     }
 
-     // Save payment details to the database
-     const startDate = new Date();
-     const endDate = new Date();
-     endDate.setMonth(startDate.getMonth() + 1); // Example: 1-month subscription
- 
-     const subscription = new Subscription({
-       userId: userDetails.userId, // Ensure `userId` is passed in `userDetails`
-       planId: planDetails.planId,
-       planName: planDetails.name,
-       price: planDetails.price,
-       trackCount: planDetails.trackCount,
-       startDate,
-       endDate,
-       paymentId: razorpayPaymentId,
-       orderId: orderCreationId,
-       razorpayPaymentId,
-       status: "active",
-     });
- 
-     await subscription.save();
-     console.log("Subscription saved successfully:", subscription);
+    // Save payment details to the database
+    const startDate = new Date();
+    const endDate = new Date();
+    endDate.setMonth(startDate.getMonth() + 12); // Example: 1-month subscription
 
-     // Send subscription confirmation email
-     try {
-       const emailTemplate = React.createElement(SubscriptionSuccessEmail, {
-         clientName: userDetails.name,
-         planName: planDetails.name,
-         price: planDetails.price,
-         startDate: startDate.toLocaleDateString(),
-       });
-       
+    // Fetch the last invoice ID from the database
+    const lastSubscription = await Subscription.findOne({})
+      .sort({ createdAt: -1 }) // Sort by creation date in descending order
+      .select("invoiceId"); // Only fetch the invoiceId field
+
+    let newInvoiceId = "SL/INV/P0001"; // Default invoice ID
+
+    if (lastSubscription && lastSubscription.invoiceId) {
+      const lastInvoiceId = lastSubscription.invoiceId;
+      const invoiceNumberMatch = lastInvoiceId.match(/(\d+)$/); // Extract the numeric part
+
+      if (invoiceNumberMatch) {
+      const lastInvoiceNumber = parseInt(invoiceNumberMatch[1], 10);
+      const newInvoiceNumber = (lastInvoiceNumber + 1).toString().padStart(4, "0"); // Increment and pad with zeros
+      newInvoiceId = `SL/INV/P${newInvoiceNumber}`;
+      }
+    }
+
+
+    const subscription = new Subscription({
+      userId: userDetails.userId, // Ensure `userId` is passed in `userDetails`
+      planId: planDetails.planId,
+      planName: planDetails.name,
+      price: planDetails.price,
+      trackCount: planDetails.trackCount,
+      startDate,
+      endDate,
+      paymentId: razorpayPaymentId,
+      orderId: orderCreationId,
+      razorpayPaymentId,
+      invoiceId: newInvoiceId, // Use the generated invoice ID
+      status: "active",
+    });
+
+    await subscription.save();
+
+    console.log("Subscription saved successfully:", subscription);
+
+    // Send subscription confirmation email
+    try {
+      const emailTemplate = React.createElement(SubscriptionSuccessEmail, {
+        clientName: userDetails.name,
+        planName: planDetails.name,
+        price: planDetails.price,
+        startDate: startDate.toLocaleDateString(),
+      });
+
        await sendMail({
          to: userDetails.email,
          subject: `Your SwaLay Subscription is Active!`,
          emailTemplate,
        });
 
-       console.log("Subscription confirmation email sent to", userDetails.email);
-     } catch (emailError) {
-       console.error("Failed to send subscription confirmation email:", emailError);
-     }
+      console.log("Subscription confirmation email sent to", userDetails.email);
+    } catch (emailError) {
+      console.error(
+        "Failed to send subscription confirmation email:",
+        emailError
+      );
+    }
 
     return NextResponse.json(
       { message: "payment verified successfully", isOk: true },
       { status: 200 }
     );
   } catch (error: any) {
-
     console.error("Error verifying payment:", error.message);
     return NextResponse.json(
       { message: "Internal Server Error", error: error.message },
       { status: 500 }
     );
-
   }
-
 }

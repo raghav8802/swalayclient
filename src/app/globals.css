@@ -135,6 +135,10 @@ body {
   color: var(--text-color);
 }
 
+.rootLayoutMain{
+  padding: 0.7rem;
+}
+
 .dashboardBody {
   padding: 1rem 1rem 0;
 }
@@ -354,12 +358,35 @@ img {
   .header__search {
     width: 70%;
   }
+
+  .dashboardBody {
+    padding: 0.5rem;
+  }
+
+  
+  .NotificationSection{
+    display: none;
+  }
+
+
+}
+
+
+@media screen and (max-width: 425px) {
+  
+  .rootLayoutMain{
+    padding: 0.1rem;
+  }
+  
+  .display-none-mobile{
+    display: none;
+  }
+
 }
 
 @media screen and (min-width: 768px) {
 
   .dashboardBody {
-    /* padding: 1rem 1rem 0 4rem; */
     padding: 0.5rem 0rem 0 4rem;
   }
 
@@ -437,6 +464,9 @@ img {
   .nav:hover .nav__dropdown-icon {
     opacity: 1;
   }
+
+
+
 }
 
 @media print {

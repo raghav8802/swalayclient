@@ -119,7 +119,7 @@ const TrackList: React.FC<TrackListProps> = ({ albumId, onTrackClick }) => {
                         : ""
                     }`}
                   >
-                    {track.songName}
+                    {track.songName} Lorem ipsum dolor sit amet.
                   </p>
                   <p className={`${Style.trackItemTrackSingerName}`}>
                     {track.primarySinger}
@@ -129,7 +129,7 @@ const TrackList: React.FC<TrackListProps> = ({ albumId, onTrackClick }) => {
                   <div className={Style.controllersItem}>
                     {track && track.category && (
                       <span
-                        className="me-2 inline-flex items-center rounded-md bg-purple-50 px-2 py-1 font-medium text-purple-700 ring-1 ring-inset ring-purple-700/10"
+                        className="me-2 inline-flex items-center rounded-md bg-purple-50 px-2 py-1 font-medium text-purple-700 ring-1 ring-inset ring-purple-700/10 "
                         style={{ fontSize: "12px" }}
                       >
                         {track.category}

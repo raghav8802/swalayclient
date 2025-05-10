@@ -27,8 +27,7 @@ const Page = () => {
   
       try {
         const response = await apiGet(`/api/olddata/get?labelName=${lableName}`);
-        console.log("dsads");
-        console.log(response);
+        
   
         setAlbumsData(response.data);
       } catch (error: any) {
