@@ -170,7 +170,7 @@ export const InvoiceTemplate = ({ subscription, userDetails }: InvoiceTemplatePr
             <div>
               <p className="text-sm text-gray-600">
                 <span className="font-medium">GST Number:</span>{" "}
-                YOUR_COMPANY_GST_NUMBER
+                09CIXPJ5843F1ZN
               </p>
             </div>
           </div>
