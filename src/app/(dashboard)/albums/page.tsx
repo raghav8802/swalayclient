@@ -113,8 +113,6 @@ const Albums = () => {
 
         </div>
 
-        {/* <div className={`mb-3 ${Style.albumContainer}`}> */}
-
         <div className={`mb-3`}>
           {labelId && <AlbumSlider labelId={labelId} />}
         </div>
