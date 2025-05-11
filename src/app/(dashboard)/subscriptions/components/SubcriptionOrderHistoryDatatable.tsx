@@ -41,27 +41,22 @@ export type Subscription = {
 };
 
 const generatePDF = async (subscription: Subscription, userDetails: any) => {
-    // Create a temporary div to render the invoice
     const tempDiv = document.createElement('div');
     document.body.appendChild(tempDiv);
-    console.log("Subscription:", subscription);
-    // Render the invoice template
+
     const root = createRoot(tempDiv);
     root.render(<InvoiceTemplate subscription={subscription} userDetails={userDetails} />);
 
-    // Wait for images to load
     await new Promise(resolve => setTimeout(resolve, 1000));
 
     try {
-        // Convert the rendered template to canvas
         const canvas = await html2canvas(document.getElementById('invoice-template')!, {
             scale: 2,
             useCORS: true,
             logging: false
         });
 
-        // Create PDF
-        const imgWidth = 210; // A4 width in mm
+        const imgWidth = 210;
         const imgHeight = (canvas.height * imgWidth) / canvas.width;
         const pdf = new jsPDF('p', 'mm', 'a4');
         const imgData = canvas.toDataURL('image/png');
@@ -69,13 +64,12 @@ const generatePDF = async (subscription: Subscription, userDetails: any) => {
         pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
         pdf.save(`invoice-${subscription.orderId.slice(-8)}.pdf`);
     } finally {
-        // Clean up
         root.unmount();
         document.body.removeChild(tempDiv);
     }
 };
 
-export const subscriptionColumns: ColumnDef<Subscription>[] = [
+export const subscriptionColumns = (userContext: any): ColumnDef<Subscription>[] => [
     {
         accessorKey: "srno",
         header: "Sr No",
@@ -126,8 +120,7 @@ export const subscriptionColumns: ColumnDef<Subscription>[] = [
         header: "Invoice",
         cell: ({ row }) => {
             const subscription = row.original;
-            const userContext = useContext(UserContext);
-            
+
             return (
                 <button
                     onClick={async () => {
@@ -135,9 +128,8 @@ export const subscriptionColumns: ColumnDef<Subscription>[] = [
                             const response = await fetch(`/api/subscription/generate-invoice?subscriptionId=${subscription._id}`);
                             if (!response.ok) throw new Error('Failed to fetch invoice data');
                             const data = await response.json();
-                            console.log("Invoice data:", data); 
                             if (!data.success) throw new Error(data.message);
-                            
+
                             await generatePDF(data.subscription, userContext?.user);
                         } catch (error) {
                             console.error('Error downloading invoice:', error);
@@ -157,12 +149,13 @@ export const subscriptionColumns: ColumnDef<Subscription>[] = [
 ];
 
 export function SubscriptionDataTable({ data }: { data: Subscription[] }) {
+    const userContext = useContext(UserContext); // Move useContext here
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
 
     const table = useReactTable({
         data,
-        columns: subscriptionColumns,
+        columns: subscriptionColumns(userContext), // Pass userContext to columns
         onSortingChange: setSorting,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
@@ -206,7 +199,7 @@ export function SubscriptionDataTable({ data }: { data: Subscription[] }) {
                             ))
                         ) : (
                             <TableRow>
-                                <TableCell colSpan={subscriptionColumns.length} className="h-24 text-center">
+                                <TableCell colSpan={subscriptionColumns(userContext).length} className="h-24 text-center">
                                     No results.
                                 </TableCell>
                             </TableRow>

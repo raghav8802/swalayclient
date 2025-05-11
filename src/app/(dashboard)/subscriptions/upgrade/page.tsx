@@ -3,11 +3,15 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Sparkles, Music, Globe, Zap, Package } from "lucide-react";
 
+/* eslint-disable no-unused-vars */
 declare global {
   interface Window {
     Razorpay: any;
   }
 }
+/* eslint-enable no-unused-vars */
+
+
 import Script from "next/script";
 import { apiPost } from "@/helpers/axiosRequest";
 import UserContext from "@/context/userContext";
@@ -252,13 +256,13 @@ function Payment() {
 
       console.log("creating order ...");
       console.log({
-        amount: parseFloat(plan?.amount || "0") * 100, // Use plan.amount directly
+        amount: parseFloat(plan?.amount || "0") * 100 * 1.18, // Add 18% GST
         currency: "INR",
         planName: plan?.name || selectedPlan?.name || "",
       });
 
       const response = await apiPost("/api/subscription/create-order", {
-        amount: parseFloat(plan?.amount || "0") * 100, // Use plan.amount directly
+        amount: parseFloat(plan?.amount || "0") * 100 * 1.18, // Add 18% GST
         currency: "INR",
         planName: plan?.name || selectedPlan?.name || "",
         username: name,
@@ -386,6 +390,7 @@ function Payment() {
       alert("There was an error processing your payment. Please try again.");
     } finally {
       setLoading(false);
+      console.log(loading)
     }
   };
 

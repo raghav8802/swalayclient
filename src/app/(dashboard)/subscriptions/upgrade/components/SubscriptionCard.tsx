@@ -19,7 +19,7 @@ interface SubscriptionCardProps {
   };
   isPopular?: boolean;
   isLabel?: boolean;
-  // enslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line no-unused-vars
   onSelectPlan: (plan: any) => void;
 }
 
@@ -63,6 +63,10 @@ const SubscriptionCard = ({ plan, isPopular, onSelectPlan  }: SubscriptionCardPr
               <span>{feature}</span>
             </li>
           ))}
+          <li className="flex text-sm">
+            <Check className="mr-2 h-5 w-5 flex-shrink-0 text-green-500" />
+            <span>18% GST applicable</span>
+          </li>
         </ul>
 
       </div>
