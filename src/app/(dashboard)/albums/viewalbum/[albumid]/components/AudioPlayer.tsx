@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 // import Style from './AudioPlayer.module.css';
 import Style from "../../../../../styles/ViewAlbums.module.css";
+import { useTrackContext } from "@/context/TrackContext";
 
 interface AudioPlayerProps {
   trackName: string;
@@ -12,6 +13,11 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ trackName, audioSrc }) => {
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const { audioInfo } = useTrackContext();
+
+  // Use the actual values from context
+  const actualTrackName = audioInfo.songName || trackName;
+  const actualAudioSrc = audioInfo.songUrl || audioSrc;
 
   useEffect(() => {
     // Reset playback when trackName changes
@@ -21,7 +27,8 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ trackName, audioSrc }) => {
       setCurrentTime(0);
       setIsPlaying(false);
     }
-  }, [trackName]);
+  }, [actualTrackName, actualAudioSrc]);
+  
 
   const togglePlay = () => {
     if (!audioRef.current) return;
@@ -99,14 +106,14 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ trackName, audioSrc }) => {
         </div>
 
         <p className={`m-0 ${Style.playingTrack}`}>
-          {trackName.length > 50
-            ? `${trackName.substring(0, 50)}...`
-            : trackName}
+          {actualTrackName.length > 50
+            ? `${actualTrackName.substring(0, 50)}...`
+            : actualTrackName}
         </p>
 
         <audio
           ref={audioRef}
-          src={audioSrc}
+          src={actualAudioSrc}
           onLoadedMetadata={onLoadedMetadata}
           onTimeUpdate={onTimeUpdate}
           onEnded={onEnded}

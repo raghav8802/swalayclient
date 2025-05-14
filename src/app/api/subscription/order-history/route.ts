@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import Subscription from '@/models/Subscription';
 import { connect } from '@/dbConfig/dbConfig';
 
+// Create a dynamic config for this route
+export const dynamic = 'force-dynamic';
+
 export async function GET(req: NextRequest) {
   try {
     await connect();

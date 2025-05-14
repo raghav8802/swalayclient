@@ -4,6 +4,9 @@ import { NextResponse, NextRequest } from 'next/server';
 import Track from '@/models/track';
 import Album from '@/models/albums';
 
+// Create a dynamic config for this route
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
     await connect();
 

@@ -1,7 +1,8 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import Style from "../../../../../styles/ViewAlbums.module.css";
 import { apiGet } from "@/helpers/axiosRequest";
 import toast from "react-hot-toast";
+import { useTrackContext } from "@/context/TrackContext";
 
 interface Track {
   albumId: string;
@@ -24,6 +25,7 @@ interface Track {
   _id: string;
 }
 
+
 interface TrackListProps {
   albumId: string;
   //eslint-disable-next-line no-unused-vars
@@ -38,15 +40,11 @@ const formatDuration = (duration: string | number) => {
   return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 };
 
+
 const TrackList: React.FC<TrackListProps> = ({ albumId, onTrackClick }) => {
   const [tracks, setTracks] = useState<Track[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [activeTrackId, setActiveTrackId] = useState<string | null>(null);
-
-  const handleTrackClick = useCallback((trackId: string) => {
-    setActiveTrackId(trackId);
-    onTrackClick(trackId);
-  }, [onTrackClick]);
+  const { activeTrackId, setActiveTrackId } = useTrackContext();
 
   // Fetch all tracks by albumId
   useEffect(() => {
@@ -55,14 +53,18 @@ const TrackList: React.FC<TrackListProps> = ({ albumId, onTrackClick }) => {
         const response = await apiGet(
           `/api/track/getTracks?albumId=${albumId}`
         );
-        if (response.data) {
+        if (response.data && response.data.length > 0) {
           const reversedTracks = response.data.reverse(); // Reverse the tracks array
           setTracks(reversedTracks);
-          if (reversedTracks.length > 0) {
-            const firstTrackId = reversedTracks[0]._id;
+          
+          // Only set the first track if we don't already have an active track
+          const firstTrackId = reversedTracks[0]._id;
+          if (!activeTrackId) {
             setActiveTrackId(firstTrackId);
             onTrackClick(firstTrackId);
           }
+        } else {
+          setTracks([]);
         }
       } catch (error) {
         toast.error("Internal server error");
@@ -72,7 +74,12 @@ const TrackList: React.FC<TrackListProps> = ({ albumId, onTrackClick }) => {
     };
   
     fetchTracks();
-  }, [albumId, onTrackClick]);
+  }, [albumId, setActiveTrackId, onTrackClick, activeTrackId]);
+
+  const handleTrackClick = (trackId: string) => {
+    setActiveTrackId(trackId);
+    onTrackClick(trackId);
+  };
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -119,7 +126,7 @@ const TrackList: React.FC<TrackListProps> = ({ albumId, onTrackClick }) => {
                         : ""
                     }`}
                   >
-                    {track.songName} Lorem ipsum dolor sit amet.
+                    {track.songName}
                   </p>
                   <p className={`${Style.trackItemTrackSingerName}`}>
                     {track.primarySinger}

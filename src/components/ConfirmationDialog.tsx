@@ -21,18 +21,18 @@ interface ConfirmationDialogProps {
   description?: string; // Optional description for the dialog
 }
 
-
 const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
   show,
   onClose,
   onContinue,
   confrimationText="Continue",
+  // eslint-disable-next-line no-unused-vars
   triggerText = "Show Dialog",
   title = "Are you absolutely sure?",
   description = "This action cannot be undone. This will permanently delete your account and remove your data from our servers.",
 }) => {
 
-  console.log("triggerText", triggerText);
+  // console.log("triggerText", triggerText);
   
   return (
     <AlertDialog open={show} onOpenChange={onClose}>
