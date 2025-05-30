@@ -81,7 +81,7 @@ const Page = () => {
       </h1>
 
       <div className="w-full flex items-center justify-start flex-wrap">
-        {marketingData.length > 0 ? (
+        {marketingData && marketingData.length > 0 ? (
           marketingData.map((album) => (
             <MarketingCard
               albumId={album._id}
