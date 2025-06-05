@@ -15,11 +15,11 @@ const Home = () => {
     <div className="min-h-screen  rounded ">
       <HomeStatsCard />
       
-      <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mt-4">
+      {/* <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mt-4">
         <p className="text-sm">
           Your subscription details have been updated. If you experience any issues, please do not hesitate to contact us. We are here to assist you.
         </p>
-      </div>
+      </div> */}
 
       {user?.user?.subscriptionAvailable !== undefined &&
         !subcriptionAvailable && (
