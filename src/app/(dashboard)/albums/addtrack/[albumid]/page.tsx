@@ -252,13 +252,14 @@ export default function NewTrack({ params }: { params: { albumid: string } }) {
       const response = await apiFormData("/api/track/addtrack", formData);
 
 
-      if (response.success) {
-        toast.success("Song uploaded successfully!");
-        router.push(`/albums/viewalbum/${btoa(albumId!)}`);
-      } else {
-        setIsUploading(false);
-        toast.error(response.message);
-      }
+      // if (response.success) {
+      //   toast.success("Song uploaded successfully!");
+      //   router.push(`/albums/viewalbum/${btoa(albumId!)}`);
+      // } else {
+      //   setIsUploading(false);
+      //   toast.error(response.message);
+      // }
+
     } catch (error) {
       setIsUploading(false);
       toast.error("Something went wrong while uploading the song.");

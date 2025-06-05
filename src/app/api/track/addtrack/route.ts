@@ -11,6 +11,9 @@ export async function POST(req: NextRequest) {
     const formData = await req.formData();
 
     const albumId = formData.get("albumId")?.toString();
+
+    console.log("albumId from input");
+    console.log(albumId);
     
     if (!albumId || !mongoose.Types.ObjectId.isValid(albumId)) {
       return NextResponse.json({
@@ -20,16 +23,17 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // const lastTrack = await Track.findOne().sort({ _id: -1 }); // find last track and where isrc is not blank or null
-    const lastTrack = await Track.findOne().select('isrc').sort({ isrc: -1 }); // find last track and where isrc is not blank or null
-    // const lastTrack = await Track.findOne({
-    //   $and: [{ isrc: { $ne: null } }, { isrc: { $ne: "" } }],
-    // }).sort({ _id: -1 });
+   
+    const lastTrack = await Track.findOne({ isrc: /^INT63/ }).select('isrc').sort({ _id: -1 });
 
     // Generate the next ISRC
     let newISRC = "INT63" + new Date().getFullYear().toString().slice(-2) + "03001"; // Default value
+    console.log("newISRC before assignment");
+    console.log(newISRC);
+
     // let newISRC = "";
     if (lastTrack && lastTrack.isrc) {
+      
       const lastISRC = parseInt(lastTrack.isrc.slice(-5)); // Extract the sequence number
       const nextISRC = lastISRC + 1;
       newISRC = `INT63${new Date().getFullYear().toString().slice(-2)}${String(
@@ -61,13 +65,8 @@ export async function POST(req: NextRequest) {
       trackType: formData.get("trackType")?.toString() ?? "",
     };
 
-    console.log("data from input");
-    console.log(data);
 
     const audioFile = formData.get("audioFile") as File;
-
-    console.log("audioFile from input");
-    console.log(audioFile);
     
 
     if (!audioFile) {
@@ -93,7 +92,6 @@ export async function POST(req: NextRequest) {
     });
 
 
-
     if (!uploadResult.status) {
       return NextResponse.json({
         message: "Failed to upload audio file",
@@ -106,10 +104,9 @@ export async function POST(req: NextRequest) {
       ...data,
       audioFile: uploadResult.fileName
     });
-    const savedTrack = await newTrack.save();
+    
+    await newTrack.save();
 
-    console.log("savedTrack");
-    console.log(savedTrack);
 
     // here i want to update total track count to increase 1 but album id in album schema
     await Album.findByIdAndUpdate(albumId, {
@@ -122,6 +119,8 @@ export async function POST(req: NextRequest) {
       success: true,
       status: 201,
     });
+
+
   } catch (error: any) {
     console.error("Error creating track:", error);
 
@@ -132,3 +131,6 @@ export async function POST(req: NextRequest) {
     });
   }
 }
+
+
+
