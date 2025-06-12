@@ -1,38 +1,36 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import TrackList from "./TrackList";
 import Style from "../../../../../styles/ViewAlbums.module.css";
 import TrackDetails from "./TrackDetails";
 import AudioPlayer from "./AudioPlayer";
+import { useTrackContext } from "@/context/TrackContext";
 
 interface TrackSectionProps {
   albumId: string;
 }
 
 const TrackSection: React.FC<TrackSectionProps> = ({ albumId }) => {
-  const [showTrackDetails, setShowTrackDetails] = useState(false);
-  const [trackId, setTrackId] = useState<string | null>(null);
-  const [showAudioPlayer, setShowAudioPlayer] = useState(false);
-  const [audio, setAudio] = useState({
-    songName: "",
-    songUrl: "",
-  });
+  const { 
+    activeTrackId, 
+    setActiveTrackId,
+    showTrackDetails,
+    setShowTrackDetails,
+    showAudioPlayer,
+    audioInfo 
+  } = useTrackContext();
 
   const handleTrackClick = (trackId: string) => {
+    setActiveTrackId(trackId);
     setShowTrackDetails(true);
-
-    setTrackId(trackId);
   };
 
-  const getSongNameUrl = (songName: string, audioUrl: string) => {
-    setShowAudioPlayer(true);
-
-    setAudio({ songName, songUrl: audioUrl });
-  };
-
+  // Ensure we render audio player when needed
   useEffect(() => {
-    setTrackId(trackId);
-  }, [trackId]);
+    if (activeTrackId && !showTrackDetails) {
+      setShowTrackDetails(true);
+    }
+  }, [activeTrackId, showTrackDetails, setShowTrackDetails]);
 
   return (
     <div>
@@ -41,22 +39,22 @@ const TrackSection: React.FC<TrackSectionProps> = ({ albumId }) => {
           <div className={`mt-3 ${Style.trackDetailsTop}`}>
             <h5 className={Style.subheading}>Tracks</h5>
           </div>
-
+          
           {albumId && (
             <TrackList albumId={albumId} onTrackClick={handleTrackClick} />
           )}
         </div>
 
         
-          {showTrackDetails && trackId && (
-            <TrackDetails trackId={trackId} onFetchDetails={getSongNameUrl} />
-          )}
+        {showTrackDetails && activeTrackId && (
+          <TrackDetails trackId={activeTrackId} />
+        )}
         
 
       </div>
 
-      {showAudioPlayer && (
-        <AudioPlayer trackName={audio.songName} audioSrc={audio.songUrl} />
+      {showAudioPlayer && audioInfo.songUrl && (
+        <AudioPlayer trackName={audioInfo.songName} audioSrc={audioInfo.songUrl} />
       )}
     </div>
   );

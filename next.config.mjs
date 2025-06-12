@@ -21,6 +21,13 @@ const nextConfig = {
   //   ignoreDuringBuilds: true,
   // },
   
+  // Configure the app to have dynamic API routes that aren't statically generated
+  output: 'standalone',
+  
+  // This makes it possible to use dynamic features within API routes
+  experimental: {
+    serverComponentsExternalPackages: ['mongoose']
+  }
 };
 
 export default nextConfig;

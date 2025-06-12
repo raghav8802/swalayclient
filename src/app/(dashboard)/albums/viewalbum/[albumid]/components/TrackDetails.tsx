@@ -6,12 +6,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { apiGet, apiPost } from "@/helpers/axiosRequest";
 import toast from "react-hot-toast";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
+import { useTrackContext } from "@/context/TrackContext";
 // import { onShare } from "@/helpers/urlShare";
 
 interface TrackListProps {
   trackId: string;
-  // eslint-disable-next-line no-unused-vars
-  onFetchDetails: (songName: string, url: string) => void;
 }
 
 
@@ -47,15 +46,13 @@ interface TrackDetail {
   albumStatus: number;
 }
 
+
 const TrackDetails: React.FC<TrackListProps> = ({
-  trackId,
-  onFetchDetails,
+  trackId
 }) => {
   const [trackDetails, setTrackDetails] = useState<TrackDetail | null>(null);
-
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-
-  // const audioRef = useRef<HTMLAudioElement>(null);
+  const { setAudioInfo, setShowAudioPlayer } = useTrackContext();
 
   const fetchTrackDetails = React.useCallback(async () => {
     try {
@@ -65,21 +62,26 @@ const TrackDetails: React.FC<TrackListProps> = ({
   
       if (response.success) {
         setTrackDetails(response.data);
-        const audioUrl = `${process.env.NEXT_PUBLIC_AWS_S3_FOLDER_PATH}albums/07c1a${response.data.albumId}ba3/tracks/${response.data.audioFile}`;
-        onFetchDetails(response.data.songName, audioUrl);
+        
+        if (response.data.audioFile) {
+          const audioUrl = `${process.env.NEXT_PUBLIC_AWS_S3_FOLDER_PATH}albums/07c1a${response.data.albumId}ba3/tracks/${response.data.audioFile}`;
+          setShowAudioPlayer(true);
+          setAudioInfo({
+            songName: response.data.songName || "",
+            songUrl: audioUrl
+          });
+        }
       }
-    } catch {
+    } catch (error) {
       toast.error("Internal server error");
     }
-  }, [trackId, onFetchDetails]);
-
-  // useEffect(() => {
-  //   fetchTrackDetails();
-  // }, []);
+  }, [trackId, setAudioInfo, setShowAudioPlayer]);
 
   useEffect(() => {
-    fetchTrackDetails();
-  }, [fetchTrackDetails]);
+    if (trackId) {
+      fetchTrackDetails();
+    }
+  }, [trackId, fetchTrackDetails]);
 
   const downloadRef = useRef<HTMLAnchorElement>(null);
 

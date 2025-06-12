@@ -15,8 +15,8 @@ const BankModal = ({
 }) => {
   const context = useContext(UserContext);
   const labelId = context?.user?._id;
-  console.log("in bank modal labelId");
-  console.log(labelId);
+  // console.log("in bank modal labelId");
+  // console.log(labelId);
 
   const [accountDetails, setAccountDetails] = useState({
     accountHolderName: "",

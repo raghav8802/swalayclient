@@ -313,9 +313,7 @@ const Navbar = () => {
                   className="nav__link "
                   onClick={handleLinkClick}
                 >
-                  <Wallet size={20} strokeWidth={1.75} style={{ color: "gold" }} className="nav__icon" />
-                  {/* <Wallet style={{ color: "gold" }} className="nav__icon" /> */}
-
+                  <Wallet size={20} strokeWidth={1.75} className="nav__icon" />
                   <span className="nav__name">Subscriptions</span>
 
                 </Link>
