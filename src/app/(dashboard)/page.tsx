@@ -25,6 +25,7 @@ const Home = () => {
     <div className="min-h-screen  rounded ">
       <HomeStatsCard />
       
+<<<<<<< HEAD
       {
         subscriptionAlert && (
         <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mt-4 flex items-center justify-between" role="alert">
@@ -37,6 +38,13 @@ const Home = () => {
         </div>
         )
       }
+=======
+      {/* <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mt-4">
+        <p className="text-sm">
+          Your subscription details have been updated. If you experience any issues, please do not hesitate to contact us. We are here to assist you.
+        </p>
+      </div> */}
+>>>>>>> bcf5eef83c9b25db947e99763314290732fc5f54
 
       {user?.user?.subscriptionAvailable !== undefined &&
         !subcriptionAvailable && (

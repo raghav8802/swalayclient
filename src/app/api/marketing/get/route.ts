@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import Marketing from '@/models/Marketing';
 import { connect } from '@/dbConfig/dbConfig';
 
+// Create a dynamic config for this route
+export const dynamic = 'force-dynamic';
+
 export async function GET(req: NextRequest) {
   try {
     // Connect to the database

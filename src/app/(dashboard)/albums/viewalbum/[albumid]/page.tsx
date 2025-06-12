@@ -14,6 +14,7 @@ import DeleteButton from "./components/DeleteButton";
 import ContentDeliverySheet from "./components/ContentDeliveryReport";
 import SubscriptionEndAlert from "@/components/SubcriptionEndAlert";
 import UserContext from "@/context/userContext";
+import { TrackProvider } from "@/context/TrackContext";
 
 interface AlbumDetails {
   artist: string;
@@ -320,7 +321,7 @@ const Albums = ({ params }: { params: { albumid: string } }) => {
       {/* list of tracks  */}
 
       {albumDetails && albumDetails.totalTracks > 0 ? (
-        albumId && <TrackSection albumId={albumId} />
+        albumId && <TrackProvider><TrackSection albumId={albumId} /></TrackProvider>
       ) : (
         <div className="mt-5 pt-4">
           <h1 className="text-center text-2xl mt-5">No track found</h1>

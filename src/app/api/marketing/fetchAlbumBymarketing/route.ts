@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import Album, { AlbumStatus } from '@/models/albums';
+import Album from '@/models/albums';
 import { connect } from '@/dbConfig/dbConfig';
 import Marketing from '@/models/Marketing';
 
@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
 
   // Extract query parameters
   const labelId = req.nextUrl.searchParams.get("labelId");
-  const status = "Approved";
+
 
   // Build the query object
   let query: any = {};
@@ -17,12 +17,14 @@ export async function GET(req: NextRequest) {
     query.labelId = labelId;
   }
 
-  const statusEnumValue = AlbumStatus[status as keyof typeof AlbumStatus];
-  query.status = statusEnumValue;
+  // Fetch albums where status is 2 or 4
+  query.status = { $in: [2, 4] };
 
   try {
-    // Fetch albums based on query
-    const albums = await Album.find(query).sort({ _id: -1 });
+
+ 
+    // Fetch albums based on query and sort by new to old
+    const albums = await Album.find(query).sort({ createdAt: -1 });
 
     if (!albums || albums.length === 0) {
       return NextResponse.json({

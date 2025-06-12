@@ -259,6 +259,7 @@ export default function NewTrack({ params }: { params: { albumid: string } }) {
         setIsUploading(false);
         toast.error(response.message);
       }
+
     } catch (error) {
       setIsUploading(false);
       toast.error("Something went wrong while uploading the song.");
@@ -463,7 +464,7 @@ export default function NewTrack({ params }: { params: { albumid: string } }) {
                     type="text"
                     placeholder="ft. max, bob"
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    required
+                    
                   />
                   
                 </div>

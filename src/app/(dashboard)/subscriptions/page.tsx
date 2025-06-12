@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import { apiGet } from "@/helpers/axiosRequest";
 import UserContext from "@/context/userContext";
 import {
@@ -25,7 +25,7 @@ const SubscriptionHistory = () => {
 
   // console.log('User context:', user);
 
-  const fetchSubscriptionHistory = async () => {
+  const fetchSubscriptionHistory = useCallback(async () => {
     if (!user?.user?._id) return;
 
     try {
@@ -44,11 +44,11 @@ const SubscriptionHistory = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user?.user?._id]);
 
   useEffect(() => {
     fetchSubscriptionHistory();
-  }, [user?.user?._id]);
+  }, [fetchSubscriptionHistory]);
 
   // const handleInsertExistingSubscriptions = async () => {
   //   try {

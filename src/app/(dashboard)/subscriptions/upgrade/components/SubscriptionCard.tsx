@@ -14,6 +14,7 @@ interface SubscriptionCardProps {
     features: string[];
     color: string;
     buttonText: string;
+    cycle: string;
     icon: React.ReactNode;
     isLabel?: boolean;
   };
@@ -53,7 +54,7 @@ const SubscriptionCard = ({ plan, isPopular, onSelectPlan  }: SubscriptionCardPr
 
         <div className="mt-4 flex items-baseline text-3xl font-bold">
           ₹{plan.price}
-          <span className="ml-1 text-sm font-medium text-muted-foreground"> {plan.isLabel? "/Year" : "/Track"} </span>
+          <span className="ml-1 text-sm font-medium text-muted-foreground"> / {plan.cycle} </span>
         </div>
 
         <ul className="mt-6 space-y-3">

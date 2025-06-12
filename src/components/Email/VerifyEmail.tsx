@@ -42,7 +42,7 @@ export const VerifyEmail: React.FC<VerifyEmailEmailTemplateProps> = ({
             display: "inline-block",
           }}
         >
-          Reset Password
+          Verify Account
         </a>
       </div>
 
