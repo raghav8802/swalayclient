@@ -104,7 +104,7 @@ const SubscriptionHistory = () => {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="flex justify-between items-center mt-3">
+      <div className="flex justify-between flex-col md:flex-row md:items-center mt-3">
         <h3 className="text-3xl font-bold mb-2 text-blue-500">
           Subscription Order History
         </h3>

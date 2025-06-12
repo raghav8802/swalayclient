@@ -70,9 +70,9 @@ const Albums = () => {
       </Breadcrumb>
 
       {/* new releases  */}
-      <div className={`mt-3 mb-3 ${Style.newReleseContainer}`}>
-        <div className={` mb-3 ${Style.spaceBetween}`}>
-          <h3 className="text-3xl font-bold mb-2 text-blue-500">All Albums</h3>
+      <div className={`mt-3 mb-3  ${Style.newReleseContainer}`}>
+        <div className={` mb-3 flex-col md:flex-row gap-2 md:gap-4 self-start md:items-center ${Style.spaceBetween}`}>
+          <h3 className="text-3xl font-bold text-blue-500">All Albums</h3>
 
           <Link href={"./albums/new-release"}>
             <button

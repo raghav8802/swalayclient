@@ -6,8 +6,11 @@
 }
 
 .heading {
+    /* color: black; */
     color: #fff;
     font-size: 2rem;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .para {

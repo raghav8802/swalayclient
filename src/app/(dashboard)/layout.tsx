@@ -51,9 +51,7 @@ export default function RootLayout({
           </section>
         </main>
 
-        <div style={{ padding: "1rem"}}>
-          <Footer />
-        </div >
+        <Footer />
         </UserProvider>
       </body>
     </html>

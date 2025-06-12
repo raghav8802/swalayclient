@@ -43,14 +43,26 @@
 .CardDetails{
     /* border: 2px solid white; */
     width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
 }
 
 
 
 
-@media screen and (max-width: 320px) {
+@media screen and (max-width: 400px) {
     .Card{
         width: 100%;
+    }
+
+    .CardHeader{
+        font-size: 0.8rem;
+    }
+
+    .CardIcon{
+        margin-right: 0;
+        font-size: 2rem;
     }
     
 }
