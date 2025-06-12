@@ -52,6 +52,8 @@ const AlbumForm: React.FC = () => {
   const userMusiclabel =
     context?.user?.usertype === "normal" ? "SwaLay Digital" : userLable;
 
+  const subscriptionEndDivRef = React.useRef<HTMLDivElement>(null);
+
   const router = useRouter();
 
   // useState hook to manage the form data
@@ -247,6 +249,12 @@ const AlbumForm: React.FC = () => {
     }
   };
 
+  const handleSubscriptionEndAlert = () => {
+    if (subscriptionEndDivRef.current) {
+      subscriptionEndDivRef.current.style.display = "none";
+    }
+  };
+
   return (
     <div className="w-full min-h-screen p-6 bg-white rounded-sm ">
       <Breadcrumb>
@@ -271,15 +279,17 @@ const AlbumForm: React.FC = () => {
 
       {/* Show SubscriptionEndAlert if subscription is not available */}
       {subscriptionAvailable !== undefined && !subscriptionAvailable && (
-        <SubscriptionEndAlert />
+        <div ref={subscriptionEndDivRef} className="mb-4">
+          <SubscriptionEndAlert handleSubscriptionEndAlert={handleSubscriptionEndAlert} />
+        </div>
       )}
 
       {!isUploading && (
         <>
           <form onSubmit={handleSubmit} className="w-full ">
             {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4 "> */}
-            <div className="grid grid-cols-12 gap-6 ">
-              <div className="col-span-8 space-y-6 ">
+            <div className="grid grid-cols-10 md:grid-cols-12 gap-6 ">
+              <div className="col-span-10 md:col-span-8 space-y-6 ">
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
                     Song Title{" "}
@@ -676,7 +686,7 @@ const AlbumForm: React.FC = () => {
                 </div>
               </div>
 
-              <div className="col-span-4 space-y-6 ">
+              <div className="col-span-10 md:col-span-4 space-y-6 ">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Tags
@@ -714,7 +724,7 @@ const AlbumForm: React.FC = () => {
                         File: {formData.artwork.name}
                       </p>
                     ) : (
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-gray-500 px-2">
                         {/* <FontAwesomeIcon icon={faUpload} size="3x" /> */}
                         Drag & drop an image here, or click to select one
                       </p>

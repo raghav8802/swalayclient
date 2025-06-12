@@ -2,13 +2,13 @@ import React from 'react'
 
 const Footer = () => {
     return (
-        <footer className="bg-white shadow-sm rounded-lg mx-4 mb-4 mt-8">
-            <div className="max-w-7xl mx-auto p-4 md:p-6 flex flex-col md:flex-row items-center justify-between gap-4">
-                <span className="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
-                    © 2025 <a href="" className="hover:underline font-medium">SwaLay</a>. All Rights Reserved.
+        <footer className="bg-white shadow-sm rounded-lg mb-4 mt-8 md:mx-8">
+            <div className="max-w-7xl mx-auto p-4 md:p-6 flex flex-col md:flex-row justify-between gap-4">
+                <span className="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap text-center">
+                    <span className='font-bold'>© 2025 <a href="" className="hover:underline">SwaLay</a></span> . All Rights Reserved.
                 </span>
 
-                <div className="flex flex-wrap justify-center md:justify-end gap-x-6 gap-y-2">
+                <div className="flex flex-col md:flex-row items-center justify-center md:justify-end gap-x-6 gap-y-2">
                     <a 
                         href="/about-us"
                         className="text-sm text-gray-600 hover:text-gray-900 transition-colors"

@@ -248,7 +248,7 @@ img {
 
 .nav__logo {
   font-weight: var(--font-semi-bold);
-  margin-bottom: 2.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .nav__list,
@@ -355,9 +355,9 @@ img {
 /* ========== MEDIA QUERIES ==========*/
 /* For small devices reduce search*/
 @media screen and (max-width: 320px) {
-  .header__search {
+  /* .header__search {
     width: 70%;
-  }
+  } */
 
   .dashboardBody {
     padding: 0.5rem;
@@ -630,7 +630,7 @@ footer {
 }
 
 .anlyticsCard{
-  height: 270px;
+  /* height: 270px; */
 }
 
 /* for content delivery report in view album  */

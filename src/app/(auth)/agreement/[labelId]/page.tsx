@@ -114,9 +114,9 @@ function Agreement({ params }: { params: { labelId: string } }) {
   });
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-500 to-purple-700 p-8">
-      <div className="bg-white text-gray-900 rounded-lg shadow-2xl p-12 w-full max-w-5xl">
-        <h1 className="text-4xl font-bold text-center mb-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-500 to-purple-700 p-4 md:p-8">
+      <div className="bg-white text-gray-900 rounded-lg shadow-2xl md:p-12 px-4 py-8  w-full max-w-5xl">
+        <h1 className="text-3xl md:text-4xl font-bold text-center mb-8">
           TO WHOMSOEVER IT MAY CONCERN
         </h1>
 
@@ -174,7 +174,7 @@ function Agreement({ params }: { params: { labelId: string } }) {
           {signatureFile ? (
             <p className="text-green-500">{signatureFile.name}</p>
           ) : (
-            <p className="text-gray-500">
+            <p className="text-gray-500 px-4">
               Drag & drop a signature file, or click to select one
             </p>
           )}

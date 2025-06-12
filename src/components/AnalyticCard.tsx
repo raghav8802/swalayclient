@@ -18,7 +18,7 @@ const AnalyticCard: React.FC<AnalyticCardProps> = ({
   return (
     <div className={Style.Card}>
       <div className={Style.CardDetails}>
-        <p className={Style.CardHeader}>{title} </p>
+        <p className={`${Style.CardHeader}`}>{title} </p>
         <p className={Style.CardNumber}>{value}</p>
       </div>
       {/* <i className={`bi bi-arrow-up-right-circle-fill me-4 ${Style.CardIcon}`}></i> */}
