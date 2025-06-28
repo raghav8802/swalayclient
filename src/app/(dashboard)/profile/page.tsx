@@ -23,7 +23,7 @@ interface BankData {
 
 const Page = () => {
   const context = useContext(UserContext);
-  // console.log(context?.user);
+
 
   const labelId = context?.user?._id;
   const username = context?.user?.username;
@@ -58,14 +58,13 @@ const Page = () => {
   };
 
   const fetchBankDetails = useCallback(async () => {
-    console.log("labelId : ", labelId);
+
 
     try {
       const response = await apiGet(
         `/api/bank/getbankdetails?labelid=${labelId}`
       );
-      console.log("fetch bank details");
-      console.log(response);
+
 
       if (response.success) {
         setBankData(response.data);

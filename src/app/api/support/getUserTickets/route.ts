@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
 
     const tickets = await Support.find({ labelId })
       .sort({ createdAt: -1 }) // Sort by newest first
-      .select('subject message reply status createdAt'); // Select only needed fields
+      .select('subject message status createdAt'); // Only select fields in the new schema
 
     return NextResponse.json({
       success: true,

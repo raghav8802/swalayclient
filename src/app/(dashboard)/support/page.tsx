@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import UserContext from "@/context/userContext";
 import { apiPost } from "@/helpers/axiosRequest";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 interface FormData {
   name: string;
@@ -13,24 +14,19 @@ interface FormData {
   subject: string;
   message: string;
   labelId?: string;
-  reply?: string;
   status?: string;
-  field1?: string;
-  field2?: string;
 }
 
 export default function Component() {
   const context = useContext(UserContext);
+  const router = useRouter();
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
     subject: "",
     message: "",
     labelId: "",
-    reply: "",
-    status: "pending",
-    field1: "",
-    field2: ""
+    status: "pending"
   });
 
   const [error, setError] = useState<string | null>(null);
@@ -43,10 +39,7 @@ export default function Component() {
         subject: "",
         message: "",
         labelId: context.user._id || "",
-        reply: "",
-        status: "pending",
-        field1: "",
-        field2: ""
+        status: "pending"
       });
     }
   }, [context]);
@@ -74,7 +67,7 @@ export default function Component() {
 
       if (response.success) {
         toast.success("Thank You! We will be in touch with you shortly.");
-        setFormData({ ...formData, subject: "", message: "" });
+        router.push("/my-tickets");
       } else {
         toast.error(response.message);
         setError("Failed to send the message. Please try again.");
@@ -127,18 +120,16 @@ export default function Component() {
                   />
                 </div>
               </div>
-              <div className="space-y-2">
-                <label htmlFor="subject">Subject</label>
-                <input
-                  id="subject"
-                  type="text"
-                  placeholder="Briefly describe your issue"
-                  value={formData.subject}
-                  onChange={handleChange}
-                  className="form-control"
-                  required
-                />
-              </div>
+              <label htmlFor="subject">Subject</label>
+              <input
+                id="subject"
+                type="text"
+                placeholder="Briefly describe your issue"
+                value={formData.subject}
+                onChange={handleChange}
+                className="form-control"
+                required
+              />
               <div className="space-y-2">
                 <label htmlFor="message">Message</label>
                 <textarea
@@ -162,7 +153,6 @@ export default function Component() {
             <CardTitle>Contact Information</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            
             <div>
               <h3 className="font-semibold">Phone</h3>
               <p>
