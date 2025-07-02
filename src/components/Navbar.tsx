@@ -8,8 +8,6 @@ import UserContext from "@/context/userContext";
 import Image from "next/image";
 import { Wallet } from "lucide-react";
 
-
-
 const Navbar = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<any[]>([]); // Stores search results from API
@@ -35,26 +33,28 @@ const Navbar = () => {
   const handleSearch = React.useCallback(
     async (query: string) => {
       console.log("query : ", query);
-  
+
       if (!query) {
         setSearchResults([]);
         setShowSuggestions(false);
         return;
       }
-  
+
       if (query === "") {
         setSearchResults([]);
         setShowSuggestions(false);
         return;
       }
-  
+
       setLoading(true);
       try {
-        const response = await apiGet(`/api/search?query=${query}&labelid=${labelId}`);
-  
+        const response = await apiGet(
+          `/api/search?query=${query}&labelid=${labelId}`
+        );
+
         console.log("response : ");
         console.log(response);
-  
+
         if (response.success) {
           setSearchResults(response.data); // Store search results
           setShowSuggestions(true); // Show suggestions dropdown
@@ -72,7 +72,7 @@ const Navbar = () => {
     },
     [labelId] // Add dependencies here
   );
-  
+
   useEffect(() => {
     // Trigger search API if search term is not empty
     if (searchTerm.trim().length > 0) {
@@ -116,7 +116,9 @@ const Navbar = () => {
         <div className="header__container">
           <Link href="/" className="header__logo">
             <Image
-              src={"https://swalay-music-files.s3.ap-south-1.amazonaws.com/assets/SwaLay-logo.png"}
+              src={
+                "https://swalay-music-files.s3.ap-south-1.amazonaws.com/assets/SwaLay-logo.png"
+              }
               alt="logo"
               width={100}
               height={70}
@@ -158,9 +160,13 @@ const Navbar = () => {
                         setShowSuggestions(false);
                         // Redirect to the appropriate page
                         if (result.type === "album") {
-                          router.push(`/albums/viewalbum/${btoa(result.albumId)}`);
+                          router.push(
+                            `/albums/viewalbum/${btoa(result.albumId)}`
+                          );
                         } else if (result.type === "track") {
-                          router.push(`/albums/viewalbum/${btoa(result.albumId)}`);
+                          router.push(
+                            `/albums/viewalbum/${btoa(result.albumId)}`
+                          );
                         }
                       }}
                     >
@@ -274,7 +280,7 @@ const Navbar = () => {
                   <i className="bi bi-mic nav__icon"></i>
                   <span className="nav__name">Artists</span>
                 </Link>
-                
+
                 <Link
                   href="/subscriptions"
                   className="nav__link "
@@ -282,7 +288,6 @@ const Navbar = () => {
                 >
                   <Wallet size={20} strokeWidth={1.75} className="nav__icon" />
                   <span className="nav__name">Subscriptions</span>
-
                 </Link>
 
                 <Link
@@ -298,10 +303,12 @@ const Navbar = () => {
                   <i className="bi bi-chat-left nav__icon"></i>
                   <span className="nav__name">My Tickets</span>
                 </Link>
+                {/* <Link href="/smartlink" className="nav__link">
+                  <i className="bi bi-link nav__icon"></i>
+                  <span className="nav__name">SmartLink</span>
+                </Link> */}
               </div>
             </div>
-
-
           </div>
 
           <div className="nav__link nav__logout" onClick={onLogout}>
