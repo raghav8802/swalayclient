@@ -23,7 +23,10 @@ const HomeStatsCard = () => {
   return (
     <div className={Style.statsContainer}>
       <div className={Style.greetContainer}>
-        <h1 className={Style.heading}>Welcome, {userName}</h1>
+        <div className={Style.heading}>
+          <span>Welcome, </span>
+          <span>{userName}</span>
+          </div>
       </div>
 
       

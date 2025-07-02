@@ -87,12 +87,12 @@ const Albums = ({ params }: { params: { filter: string } }) => {
       {/* all music list  */}
 
       <div className={`bg-white mt-3 rounded ${Style.musicListContainer}`}>
-        <div className={` ${Style.spaceBetween}`}>
-          <h3 className="text-3xl font-bold mb-2 text-blue-500 capitalize ">
+        <div className={`flex flex-col gap-3 md:flex-row justify-between items-baseline md:items-center`}>
+          <h3 className="text-3xl font-bold text-blue-500 capitalize text-left">
             {filter} Albums
           </h3>
 
-          <Link href="/albums/olddata/albums" className="px-4 py-2 btn-success">Old Data</Link>
+          <Link href="/albums/olddata/albums" className="px-4 py-2 bg-black text-white rounded-md">Old Data</Link>
 
         </div>
 

@@ -93,17 +93,17 @@ const Payments = () => {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="flex justify-between items-center mt-3">
-        <h3 className="text-3xl font-bold mb-2 text-blue-500">
+      <div className="flex flex-col md:flex-row gap-2 justify-between items-center mt-3">
+        <h3 className="text-3xl font-bold text-blue-500">
           All Earnings Details
         </h3>
-        <div>
+        <div className="flex self-start">
           {availableBalance > 500 && (
             <Button  onClick={() => setIsModalVisible(true)}>
               Request Payout
             </Button>
           )}
-          <Link href={"/earnings/payouts"} className="ms-2 px-3 py-3 btn-success">
+          <Link href={"/earnings/payouts"} className="bg-black text-white rounded-md px-3 py-2">
             Payout Details
           </Link>
         </div>

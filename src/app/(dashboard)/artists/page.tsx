@@ -73,13 +73,13 @@ function ArtistForm() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="flex justify-between items-center mt-3">
+      <div className="flex justify-between flex-col md:flex-row md:items-center mt-3">
         <h3 className="text-3xl font-bold mb-2 text-blue-500">All Artists</h3>
-        <Button onClick={() => setIsModalVisible(true)}>New Artist</Button>
+        <Button className="self-start" onClick={() => setIsModalVisible(true)}>New Artist</Button>
       </div>
 
       {artists && (
-        <div className="bg-white p-3">
+        <div className="bg-white md:p-3">
           <ArtistDataTable data={artists} />
         </div>
       )}
@@ -91,8 +91,9 @@ function ArtistForm() {
         <h5 className="text-2xl mt-5 pt-3 text-center">No Record Found</h5>
       )}
 
-
-      <ArtistModalForm isVisible={isModalVisible} onClose={handleClose} />
+      <div className="absolute">
+        <ArtistModalForm isVisible={isModalVisible} onClose={handleClose} />
+      </div>
     </div>
   );
 }
