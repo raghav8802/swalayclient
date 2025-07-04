@@ -4,12 +4,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connect } from '@/dbConfig/dbConfig';
 import Support from '@/models/support';
 
+
 export async function POST(req: NextRequest) {
   try {
     await connect();
 
     const body = await req.json();
-    const { name, email, labelId, subject, message, reply, status, field1, field2 } = body;
+    const { name, email, labelId, subject, message, status } = body;
 
     // Validate required fields
     if (!name || !email || !labelId || !subject || !message) {
@@ -45,10 +46,7 @@ export async function POST(req: NextRequest) {
       labelId,
       subject,
       message,
-      reply: reply || '',
-      status: status || 'pending',
-      field1: field1 || '',
-      field2: field2 || ''
+      status: status || 'pending'
     });
 
     const savedSupport = await newSupport.save();

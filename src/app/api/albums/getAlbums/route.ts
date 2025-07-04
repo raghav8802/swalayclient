@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
         });
     }
 
-    console.log("labelId: ", labelId);
+ 
 
     try {
         // Convert the labelId string to a mongoose ObjectId
