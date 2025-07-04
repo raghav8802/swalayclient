@@ -1,5 +1,5 @@
 import { connect } from "@/dbConfig/dbConfig";
-import { uploadFileToS3, uploadFileToS3ForUser } from "@/dbConfig/uploadFileToS3";
+import { uploadFileToS3ForUser } from "@/dbConfig/uploadFileToS3";
 import Label from "@/models/Label";
 import { NextResponse, type NextRequest } from "next/server";
 

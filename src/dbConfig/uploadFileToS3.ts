@@ -134,7 +134,6 @@ export async function uploadFileToS3({
 export async function uploadFileToS3ForUser({
   file,
   fileName,
-  folderName,
 }: UploadFileToS3Params): Promise<{ status: boolean; fileName: string }> {
   let UploadId: string | undefined;
   let uploadFilePath: string | undefined;

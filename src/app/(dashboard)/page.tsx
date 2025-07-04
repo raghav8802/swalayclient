@@ -1,14 +1,14 @@
 "use client";
-import React, { useContext, useRef, useState } from "react";
-import Style from "../styles/Home.module.css";
-import "bootstrap-icons/font/bootstrap-icons.css";
-import HomeStatsCard from "@/components/HomeStatsCard";
+import React from "react";
 import DashboradSection from "@/components/DashboradSection";
-import UserContext from "@/context/userContext";
+import HomeStatsCard from "@/components/HomeStatsCard";
 import SubscriptionEndAlert from "@/components/SubcriptionEndAlert";
+import UserContext from "@/context/userContext";
+import "bootstrap-icons/font/bootstrap-icons.css";
+import { useContext, useRef } from "react";
+import Style from "../styles/Home.module.css";
 
 const Home = () => {
-  const [subscriptionAlert, setSubscriptionAlert] = useState(true);
   const subscriptionEndDivRef = useRef<HTMLDivElement>(null);
 
   const handleSubscriptionEndAlert = () => {

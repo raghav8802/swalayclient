@@ -13,6 +13,7 @@ const Navbar = () => {
   const [searchResults, setSearchResults] = useState<any[]>([]); // Stores search results from API
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [loading, setLoading] = useState(false); // To show loading state
+  const [isMobileView, setIsMobileView] = useState(false);
   const suggestionsRef = useRef<HTMLDivElement>(null);
   const sideBarRef = useRef<HTMLDivElement>(null)
 
@@ -126,6 +127,18 @@ const Navbar = () => {
     }
   }
 
+  useEffect(() => {
+  if (typeof window !== "undefined") {
+    const handleResize = () => {
+      setIsMobileView(window.innerWidth < 673);
+    };
+
+    handleResize(); // Set initially
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }
+}, []);
+
   return (
     <div>
       <header className="header">
@@ -226,7 +239,7 @@ const Navbar = () => {
           <div>
             <div className="overflow-hidden">
               <Link href="/" className="nav__link nav__logo">
-                <Image src={"https://swalay-music-files.s3.ap-south-1.amazonaws.com/assets/SwaLay-logo.png"} width={100} height={100} className={`max-w-[100px] m-auto ${window.innerWidth < 673 ? "opacity-100" : showLogo ? "" : "opacity-0 ease-in-out duration-500"}`}  alt="Logo"/>
+                <Image src={"https://swalay-music-files.s3.ap-south-1.amazonaws.com/assets/SwaLay-logo.png"} width={100} height={100} className={`max-w-[100px] m-auto ${isMobileView  ? "opacity-100" : showLogo ? "" : "opacity-0 ease-in-out duration-500"}`}  alt="Logo"/>
               </Link>
             </div>
             
