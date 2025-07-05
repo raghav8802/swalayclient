@@ -156,7 +156,7 @@ export default function MyTickets() {
 
   return (
     <div className="w-full min-h-[80dvh] p-6 bg-white rounded-sm">
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex justify-between gap-3 flex-col md:flex-row md:items-center mb-4 md:mb-8">
         <div className="space-y-4">
           <h1 className="text-3xl font-bold">My Support Tickets</h1>
           <p className="text-muted-foreground">

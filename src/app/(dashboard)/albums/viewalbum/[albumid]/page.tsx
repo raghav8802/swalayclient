@@ -135,7 +135,7 @@ const Albums = ({ params }: { params: { albumid: string } }) => {
       {user?.user?.subscriptionAvailable !== undefined &&
         !subcriptionAvailable && (
           <div className="mt-4 mb-2">
-            <SubscriptionEndAlert />
+            <SubscriptionEndAlert handleSubscriptionEndAlert={()=>{}} />
           </div>
         )}
 

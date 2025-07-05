@@ -5,7 +5,7 @@ import { Bell, ChevronRight} from "lucide-react"
 import Link from "next/link"
 
 
-export default function SubscriptionEndAlert() {
+export default function SubscriptionEndAlert({handleSubscriptionEndAlert}: {handleSubscriptionEndAlert: () => void}) {
   
 
   return (
@@ -24,8 +24,10 @@ export default function SubscriptionEndAlert() {
           >
             Renew Now
             <ChevronRight className="ml-1 h-4 w-4" />
-          </Link>
-          
+          </Link> 
+          <button onClick={handleSubscriptionEndAlert}>
+            <i className="bi bi-x-lg text-white-500 hover:text-gray-700"></i>
+          </button>
         </div>
       </div>
     </div>

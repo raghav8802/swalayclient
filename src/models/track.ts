@@ -17,10 +17,7 @@ export interface ITrack extends Document {
   duration: string | null;
   crbt: string | null;
   platformLinks: { 
-    SpotifyLink: string | null, 
-    AppleLink: string | null, 
-    Instagram: string | null, 
-    Facebook: string | null 
+    [key: string]: string | null; // it will store platform links like { SpotifyLink: 'link', AppleLink: 'link', Instagram: 'link', Facebook: 'link' }
   } | null;
   category: string | null;
   version: string | null;
@@ -84,12 +81,7 @@ const trackSchema: Schema<ITrack> = new Schema({
     default: null,
   },
   platformLinks: {
-    type: {
-      SpotifyLink: { type: String, default: null },
-      AppleLink: { type: String, default: null },
-      Instagram: { type: String, default: null },
-      Facebook: { type: String, default: null },
-    },
+    type: Object,
     default: null,
   },
   category: {
