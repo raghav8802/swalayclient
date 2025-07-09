@@ -29,44 +29,46 @@ const nextConfig = {
     serverComponentsExternalPackages: ['mongoose']
   },
 
-  async headers(){
-    return [
-      {
-        source : '/api/smartlink/getProfile',
-        headers : [
-          {
-            key : "Access-Control-Allow-Origin",
-            value : process.env.SMARTLINK_URL
-          },
-          {
-            key : "Access-Control-Allow-Methods",
-            value : "GET"
-          },
-          {
-            key : "Access-Control-Allow-Headers",
-            value : "Content-Type"
-          }
-        ]
-      },
-      {
-        source : '/api/smartlink/getTrack',
-        headers : [
-          {
-            key : "Access-Control-Allow-Origin",
-            value : process.env.SMARTLINK_URL
-          },
-          {
-            key : "Access-Control-Allow-Methods",
-            value : "GET"
-          },
-          {
-            key : "Access-Control-Allow-Headers",
-            value : "Content-Type"
-          }
-        ]
-      }
-    ]
-  }
+  // async headers(){
+  //   return [
+  //     {
+  //       source : '/api/smartlink/getProfile',
+  //       headers : [
+  //         {
+  //           key : "Access-Control-Allow-Origin",
+  //           value : process.env.SMARTLINK_URL
+  //         },
+  //         {
+  //           key : "Access-Control-Allow-Methods",
+  //           value : "GET"
+  //         },
+  //         {
+  //           key : "Access-Control-Allow-Headers",
+  //           value : "Content-Type"
+  //         }
+  //       ]
+  //     },
+  //     {
+  //       source : '/api/smartlink/getTrack',
+  //       headers : [
+  //         {
+  //           key : "Access-Control-Allow-Origin",
+  //           value : process.env.SMARTLINK_URL
+  //         },
+  //         {
+  //           key : "Access-Control-Allow-Methods",
+  //           value : "GET"
+  //         },
+  //         {
+  //           key : "Access-Control-Allow-Headers",
+  //           value : "Content-Type"
+  //         }
+  //       ]
+  //     }
+  //   ]
+  // }
+
+
 };
 
 export default nextConfig;
