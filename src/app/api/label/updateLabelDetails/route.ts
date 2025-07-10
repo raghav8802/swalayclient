@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
     const formData = await request.formData();
 
     const data = {
-      lablelId: formData.get("labelId")?.toString() || "",
+      labelId: formData.get("labelId")?.toString() || "",
       bio: formData.get("bio")?.toString() || "",
       instagram: formData.get("instagram")?.toString() || "",
       facebook: formData.get("facebook")?.toString() || "",
@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
       appleMusic: formData.get("appleMusic")?.toString() || "",
     };
 
-    if (!data.lablelId) {
+    if (!data.labelId) {
       return NextResponse.json({
         status: 400,
         message: "Label ID is not found",
@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
 
     await connect();
 
-    const label = await Label.findOne({ _id: data.lablelId });
+    const label = await Label.findOne({ _id: data.labelId });
 
     if (!label) {
       return NextResponse.json({
@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
       const timestamp = Date.now(); // Current timestamp in milliseconds
       const random = Math.round(Math.random() * 16).toString(4);
       const fileExtension = profilePicture.name.split(".").pop(); // Get file extension
-      const profilePictureName = `${data.lablelId}-${timestamp}-${random}.${fileExtension}`;
+      const profilePictureName = `${data.labelId}-${timestamp}-${random}.${fileExtension}`;
 
       const uploadResult = await uploadFileToS3ForUser({
         file: buffer,
