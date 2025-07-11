@@ -10,8 +10,13 @@ import toast from "react-hot-toast";
 import Style from "../../styles/Profile.module.css";
 import BankModal from "./components/BankModal";
 import LableDetailsEditModal from "./components/LableDetailsEditModal";
-import Image from "next/image";
 import Link from "next/link";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Apple, Facebook, Instagram, Music, Upload,Link as LinkIcon, Copy} from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import UpdateProfilePictureModal from "./components/UpdateProfilePictureModal";
+import UpdateUniqueUsernameModal from "./components/UpdateUniqueUsernameModal";
 
 interface BankData {
   _id: string;
@@ -59,6 +64,8 @@ const Page = () => {
 
   const [labelDetails, setLabelDetails] = useState<iLabel>();
   const [isLabelDetailsEditOpen, setIsLabelDetailsEditOpen] = useState<boolean>(false)
+  const [isProfilePictureModalUpdateOpen,setIsProfilePictureUpdateOpen] = useState<boolean>(false)
+  const [isUniqueUsernameUpdateModalOpen,setIsUniqueUsernameUpdateModalOpen] = useState<boolean>(false)
 
   const toggleVisibility = (field: keyof typeof visibleFields) => {
     setVisibleFields((prev) => ({
@@ -97,6 +104,14 @@ const Page = () => {
     setIsLabelDetailsEditOpen(false);
   }
 
+  const handleCloseProfilePictureUpdate = ()=>{
+    setIsProfilePictureUpdateOpen(false)
+  }
+
+  const handleCloseUniqueUsernameModal =()=>{
+    setIsUniqueUsernameUpdateModalOpen(false)
+  }
+
   const handleLabelUpdate = async () => {
     if (!labelId || labelId !== "6784b1d257ce42ea2334c86a") return;
 
@@ -127,7 +142,7 @@ const Page = () => {
     }
   };
 
-  const fetchLableDetails = useCallback(async () => {
+  const fetchLabelDetails = useCallback(async () => {
     if (!labelId) return;
 
     try {
@@ -151,14 +166,34 @@ const Page = () => {
   }, [labelId]);
 
   useEffect(() => {
-    fetchLableDetails();
-  }, [fetchLableDetails, labelId]);
+    fetchLabelDetails();
+  }, [fetchLabelDetails, labelId]);
 
   useEffect(() => {
     if (labelId) {
       fetchBankDetails();
     }
   }, [labelId, fetchBankDetails]);
+
+  const smartLink = `http://localhost:5173/${labelDetails?.uniqueUsername}`
+
+  const handleCopyToClipboardSmartLink = async()=>{
+
+    if(!labelDetails?.uniqueUsername){
+      toast.error("username is not found")
+      return
+    }
+    const toastId = toast("Copying SmartLink")
+    try {
+      await navigator.clipboard.writeText(smartLink)
+      
+      toast.success("SmartLink is copied to clipboard")
+    } catch (error) {
+      toast.error((error as Error).message)
+    } finally {
+      toast.dismiss(toastId)
+    }
+  }
 
   return (
     <div className="grid grid-cols-12 gap-4">
@@ -241,6 +276,7 @@ const Page = () => {
           </div>
         </div>
 
+        {/* {SmartLink Section} */}
         <div className="px-2 sm:px-4 py-3 bg-white border-2 rounded mt-5 relative">
           <div className="absolute flex gap-1 items-center top-2 right-2">
             <span className="">Edit</span>
@@ -249,63 +285,131 @@ const Page = () => {
               className={`bi bi-pencil-square ${Style.editIcon}`}
             ></i>
           </div>
-          <h3 className={Style.labelHeader}>SmartLink</h3>
-          <div className="flex flex-col md:flex-row items-center ">
-            <div className="flex flex-1 flex-col justify-between mt-3">
-              {labelDetails?.profilePicture ? (
-                <Image
-                  src={"https://swalay-music-files.s3.ap-south-1.amazonaws.com/user/" + labelDetails.profilePicture}
-                  alt="Label Avatar"
-                  className="w-24 h-24 rounded-full object-cover"
-                  width={100}
-                  height={100}
-                />
-              ) : (
-                <p className="text-gray-500">No avatar available</p>
-              )}
-            </div>
-            <div className="flex flex-1 flex-col justify-between mt-3">
-              <p className={Style.labelSubHeader}>Bio</p>
-              {labelDetails?.bio ? (
-                <p className="text-gray-700">{labelDetails.bio}</p>
-              ) : (
-                <p className="text-gray-500">No bio available</p>
-              )}
-            </div>
-            <div className="flex flex-1 flex-col justify-between mt-3">
-              <p className={Style.labelSubHeader}>Social Platforms</p>
-                <span className="flex items-center gap-2">
-                  <i className="bi bi-instagram"></i>
-                  {
-                    labelDetails?.instagram ? <Link href={labelDetails?.instagram}>Instagram</Link> : <span>Not Set</span>
-                  }
-                </span>
-                <span className="flex items-center gap-2">
-                  <i className="bi bi-facebook"></i>
-                  {
-                    labelDetails?.facebook ? <Link href={labelDetails?.facebook}>Facebook</Link> : <span>Not Set</span>
-                  }
-                </span>
-                <span className="flex items-center gap-2">
-                  <i className="bi bi-youtube"></i> 
-                  {
-                    labelDetails?.ytMusic ? <Link href={labelDetails?.ytMusic}>Yt Music</Link> : <span>Not Set</span>
-                  }
-                </span>
-                <span className="flex items-center gap-2">
-                  <i className="bi bi-apple"></i> 
-                  {
-                    labelDetails?.appleMusic ? <Link href={labelDetails?.appleMusic}>Apple Music</Link> : <span>Not Set</span>
-                  }
-                </span>
-                <span className="flex items-center gap-2">
-                  <i className="bi bi-spotify"></i> 
-                  {
-                    labelDetails?.spotify ? <Link href={labelDetails?.spotify}>Spotify</Link> : <span>Not Set</span>
-                  }
-                </span>
-            </div>
+          <div className="flex items-center  mb-8">
+              <h3 className={Style.labelHeader}>SmartLink</h3>
           </div>
+          <Card className="w-full mx-auto px-2 sm:px-4 py-3 border-0 shadow-sm">
+
+            {/* Header */}
+            
+
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+              {/* Profile Picture Section */}
+
+              <div className="lg:col-span-3 flex flex-col items-center space-y-4">
+                <div
+                  className="relative group"
+                >
+                  <Avatar className="w-40 h-40 border-4 border-white shadow-lg">
+                    <AvatarImage src={"https://swalay-music-files.s3.ap-south-1.amazonaws.com/user/" + labelDetails?.profilePicture} alt="Profile" />
+                    <AvatarFallback className="bg-gray-800 text-white text-2xl">SL</AvatarFallback>
+                  </Avatar>
+                </div>
+
+
+                    {/* Update Profile Picture Button */}
+                <Button variant="outline" size="sm" className="w-full max-w-[140px] bg-transparent" onClick={()=>setIsProfilePictureUpdateOpen(true)}>
+                  <Upload className="w-4 h-4 mr-2" />
+                  Change Photo
+                </Button>
+              </div>
+
+              {/* Bio Section */}
+              <div className="lg:col-span-9 space-y-4">
+                <div>
+                  <h2 className="text-lg font-semibold text-gray-900 mb-3">Bio</h2>
+                  <div className="bg-white rounded-lg p-4 border border-gray-200 shadow-sm">
+                    <p className="text-gray-700 leading-relaxed">
+                      {labelDetails?.bio}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Social Platforms Section */}
+              <div className="lg:col-span-12 space-y-4">
+                <h2 className="text-lg font-semibold text-gray-900 mb-3">Social Platforms</h2>
+                <div className=" flex flex-col md:flex-row gap-2 flex-wrap">
+                  {
+                    labelDetails?.instagram && (
+                      <Link href={labelDetails?.instagram} className="flex flex-1 items-center space-x-3 p-3 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+                    <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+                      <Instagram className="w-5 h-5 text-white" />
+                    </div>
+                    <span className="text-gray-700 font-medium">Instagram</span>
+                  </Link>
+                    )
+                  }
+
+                  {
+                    labelDetails?.facebook && (
+                      <Link href={labelDetails.facebook} className="flex flex-1 items-center space-x-3 p-3 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+                        <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                          <Facebook className="w-5 h-5 text-white" />
+                        </div>
+                        <span className="text-gray-700 font-medium">Facebook</span>
+                      </Link>
+                    )
+                  }
+
+                  {
+                    labelDetails?.ytMusic && (
+                      <Link href={labelDetails.ytMusic} className="flex flex-1 items-center space-x-3 p-3 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+                    <div className="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center">
+                      <Music className="w-5 h-5 text-white" />
+                    </div>
+                    <span className="text-gray-700 font-medium">Yt Music</span>
+                  </Link>
+                    )
+                  }
+
+                  {
+                    labelDetails?.appleMusic && (
+                      <Link href={labelDetails.appleMusic} className="flex flex-1 items-center space-x-3 p-3 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+                    <div className="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center">
+                      <Apple className="w-5 h-5 text-white" />
+                    </div>
+                    <span className="text-gray-700 font-medium">Apple Music</span>
+                  </Link>
+                    )
+                  }
+
+                  {
+                    labelDetails?.spotify && (
+                      <Link href={labelDetails.spotify} className="flex flex-1 items-center space-x-3 p-3 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+                    <div className="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
+                      <Music className="w-5 h-5 text-white" />
+                    </div>
+                    <span className="text-gray-700 font-medium">Spotify</span>
+                  </Link>
+                    )
+                  }
+                </div>
+              </div>
+
+                <div className="lg:col-span-12 flex space-y-4">
+                    {
+                      labelDetails?.uniqueUsername ? (
+                        <>  
+                            <div className="flex  overflow-x-auto items-center space-x-3 p-3 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+                              <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
+                                <LinkIcon className="w-8 h-8 p-1 text-white" />
+                              </div>
+                              <span className="text-gray-700 font-medium">{smartLink} </span>
+                              <span className="h-[32px] w-[32px]">
+                                <Copy className="hover:bg-black/10 p-1 block h-[32px] w-[32px] rounded duration-100 cursor-pointer" onClick={handleCopyToClipboardSmartLink}/>
+                              </span>
+                            </div>
+                        </>
+                      ) : (
+                        <Button variant={"outline"} onClick={()=>setIsUniqueUsernameUpdateModalOpen(true)}>
+                          Update Username
+                        </Button>
+                      )
+                    }
+                </div>
+            </div>
+          </Card>
         </div>
 
         <div className={`mt-5 ${Style.profileContainer}`}>
@@ -496,6 +600,8 @@ const Page = () => {
 
         <BankModal isVisible={isModalVisible} onClose={handleClose} />
         <LableDetailsEditModal isVisible={isLabelDetailsEditOpen} onClose={handleCloseEditDetails}/>
+        <UpdateProfilePictureModal isVisible={isProfilePictureModalUpdateOpen} onClose={handleCloseProfilePictureUpdate}/>
+        <UpdateUniqueUsernameModal isVisible={isUniqueUsernameUpdateModalOpen} onClose={handleCloseUniqueUsernameModal}/>
       </div>
     </div>
   );

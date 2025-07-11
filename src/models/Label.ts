@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
 export interface iLabel extends Document {
-  uniqueUsername : string
+  uniqueUsername? : string
   username: string;
   email: string;
   bio?: string;
@@ -30,7 +30,7 @@ export interface iLabel extends Document {
 const LabelSchema: Schema<iLabel> = new Schema({
   uniqueUsername : {
     type : String,
-    required : true,
+    default : null
   },
   username: {
     type: String,
