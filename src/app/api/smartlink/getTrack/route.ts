@@ -1,10 +1,12 @@
 import { connect } from "@/dbConfig/dbConfig";
 import Album from "@/models/albums";
 import Artist from "@/models/Artists";
+import Label from "@/models/Label";
 import Track from "@/models/track";
 import { NextRequest, NextResponse } from "next/server";
 
 interface TrackFetchData {
+  profilePicture? : string
   songName: string;
   category: string;
   audioFile: string;
@@ -45,8 +47,12 @@ export async function GET(request: NextRequest) {
     }
 
     const album = await Album.findById(track.albumId).select(
-      "_id title thumbnail language genre"
+      "_id labelId title thumbnail language genre"
     );
+
+    const label = await Label.findOne({
+      _id : album.labelId
+    }).select("profilePicture")
 
     const singers = await Artist.find({
       _id: {
@@ -55,6 +61,7 @@ export async function GET(request: NextRequest) {
     }).select("_id artistName");
 
     const data : TrackFetchData = {
+      profilePicture : label?.profilePicture,
       songName: track.songName,
       category: track.category,
       audioFile: track.audioFile,
