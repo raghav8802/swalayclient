@@ -3,19 +3,19 @@ import { Modal } from "@/components/Modal";
 import { Button } from "@/components/ui/button";
 import UserContext from "@/context/userContext";
 import { apiFormData } from "@/helpers/axiosRequest";
-import { useRouter } from "next/navigation";
-import React, { useContext, useState } from "react";
+import React, { Dispatch, SetStateAction, useContext, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import toast from "react-hot-toast";
 
 const UpdateProfilePictureModal = ({
   isVisible,
   onClose,
+  setIsVisible,
 }: {
   isVisible: boolean;
+  setIsVisible : Dispatch<SetStateAction<boolean>>
   onClose: () => void;
 }) => {
-  const router = useRouter();
   const context = useContext(UserContext);
 
   const labelId = context?.user?._id ?? "";
@@ -96,8 +96,11 @@ const UpdateProfilePictureModal = ({
       if (response.success) {
         toast.success("Profile Picture updated successfully");
         toast.dismiss(loadingToastId);
+        setIsVisible(false)
         setProfilePicture(null);
-        router.refresh();
+        setTimeout(()=>{
+          window.location.reload()
+        },1000)
       } else {
         toast.error(response.message || "Failed to update profile picture");
       }
@@ -105,7 +108,7 @@ const UpdateProfilePictureModal = ({
       toast.error(
         (error as Error).message || "An error occurred while updating details"
       );
-    }
+    } 
   };
 
   return (

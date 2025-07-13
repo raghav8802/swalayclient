@@ -3,18 +3,18 @@
 import { Modal } from "@/components/Modal";
 import UserContext from "@/context/userContext";
 import { apiPost } from "@/helpers/axiosRequest";
-import { useRouter } from "next/navigation";
-import React, { useContext, useState } from "react";
+import React, { Dispatch, SetStateAction, useContext, useState } from "react";
 import toast from "react-hot-toast";
 
 const UpdateUniqueUsernameModal = ({
   onClose,
   isVisible,
+  setIsVisible
 }: {
   onClose: () => void;
   isVisible: boolean;
+  setIsVisible : Dispatch<SetStateAction<boolean>>
 }) => {
-  const router = useRouter()
   const context = useContext(UserContext);
 
   const labelId = context?.user?._id ?? "";
@@ -33,8 +33,10 @@ const UpdateUniqueUsernameModal = ({
       });
       if (response.success) {
         toast.success("Username Updated Successfully");
-        router.refresh()
-        return;
+        setIsVisible(false)
+        setTimeout(()=>{
+          window.location.reload()
+        },1000)
       } else {
         toast.error(response.message);
       }
