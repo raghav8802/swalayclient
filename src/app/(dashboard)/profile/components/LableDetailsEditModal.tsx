@@ -5,7 +5,6 @@ import UserContext from "@/context/userContext";
 import { apiFormData } from "@/helpers/axiosRequest";
 import { useContext, useState } from "react";
 import toast from "react-hot-toast";
-import {useRouter} from "next/navigation"
 
 interface EditLabelDetailsForSmartLink {
   uniqueUsername? : string
@@ -25,7 +24,7 @@ const LableDetailsEditModal = ({
   isVisible: boolean;
   onClose: () => void;
 }) => {
-  const router = useRouter()
+
   const context = useContext(UserContext);
 
   const labelId = context?.user?._id ?? "";
@@ -73,8 +72,10 @@ const LableDetailsEditModal = ({
           appleMusic: "",
         });
         // setSelectedTags([]);
-        toast.success("Details updated successfully");
-        router.refresh()
+        toast.success("Details updated successfully")
+        setTimeout(()=>{
+          window.location.reload()
+        },1000)
       } else {
         toast.error(response.message || "Failed to update details");
       }

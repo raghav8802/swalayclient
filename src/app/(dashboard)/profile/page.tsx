@@ -34,7 +34,6 @@ interface BankData {
 const Page = () => {
   const context = useContext(UserContext);
 
-
   const labelId = context?.user?._id;
   const username = context?.user?.username;
   const email = context?.user?.email;
@@ -600,8 +599,8 @@ const Page = () => {
 
         <BankModal isVisible={isModalVisible} onClose={handleClose} />
         <LableDetailsEditModal isVisible={isLabelDetailsEditOpen} onClose={handleCloseEditDetails}/>
-        <UpdateProfilePictureModal isVisible={isProfilePictureModalUpdateOpen} onClose={handleCloseProfilePictureUpdate}/>
-        <UpdateUniqueUsernameModal isVisible={isUniqueUsernameUpdateModalOpen} onClose={handleCloseUniqueUsernameModal}/>
+        <UpdateProfilePictureModal isVisible={isProfilePictureModalUpdateOpen} setIsVisible={setIsProfilePictureUpdateOpen} onClose={handleCloseProfilePictureUpdate}/>
+        <UpdateUniqueUsernameModal setIsVisible={setIsProfilePictureUpdateOpen} isVisible={isUniqueUsernameUpdateModalOpen} onClose={handleCloseUniqueUsernameModal}/>
       </div>
     </div>
   );
