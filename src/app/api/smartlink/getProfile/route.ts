@@ -60,6 +60,8 @@ export async function GET(request: NextRequest) {
         status: 404,
         message: "Label not found",
         success: false,
+      },{
+        status : 404
       });
     }
 
