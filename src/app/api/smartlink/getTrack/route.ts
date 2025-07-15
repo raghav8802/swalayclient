@@ -43,6 +43,8 @@ export async function GET(request: NextRequest) {
         success: false,
         status: 404,
         message: "Track Not found",
+      },{
+        status : 404
       });
     }
 
