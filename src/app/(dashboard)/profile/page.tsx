@@ -17,6 +17,7 @@ import { Apple, Facebook, Instagram, Music, Upload,Link as LinkIcon, Copy} from 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import UpdateProfilePictureModal from "./components/UpdateProfilePictureModal";
 import UpdateUniqueUsernameModal from "./components/UpdateUniqueUsernameModal";
+import Image from "next/image";
 
 interface BankData {
   _id: string;
@@ -174,7 +175,7 @@ const Page = () => {
     }
   }, [labelId, fetchBankDetails]);
 
-  const smartLink = `http://localhost:5173/${labelDetails?.uniqueUsername}`
+  const smartLink = `${process.env.NEXT_PUBLIC_SMARTLINK_URL}/${labelDetails?.uniqueUsername}`
 
   const handleCopyToClipboardSmartLink = async()=>{
 
@@ -300,7 +301,7 @@ const Page = () => {
                   className="relative group"
                 >
                   <Avatar className="w-40 h-40 border-4 border-white shadow-lg">
-                    <AvatarImage src={"https://swalay-music-files.s3.ap-south-1.amazonaws.com/user/" + labelDetails?.profilePicture} alt="Profile" />
+                    <AvatarImage src={`${process.env.NEXT_PUBLIC_AWS_S3_FOLDER_PATH}user/${labelDetails?.profilePicture}`} alt="Profile" />
                     <AvatarFallback className="bg-gray-800 text-white text-2xl">SL</AvatarFallback>
                   </Avatar>
                 </div>
@@ -354,8 +355,8 @@ const Page = () => {
                   {
                     labelDetails?.ytMusic && (
                       <Link href={labelDetails.ytMusic} className="flex flex-1 items-center space-x-3 p-3 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
-                    <div className="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center">
-                      <Music className="w-5 h-5 text-white" />
+                    <div className="w-8 h-8 rounded-lg flex items-center justify-center">
+                      <Image src="/images/ytMusic.png" width={100} height={100} className="w-full h-full text-white" alt="YtMusic"/>
                     </div>
                     <span className="text-gray-700 font-medium">Yt Music</span>
                   </Link>
@@ -365,8 +366,8 @@ const Page = () => {
                   {
                     labelDetails?.appleMusic && (
                       <Link href={labelDetails.appleMusic} className="flex flex-1 items-center space-x-3 p-3 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
-                    <div className="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center">
-                      <Apple className="w-5 h-5 text-white" />
+                    <div className="w-8 h-8 rounded-lg flex items-center justify-center">
+                      <Image src="/images/appleMusic.png" width={100} height={100} className="w-full h-full text-white" alt="AppleMusic"/>
                     </div>
                     <span className="text-gray-700 font-medium">Apple Music</span>
                   </Link>
@@ -376,8 +377,8 @@ const Page = () => {
                   {
                     labelDetails?.spotify && (
                       <Link href={labelDetails.spotify} className="flex flex-1 items-center space-x-3 p-3 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
-                    <div className="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
-                      <Music className="w-5 h-5 text-white" />
+                    <div className="w-8 h-8  rounded-lg flex items-center justify-center">
+                      <Image src="/images/spotify.png" width={100} height={100} className="w-full h-full text-white" alt="Spotify"/>
                     </div>
                     <span className="text-gray-700 font-medium">Spotify</span>
                   </Link>

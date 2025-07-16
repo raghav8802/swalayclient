@@ -36,7 +36,7 @@ const nextConfig = {
         headers : [
           {
             key : "Access-Control-Allow-Origin",
-            value : process.env.SMARTLINK_URL
+            value : process.env.NEXT_PUBLIC_SMARTLINK_URL
           },
           {
             key : "Access-Control-Allow-Methods",
@@ -53,7 +53,7 @@ const nextConfig = {
         headers : [
           {
             key : "Access-Control-Allow-Origin",
-            value : process.env.SMARTLINK_URL
+            value : process.env.NEXT_PUBLIC_SMARTLINK_URL
           },
           {
             key : "Access-Control-Allow-Methods",
