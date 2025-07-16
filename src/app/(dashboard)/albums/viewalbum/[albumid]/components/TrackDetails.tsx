@@ -123,6 +123,8 @@ const TrackDetails: React.FC<TrackListProps> = ({ trackId }) => {
   };
 
   const handleFetchLinks = async () => {
+    console.log("Fetching links for ISRC:");
+
     if (!trackDetails || !trackDetails.isrc) {
       toast.error("ISRC is required to fetch links");
       return;
@@ -133,6 +135,7 @@ const TrackDetails: React.FC<TrackListProps> = ({ trackId }) => {
       const response = await apiGet(
         `/api/track/getTrackLinks?isrc=${trackDetails.isrc}`
       );
+      console.log("Response from getTrackLinks:", response);
       if (response.success) {
         toast.success("Track links fetched successfully");
         router.refresh(); // Refresh the page to show updated links

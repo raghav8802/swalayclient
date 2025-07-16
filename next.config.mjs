@@ -28,7 +28,6 @@ const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ['mongoose']
   },
-
   async headers(){
     return [
       {

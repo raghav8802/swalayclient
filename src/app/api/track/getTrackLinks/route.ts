@@ -20,10 +20,13 @@ export async function GET(request: NextRequest) {
       }
     );
 
+    console.log("Response from Music Fetch API:", response.data);
+
     if (response.status === 200 && response.data) {
       await connect();
 
       const track = await Track.findOne({ isrc: isrc });
+      console.log("Track found:", track);
 
       if (!track) {
         return NextResponse.json(
@@ -69,7 +72,9 @@ export async function GET(request: NextRequest) {
         status: response.status || 500,
       },
     );
+
   } catch (error: any) {
+    console.error("Error fetching track links:", error.message);
     return NextResponse.json({
       message: error.message || "Internal Server Error",
       status: 500,

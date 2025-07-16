@@ -42,9 +42,9 @@ const DeleteButton: React.FC<AlbumDeleteProps> = ({ albumId }) => {
 
   return (
     <div>
-      <button className={"mt-4 ms-5 mb-2 btn deleteBtn p-3"} onClick={onDelete}>
+      <button className={"deleteBtn btn flex items-center justify-center gap-2 px-4 py-3 text-white bg-blue-600 hover:bg-blue-700 rounded"} onClick={onDelete}>
         <i className="me-2 bi bi-trash"></i>
-        Delete Album
+        Delete
       </button>
 
       <ConfirmationDialog

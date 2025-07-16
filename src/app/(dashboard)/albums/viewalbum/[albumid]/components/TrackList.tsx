@@ -3,6 +3,7 @@ import Style from "../../../../../styles/ViewAlbums.module.css";
 import { apiGet } from "@/helpers/axiosRequest";
 import toast from "react-hot-toast";
 import { useTrackContext } from "@/context/TrackContext";
+import { Link } from "lucide-react";
 
 interface Track {
   albumId: string;
@@ -155,7 +156,11 @@ const TrackList: React.FC<TrackListProps> = ({ albumId, onTrackClick }) => {
           );
         })
       ) : (
-        <h1 className="text-center mt-5">No Tracks Found</h1>
+        <div className="flex flex-col items-center justify-center h-full mb-5">
+          <i className="bi bi-music-note-list text-4xl text-gray-400 mb-3"></i>
+            <p className="text-gray-500 text-lg">No tracks available for this album</p>
+        </div>
+       
       )}
     </ul>
   );
