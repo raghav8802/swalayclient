@@ -11,6 +11,7 @@ interface TrackSectionProps {
 }
 
 const TrackSection: React.FC<TrackSectionProps> = ({ albumId }) => {
+  
   const { 
     activeTrackId, 
     setActiveTrackId,

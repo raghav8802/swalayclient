@@ -213,13 +213,7 @@ const Navbar = () => {
               )}
             </div>
             </div>
-              <Link
-                  href="/profile"
-                  className="nav__link ml-auto"
-                  onClick={handleLinkClick}
-                >
-                  <i className="bi bi-person flex mx-auto size-4 w-full"></i>
-              </Link>
+             
           </div>
 
           
@@ -271,7 +265,7 @@ const Navbar = () => {
                       >
                         New release
                       </Link>
-                      <Link href="/albums/all" className="nav__dropdown-item" onClick={handleLinkClick}>
+                      <Link href="/albums" className="nav__dropdown-item" onClick={handleLinkClick}>
                         Albums
                       </Link>
                       <Link href="/albums/draft" className="nav__dropdown-item" onClick={handleLinkClick}>
@@ -349,6 +343,15 @@ const Navbar = () => {
                   <i className="bi bi-chat-left nav__icon"></i>
                   <span className="nav__name">My Tickets</span>
                 </Link>
+
+                 <Link
+                  href="/profile"
+                  className="nav__link "
+                  onClick={handleLinkClick}
+                >
+                  <i className="bi bi-person nav__icon"></i>
+                  <span className="nav__name">Profile</span>
+                </Link>
                 {/* <Link href="/smartlink" className="nav__link">
                   <i className="bi bi-link nav__icon"></i>
                   <span className="nav__name">SmartLink</span>
@@ -361,6 +364,7 @@ const Navbar = () => {
             <i className="bi bi-box-arrow-left nav__icon"></i>
             <span className="nav__name">Log Out</span>
           </div>
+
         </nav>
       </div>
     </div>

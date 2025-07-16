@@ -15,12 +15,11 @@ export async function GET(request: NextRequest) {
       }
     );
 
-    console.log(response)
-
     if (response.result) {
       await connect();
 
       const track = await Track.findOne({ isrc: isrc });
+      console.log("Track found:", track);
 
       if (!track) {
         return NextResponse.json(
@@ -62,13 +61,18 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       success: false,
       message: "Failed to fetch track links",
-      status: response.status || 500,
+      status: 500,
+    },{
+      status : 404
     });
   } catch (error: any) {
+    console.error("Error fetching track links:", error.message);
     return NextResponse.json({
       message: error.message || "Internal Server Error",
       status: 500,
       success: false,
+    },{
+      status : 500
     });
   }
 }
