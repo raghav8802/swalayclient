@@ -1,28 +1,21 @@
 import { connect } from "@/dbConfig/dbConfig";
+import { apiGetCustomHeaders } from "@/helpers/axiosRequest";
 import Track from "@/models/track";
-import axios from "axios";
 import { type NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   const isrc = request.nextUrl.searchParams.get("isrc");
 
-  console.log(
-    `${process.env.MUSIC_FETCH_BASE_URL}/isrc?isrc=${isrc}&x-token=${process.env.MUSIC_FETCH_API_KEY}`
-  );
-
   try {
-    const response = await axios.get(
+    const response = await apiGetCustomHeaders(
       `${process.env.MUSIC_FETCH_BASE_URL}/isrc?isrc=${isrc}&x-token=${process.env.MUSIC_FETCH_API_KEY}`,
+      {},
       {
-        headers: {
-          "x-token": process.env.MUSIC_FETCH_API_KEY || "",
-        },
+        "x-token": process.env.MUSIC_FETCH_API_KEY || "",
       }
     );
 
-    console.log("Response from Music Fetch API:", response.data);
-
-    if (response.status === 200 && response.data) {
+    if (response.result) {
       await connect();
 
       const track = await Track.findOne({ isrc: isrc });
@@ -44,7 +37,7 @@ export async function GET(request: NextRequest) {
           id: string;
           link: string;
         };
-      } = response.data.result.services || {};
+      } = response.result.services || {};
 
       const platformLinks: { [key: string]: string } = {};
 
@@ -65,20 +58,21 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Failed to fetch track links",
-        status: response.status || 500,
-      },
-    );
-
+    return NextResponse.json({
+      success: false,
+      message: "Failed to fetch track links",
+      status: 404,
+    },{
+      status : 404
+    });
   } catch (error: any) {
     console.error("Error fetching track links:", error.message);
     return NextResponse.json({
       message: error.message || "Internal Server Error",
       status: 500,
       success: false,
+    },{
+      status : 500
     });
   }
 }
