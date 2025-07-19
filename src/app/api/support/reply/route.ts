@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connect } from '@/dbConfig/dbConfig';
-import SupportReply from '@/models/supportReply';
-import Support from '@/models/support';
+import SupportReply from '@/models/SupportReply';
+import Support from '@/models/Support';
 
 export async function POST(req: NextRequest) {
   try {

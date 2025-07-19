@@ -7,9 +7,6 @@ export async function GET(request: NextRequest) {
   await connect();
   const isrc = request.nextUrl.searchParams.get("isrc");
 
-  console.log(
-    `${process.env.MUSIC_FETCH_BASE_URL}/isrc?isrc=${isrc}&x-token=${process.env.MUSIC_FETCH_API_KEY}`
-  );
 
   try {
     const response = await axios.get(
@@ -28,7 +25,7 @@ export async function GET(request: NextRequest) {
       
 
       const track = await Track.findOne({ isrc: isrc });
-      console.log("Track found:", track);
+
 
       if (!track) {
         return NextResponse.json(
@@ -60,8 +57,6 @@ export async function GET(request: NextRequest) {
 
       const updatedTrack = await track.save();
 
-      console.log("Updated track:");
-      console.log(updatedTrack);
 
       return NextResponse.json({
         success: true,

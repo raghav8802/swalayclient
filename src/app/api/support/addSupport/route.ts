@@ -2,8 +2,10 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { connect } from '@/dbConfig/dbConfig';
-import Support from '@/models/support';
-
+import Support from '@/models/Support';
+import sendMail from '@/helpers/sendMail';
+import SupportTicketEmail from '@/components/Email/SupportTicketEmail';
+import React from 'react';
 
 export async function POST(req: NextRequest) {
   try {
@@ -46,10 +48,30 @@ export async function POST(req: NextRequest) {
       labelId,
       subject,
       message,
-      status: status || 'pending'
+      status: status || 'pending',
+      priority: 'medium',
+      category: 'general',
+      isClosed: false
     });
 
     const savedSupport = await newSupport.save();
+
+    // Send email notification
+    try {
+      await sendMail({
+        to: email,
+        subject: `Support Ticket Created - ${savedSupport.ticketId}`,
+        emailTemplate: React.createElement(SupportTicketEmail, {
+          clientName: name,
+          ticketId: savedSupport.ticketId,
+          subject: subject,
+          message: message
+        })
+      });
+    } catch (emailError) {
+      console.error('Error sending support ticket email:', emailError);
+      // Don't return error to client if email fails, just log it
+    }
 
     return NextResponse.json({
       message: "Thank you! We will reach out to you soon.",
