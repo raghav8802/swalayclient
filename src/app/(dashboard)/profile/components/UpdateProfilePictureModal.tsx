@@ -11,12 +11,15 @@ import toast from "react-hot-toast";
 const UpdateProfilePictureModal = ({
   isVisible,
   onClose,
+  onSuccess,
 }: {
   isVisible: boolean;
   onClose: () => void;
+  onSuccess?: () => void;
 }) => {
   const router = useRouter();
   const context = useContext(UserContext);
+  const [isLoading, setIsLoading] = useState(false);
 
   const labelId = context?.user?._id ?? "";
   const [profilePicture, setProfilePicture] = useState<File | null>();
@@ -40,7 +43,6 @@ const UpdateProfilePictureModal = ({
   });
 
   const handleUpdateProfilePicture = async () => {
-    
     try {
       if (!profilePicture) {
         toast.error("Image file is required");
@@ -53,6 +55,7 @@ const UpdateProfilePictureModal = ({
         return;
       }
 
+      setIsLoading(true);
       const loadingToastId = toast.loading("Uploading...");
 
       const image = new Image();
@@ -78,7 +81,9 @@ const UpdateProfilePictureModal = ({
       try {
         await imageLoaded; // Wait for the image to load and validate dimensions
       } catch (error: any) {
+        toast.dismiss(loadingToastId);
         toast.error(error.message);
+        setIsLoading(false);
         return;
       }
 
@@ -87,17 +92,16 @@ const UpdateProfilePictureModal = ({
       formData.append("labelId", labelId);
 
       const response = await apiFormData(
-        "/api/label/updateLabelProfilePicture",
+        "/api/user/updateLabelProfilePicture",
         formData
       );
-
-      console.log(response);
       
       if (response.success) {
         toast.success("Profile Picture updated successfully");
-        toast.dismiss(loadingToastId);
         setProfilePicture(null);
-        router.refresh();
+        onSuccess?.(); // Call the success callback if provided
+        onClose(); // Close the modal
+        router.refresh(); // Refresh the page data
       } else {
         toast.error(response.message || "Failed to update profile picture");
       }
@@ -105,6 +109,8 @@ const UpdateProfilePictureModal = ({
       toast.error(
         (error as Error).message || "An error occurred while updating details"
       );
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -114,24 +120,24 @@ const UpdateProfilePictureModal = ({
       isVisible={isVisible}
       onClose={onClose}
       onSave={handleUpdateProfilePicture}
-      triggerLabel="Update"
+      triggerLabel={isLoading ? "Uploading..." : "Update"}
     >
       <div className="flex flex-col gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Profile Picture (File Type: png, jpg | <span className="text-red-500">Recomended File Size: 3000 x 3000</span>){" "}
+            Profile Picture (File Type: png, jpg | <span className="text-red-500">Recommended File Size: 3000 x 3000</span>){" "}
           </label>
           <div className="flex gap-2 items-center md:flex-row flex-col mt-2">
             {profilePicture && (
               <div className="flex gap-1 flex-col">
                 <img
-                src={URL.createObjectURL(profilePicture)}
-                alt="Pic"
-                className="h-32 w-32 rounded-full"
-              />
-              <Button className="h-10" onClick={()=>setProfilePicture(null)}>
-                Remove Image
-              </Button>
+                  src={URL.createObjectURL(profilePicture)}
+                  alt="Pic"
+                  className="h-32 w-32 rounded-full"
+                />
+                <Button className="h-10" onClick={() => setProfilePicture(null)}>
+                  Remove Image
+                </Button>
               </div>
             )}
             <div

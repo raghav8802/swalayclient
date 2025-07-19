@@ -57,8 +57,6 @@ const TrackDetails: React.FC<TrackListProps> = ({ trackId }) => {
       const response = await apiGet(
         `/api/track/getTrackDetails?trackId=${trackId}`
       );
-
-      console.log(response.data)
       
       if (response.success) {
         setTrackDetails(response.data);
@@ -138,7 +136,7 @@ const TrackDetails: React.FC<TrackListProps> = ({ trackId }) => {
       console.log("Response from getTrackLinks:", response);
       if (response.success) {
         toast.success("Track links fetched successfully");
-        router.refresh(); // Refresh the page to show updated links
+        window.location.reload();
         return;
       }
 
@@ -440,7 +438,7 @@ const TrackDetails: React.FC<TrackListProps> = ({ trackId }) => {
 
             <TabsContent value="links">
               <div className={`mt-2  ${Style.trackInfoListContainer}`}>
-                <ul className="p-6 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-xl shadow-md space-y-4">
+                <ul className="p-6  space-y-4">
                   {trackDetails?.platformLinks ? (
                     <>
                       {(
@@ -474,11 +472,18 @@ const TrackDetails: React.FC<TrackListProps> = ({ trackId }) => {
                       })}
                     </>
                   ) : (
-                    <li className="text-gray-500 dark:text-gray-400">
-                      <span>No links available for this track.</span>
-                      <button className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition duration-200 ms-2" onClick={handleFetchLinks} disabled={isLinkFetching}>
-                        {isLinkFetching ? "Fetching..." : "Fetch Links"}
-                      </button>
+                    <li className="text-gray-500 dark:text-gray-400 ">
+                      <p className="mb-6 mt-3 text-center">No links available for this track.</p>
+                      <div className="flex justify-center items-center ">
+                        <button
+                          className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition duration-200 "
+                          style={{ display: "block", marginLeft: "auto", marginRight: "auto" }}
+                          onClick={handleFetchLinks}
+                          disabled={isLinkFetching}
+                        >
+                          {isLinkFetching ? "Fetching..." : "Fetch Live Links"}
+                        </button>
+                      </div>
                     </li>
                   )}
                 </ul>

@@ -6,6 +6,9 @@ import { apiPost } from "@/helpers/axiosRequest";
 import { useRouter } from "next/navigation";
 import React, { useContext, useState } from "react";
 import toast from "react-hot-toast";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { AlertCircle } from "lucide-react";
 
 const UpdateUniqueUsernameModal = ({
   onClose,
@@ -14,34 +17,56 @@ const UpdateUniqueUsernameModal = ({
   onClose: () => void;
   isVisible: boolean;
 }) => {
-  const router = useRouter()
+  const router = useRouter();
   const context = useContext(UserContext);
 
   const labelId = context?.user?._id ?? "";
   const [uniqueUsername, setUniqueUsername] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const validateUsername = (username: string) => {
+    if (!username) return "Username is required";
+    if (username.length < 3) return "Username must be at least 3 characters";
+    if (username.length > 30) return "Username must be less than 30 characters";
+    if (!/^[a-zA-Z0-9_-]+$/.test(username)) return "Username can only contain letters, numbers, underscores and hyphens";
+    return "";
+  };
+
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.toLowerCase();
+    setUniqueUsername(value);
+    setError(validateUsername(value));
+  };
 
   const handleSave = async () => {
-    if (!uniqueUsername || uniqueUsername.length === 0) {
-      toast.error("Enter a valid username");
+    const validationError = validateUsername(uniqueUsername);
+    if (validationError) {
+      setError(validationError);
       return;
     }
-    const toastId = toast("Updating");
+
+    setIsLoading(true);
     try {
       const response = await apiPost("/api/smartlink/updateUniqueUsername", {
         uniqueUsername,
         labelId,
       });
+      
       if (response.success) {
-        toast.success("Username Updated Successfully");
-        router.refresh()
-        return;
+        toast.success("Username updated successfully");
+        router.refresh();
+        onClose();
       } else {
+        setError(response.message || "Failed to update username");
         toast.error(response.message);
       }
     } catch (error) {
-      console.log((error as Error).message);
+      const message = (error as Error).message;
+      setError(message);
+      toast.error(message);
     } finally {
-      toast.dismiss(toastId);
+      setIsLoading(false);
     }
   };
 
@@ -52,15 +77,34 @@ const UpdateUniqueUsernameModal = ({
       onSave={handleSave}
       isVisible={isVisible}
       triggerLabel="Update Username"
+      isLoading={isLoading}
     >
-      <label className="flex flex-col gap-1">
-        New Username
-        <input
-          placeholder="Enter a username ..."
-          className="border p-2 rounded"
-          onChange={(e) => setUniqueUsername(e.target.value)}
-        />
-      </label>
+      <div className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="username">Username</Label>
+          <Input
+            id="username"
+            placeholder="Enter a username"
+            value={uniqueUsername}
+            onChange={handleUsernameChange}
+            className={error ? "border-red-500" : ""}
+          />
+          {error && (
+            <div className="flex items-center gap-2 text-red-500 text-sm mt-1">
+              <AlertCircle className="h-4 w-4" />
+              <span>{error}</span>
+            </div>
+          )}
+        </div>
+        <div className="text-sm text-muted-foreground">
+          <p>Username guidelines:</p>
+          <ul className="list-disc list-inside space-y-1 mt-1">
+            <li>Must be between 3-30 characters</li>
+            <li>Can contain letters, numbers, underscores and hyphens</li>
+            <li>Will be used in your smart link URL</li>
+          </ul>
+        </div>
+      </div>
     </Modal>
   );
 };

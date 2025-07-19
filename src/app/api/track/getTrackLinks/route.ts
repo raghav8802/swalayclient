@@ -4,6 +4,7 @@ import axios from "axios";
 import { type NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
+  await connect();
   const isrc = request.nextUrl.searchParams.get("isrc");
 
   console.log(
@@ -20,10 +21,11 @@ export async function GET(request: NextRequest) {
       }
     );
 
+
     console.log("Response from Music Fetch API:", response.data);
 
     if (response.status === 200 && response.data) {
-      await connect();
+      
 
       const track = await Track.findOne({ isrc: isrc });
       console.log("Track found:", track);
@@ -56,7 +58,10 @@ export async function GET(request: NextRequest) {
 
       track.platformLinks = platformLinks;
 
-      await track.save();
+      const updatedTrack = await track.save();
+
+      console.log("Updated track:");
+      console.log(updatedTrack);
 
       return NextResponse.json({
         success: true,
@@ -65,14 +70,11 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Failed to fetch track links",
-        status: response.status || 500,
-      },
-    );
-
+    return NextResponse.json({
+      success: false,
+      message: "Failed to fetch track links",
+      status: response.status || 500,
+    });
   } catch (error: any) {
     console.error("Error fetching track links:", error.message);
     return NextResponse.json({
