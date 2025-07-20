@@ -223,8 +223,8 @@ const SignupForm = ({
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const isArtist = userType === "artist";
-  const formTitle = isArtist ? "Artist Name" : "Label Name";
-  const placeholderText = isArtist ? "Your stage name" : "Your label name";
+  const formTitle = "Name";
+  const placeholderText = isArtist ? "Your user name" : "Your user name";
   const buttonClass = isArtist ? "bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400" : "bg-purple-600 hover:bg-purple-700 disabled:bg-purple-400";
   const buttonText = isArtist ? "Create Artist Account" : "Create Label Account";
   
