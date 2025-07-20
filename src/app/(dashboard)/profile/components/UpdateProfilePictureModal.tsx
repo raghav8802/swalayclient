@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import React, { useContext, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import toast from "react-hot-toast";
+import Image from "next/image";
 
 const UpdateProfilePictureModal = ({
   isVisible,
@@ -58,7 +59,8 @@ const UpdateProfilePictureModal = ({
       setIsLoading(true);
       const loadingToastId = toast.loading("Uploading...");
 
-      const image = new Image();
+      // Create a new HTMLImageElement for dimension validation
+      const image = document.createElement('img');
       const imageLoaded = new Promise<void>((resolve, reject) => {
         image.onload = () => {
           if (image.width > 3000 || image.height > 3000) {
@@ -130,11 +132,15 @@ const UpdateProfilePictureModal = ({
           <div className="flex gap-2 items-center md:flex-row flex-col mt-2">
             {profilePicture && (
               <div className="flex gap-1 flex-col">
-                <img
-                  src={URL.createObjectURL(profilePicture)}
-                  alt="Pic"
-                  className="h-32 w-32 rounded-full"
-                />
+                <div className="relative h-32 w-32 rounded-full overflow-hidden">
+                  <Image
+                    src={URL.createObjectURL(profilePicture)}
+                    alt="Profile Picture"
+                    fill
+                    style={{ objectFit: 'cover' }}
+                    sizes="128px"
+                  />
+                </div>
                 <Button className="h-10" onClick={() => setProfilePicture(null)}>
                   Remove Image
                 </Button>

@@ -7,7 +7,7 @@ import { apiGet, apiPost } from "@/helpers/axiosRequest";
 import toast from "react-hot-toast";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
 import { useTrackContext } from "@/context/TrackContext";
-import { useRouter } from "next/navigation";
+
 // import { onShare } from "@/helpers/urlShare";
 
 interface TrackListProps {
@@ -50,7 +50,6 @@ const TrackDetails: React.FC<TrackListProps> = ({ trackId }) => {
 
   const [isLinkFetching, setIsLinkFetching] = useState(false);
 
-  const router = useRouter()
 
   const fetchTrackDetails = React.useCallback(async () => {
     try {

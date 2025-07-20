@@ -55,7 +55,7 @@ export async function GET(request: NextRequest) {
 
       track.platformLinks = platformLinks;
 
-      const updatedTrack = await track.save();
+      await track.save();
 
 
       return NextResponse.json({

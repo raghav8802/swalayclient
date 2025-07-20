@@ -5,7 +5,7 @@ import UserContext from "@/context/userContext";
 import { apiFormData } from "@/helpers/axiosRequest";
 import { useContext, useState, useEffect } from "react";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AlertCircle } from "lucide-react";
@@ -37,7 +37,7 @@ const LableDetailsEditModal = ({
   };
   onSuccess?: () => void;
 }) => {
-  const router = useRouter();
+
   const context = useContext(UserContext);
   const labelId = context?.user?._id ?? "";
   const [isLoading, setIsLoading] = useState(false);

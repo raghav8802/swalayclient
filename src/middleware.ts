@@ -12,10 +12,16 @@ export async function middleware(request: NextRequest) {
 
     const token = request.cookies.get('token')?.value || '';
 
- 
     // Allow API routes to bypass the token check
     if (path.startsWith('/api')) {
-        return NextResponse.next();
+        const response = NextResponse.next();
+        // Add CORS headers for smartlink API routes
+        if (path.startsWith('/api/smartlink')) {
+            response.headers.set('Access-Control-Allow-Origin', '*');
+            response.headers.set('Access-Control-Allow-Methods', 'GET');
+            response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+        }
+        return response;
     }
 
     if (token && isPublicPath) {
@@ -38,5 +44,6 @@ export const config = {
         '/forgotpassword',
         '/((?!api|_next/static|_next/image|favicon.ico).*)',
         '/:path*',
+        '/api/smartlink/:path*'  // Add matcher for smartlink API routes
     ]
 };

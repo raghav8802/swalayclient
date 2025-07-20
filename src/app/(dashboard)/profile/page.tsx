@@ -10,11 +10,10 @@ import BankModal from "./components/BankModal";
 import LableDetailsEditModal from "./components/LableDetailsEditModal";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Apple, Facebook, Instagram, Music2, Upload, Link as LinkIcon, Copy, Globe, Building2, Mail, Phone, Calendar, Wallet2, Eye, EyeOff } from "lucide-react";
+import { Upload, Link as LinkIcon, Globe, Building2, Mail, Phone, Calendar, Wallet2, Eye, EyeOff } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import UpdateProfilePictureModal from "./components/UpdateProfilePictureModal";
 import UpdateUniqueUsernameModal from "./components/UpdateUniqueUsernameModal";
-import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import Image from "next/image";
@@ -43,7 +42,6 @@ const Page = () => {
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [bankData, setBankData] = useState<BankData | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [labelDetails, setLabelDetails] = useState<iLabel>();
   const [isLabelDetailsEditOpen, setIsLabelDetailsEditOpen] = useState<boolean>(false);
   const [isProfilePictureModalUpdateOpen, setIsProfilePictureUpdateOpen] = useState<boolean>(false);
@@ -72,9 +70,7 @@ const Page = () => {
       if (response.success) {
         setBankData(response.data);
       }
-      setIsLoading(false);
     } catch (error) {
-      setIsLoading(false);
       toast.error("Failed to fetch bank details");
       console.error(error);
     }
