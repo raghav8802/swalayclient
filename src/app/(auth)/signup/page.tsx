@@ -214,6 +214,7 @@ const SignupForm = ({
     contact: "",
     password: "",
     confirmPassword: "",
+    labelName: "" // Add labelName field
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isAgreementChecked, setIsAgreementChecked] = useState(false);
@@ -241,6 +242,10 @@ const SignupForm = ({
     const newErrors: Record<string, string> = {};
 
     if (!formData.name.trim()) newErrors.name = `${formTitle} is required`;
+    
+    if (userType === "label" && !formData.labelName.trim()) {
+      newErrors.labelName = "Label Name is required";
+    }
     
     if (!formData.email.trim()) {
       newErrors.email = "Email is required";
@@ -290,7 +295,8 @@ const SignupForm = ({
         email: formData.email,
         contact: formData.contact,
         password: formData.password,
-        userType: userType
+        userType: userType,
+        labelName: userType === "artist" ? "SwaLay Digital" : formData.labelName
       });
 
       if(response.success) {
@@ -325,6 +331,21 @@ const SignupForm = ({
           />
           {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
         </div>
+
+        {userType === "label" && (
+          <div>
+            <label className="block text-sm font-medium mb-1">Label Name</label>
+            <input
+              type="text"
+              name="labelName"
+              value={formData.labelName}
+              onChange={handleChange}
+              className={`w-full px-3 py-2 border rounded-lg ${errors.labelName ? 'border-red-500' : ''}`}
+              placeholder="Your label name"
+            />
+            {errors.labelName && <p className="text-red-500 text-xs mt-1">{errors.labelName}</p>}
+          </div>
+        )}
        
 
         <div>

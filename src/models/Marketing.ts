@@ -13,6 +13,7 @@ export interface IMarketing extends Document {
   albumName: string;
   isExtraFileRequested: boolean; // Boolean for extra file request
   comment?: string; // Optional comment field
+  isSelectedForPromotion: boolean;
 }
 
 // Define the schema
@@ -77,6 +78,11 @@ const MarketingSchema: Schema<IMarketing> = new Schema(
       type: String,
       required: false, // Comment is optional
       trim: true,
+    },
+    isSelectedForPromotion: {
+      type: Boolean,
+      required: true,
+      default: false, // Default value if not provided
     },
   }
 );

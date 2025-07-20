@@ -50,6 +50,11 @@ export async function GET(req: NextRequest) {
           if (marketing.isExtraFileRequested) {
             marketingStatus = "Requested";
           }
+
+          if (marketing.isSelectedForPromotion) {
+            marketingStatus = "Selected";
+          }
+
         }
 
         // Add marketing status to the album object
