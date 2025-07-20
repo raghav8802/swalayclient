@@ -52,7 +52,7 @@ export async function GET(request: NextRequest) {
     await connect();
 
     const label = await Label.findOne({ uniqueUsername }).select(
-      "_id username bio appleMusic facebook instagram spotify ytMusic profilePicture"
+      "_id label username usertype bio appleMusic facebook instagram spotify ytMusic profilePicture"
     );
 
     if (!label) {
@@ -100,7 +100,7 @@ export async function GET(request: NextRequest) {
 
     const data: DataForSmartLink = {
       bio: label.bio || undefined,
-      labelName: label.username,
+      labelName: label.usertype === "super" ? label.lable || "Swalay Digital" : label.username,
       facebook: label.facebook || undefined,
       appleMusic: label.appleMusic || undefined,
       instagram: label.instagram || undefined,

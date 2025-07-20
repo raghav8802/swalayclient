@@ -3,20 +3,24 @@ import { Modal } from "@/components/Modal";
 import { Button } from "@/components/ui/button";
 import UserContext from "@/context/userContext";
 import { apiFormData } from "@/helpers/axiosRequest";
-import React, { Dispatch, SetStateAction, useContext, useState } from "react";
+import { useRouter } from "next/navigation";
+import React, { useContext, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import toast from "react-hot-toast";
+import Image from "next/image";
 
 const UpdateProfilePictureModal = ({
   isVisible,
   onClose,
-  setIsVisible,
+  onSuccess,
 }: {
   isVisible: boolean;
-  setIsVisible : Dispatch<SetStateAction<boolean>>
   onClose: () => void;
+  onSuccess?: () => void;
 }) => {
+  const router = useRouter();
   const context = useContext(UserContext);
+  const [isLoading, setIsLoading] = useState(false);
 
   const labelId = context?.user?._id ?? "";
   const [profilePicture, setProfilePicture] = useState<File | null>();
@@ -40,7 +44,6 @@ const UpdateProfilePictureModal = ({
   });
 
   const handleUpdateProfilePicture = async () => {
-    
     try {
       if (!profilePicture) {
         toast.error("Image file is required");
@@ -53,9 +56,11 @@ const UpdateProfilePictureModal = ({
         return;
       }
 
+      setIsLoading(true);
       const loadingToastId = toast.loading("Uploading...");
 
-      const image = new Image();
+      // Create a new HTMLImageElement for dimension validation
+      const image = document.createElement('img');
       const imageLoaded = new Promise<void>((resolve, reject) => {
         image.onload = () => {
           if (image.width > 3000 || image.height > 3000) {
@@ -78,7 +83,9 @@ const UpdateProfilePictureModal = ({
       try {
         await imageLoaded; // Wait for the image to load and validate dimensions
       } catch (error: any) {
+        toast.dismiss(loadingToastId);
         toast.error(error.message);
+        setIsLoading(false);
         return;
       }
 
@@ -87,20 +94,16 @@ const UpdateProfilePictureModal = ({
       formData.append("labelId", labelId);
 
       const response = await apiFormData(
-        "/api/label/updateLabelProfilePicture",
+        "/api/user/updateLabelProfilePicture",
         formData
       );
-
-      console.log(response);
       
       if (response.success) {
         toast.success("Profile Picture updated successfully");
-        toast.dismiss(loadingToastId);
-        setIsVisible(false)
         setProfilePicture(null);
-        setTimeout(()=>{
-          window.location.reload()
-        },1000)
+        onSuccess?.(); // Call the success callback if provided
+        onClose(); // Close the modal
+        router.refresh(); // Refresh the page data
       } else {
         toast.error(response.message || "Failed to update profile picture");
       }
@@ -108,7 +111,10 @@ const UpdateProfilePictureModal = ({
       toast.error(
         (error as Error).message || "An error occurred while updating details"
       );
-    } 
+    }
+      finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -117,24 +123,28 @@ const UpdateProfilePictureModal = ({
       isVisible={isVisible}
       onClose={onClose}
       onSave={handleUpdateProfilePicture}
-      triggerLabel="Update"
+      triggerLabel={isLoading ? "Uploading..." : "Update"}
     >
       <div className="flex flex-col gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Profile Picture (File Type: png, jpg | <span className="text-red-500">Recomended File Size: 3000 x 3000</span>){" "}
+            Profile Picture (File Type: png, jpg | <span className="text-red-500">Recommended File Size: 3000 x 3000</span>){" "}
           </label>
           <div className="flex gap-2 items-center md:flex-row flex-col mt-2">
             {profilePicture && (
               <div className="flex gap-1 flex-col">
-                <img
-                src={URL.createObjectURL(profilePicture)}
-                alt="Pic"
-                className="h-32 w-32 rounded-full"
-              />
-              <Button className="h-10" onClick={()=>setProfilePicture(null)}>
-                Remove Image
-              </Button>
+                <div className="relative h-32 w-32 rounded-full overflow-hidden">
+                  <Image
+                    src={URL.createObjectURL(profilePicture)}
+                    alt="Profile Picture"
+                    fill
+                    style={{ objectFit: 'cover' }}
+                    sizes="128px"
+                  />
+                </div>
+                <Button className="h-10" onClick={() => setProfilePicture(null)}>
+                  Remove Image
+                </Button>
               </div>
             )}
             <div

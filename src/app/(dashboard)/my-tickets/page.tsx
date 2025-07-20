@@ -12,6 +12,7 @@ import { Plus } from "lucide-react";
 
 interface SupportTicket {
   _id: string;
+  ticketId: string;
   subject: string;
   message: string;
   status: string;
@@ -214,16 +215,23 @@ export default function MyTickets() {
             return (
               <Card key={ticket._id}>
                 <CardHeader>
-                  <CardTitle className="flex justify-between items-center">
-                    <span>{ticket.subject}</span>
-                    <div className="flex items-center gap-2">
-                      <span className={`text-sm px-3 py-1 rounded-full ${
-                        ticket.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                        ticket.status === 'in-progress' ? 'bg-blue-100 text-blue-800' :
-                        'bg-green-100 text-green-800'
-                      }`}>
-                        {ticket.status}
+                  <div className="flex flex-col space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="font-bold text-sm ">
+                        Ticket ID: #{ticket.ticketId}
                       </span>
+                      <div className="flex items-center gap-2">
+                        <span className={`text-sm px-3 py-1 rounded-full ${
+                          ticket.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                          ticket.status === 'in-progress' ? 'bg-blue-100 text-blue-800' :
+                          'bg-green-100 text-green-800'
+                        }`}>
+                          {ticket.status}
+                        </span>
+                      </div>
+                    </div>
+                    <CardTitle className="flex justify-between items-center">
+                      <span>{ticket.subject}</span>
                       <Button
                         variant="ghost"
                         size="sm"
@@ -232,8 +240,8 @@ export default function MyTickets() {
                       >
                         {isExpanded ? 'Hide' : 'View'} Conversation
                       </Button>
-                    </div>
-                  </CardTitle>
+                    </CardTitle>
+                  </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div>

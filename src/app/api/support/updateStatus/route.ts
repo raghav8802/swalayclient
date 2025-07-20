@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connect } from '@/dbConfig/dbConfig';
-import Support from '@/models/support';
+import Support from '@/models/Support';
 
 export async function PATCH(req: NextRequest) {
   try {

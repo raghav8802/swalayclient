@@ -28,43 +28,44 @@ const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ['mongoose']
   },
-  async headers(){
+
+  async headers() {
     return [
       {
-        source : '/api/smartlink/getProfile',
-        headers : [
+        source: '/api/smartlink/getProfile',
+        headers: [
           {
-            key : "Access-Control-Allow-Origin",
-            value : process.env.NEXT_PUBLIC_SMARTLINK_URL
+            key: 'Access-Control-Allow-Origin',
+            value: process.env.SMARTLINK_URL || '*'
           },
           {
-            key : "Access-Control-Allow-Methods",
-            value : "GET"
+            key: 'Access-Control-Allow-Methods',
+            value: 'GET'
           },
           {
-            key : "Access-Control-Allow-Headers",
-            value : "Content-Type"
+            key: 'Access-Control-Allow-Headers',
+            value: 'Content-Type'
           }
         ]
       },
       {
-        source : '/api/smartlink/getTrack',
-        headers : [
+        source: '/api/smartlink/getTrack',
+        headers: [
           {
-            key : "Access-Control-Allow-Origin",
-            value : process.env.NEXT_PUBLIC_SMARTLINK_URL
+            key: 'Access-Control-Allow-Origin',
+            value: process.env.SMARTLINK_URL || '*'
           },
           {
-            key : "Access-Control-Allow-Methods",
-            value : "GET"
+            key: 'Access-Control-Allow-Methods',
+            value: 'GET'
           },
           {
-            key : "Access-Control-Allow-Headers",
-            value : "Content-Type"
+            key: 'Access-Control-Allow-Headers',
+            value: 'Content-Type'
           }
         ]
       }
-    ]
+    ];
   }
 };
 

@@ -42,6 +42,8 @@ const Page = () => {
     setIsLoading(true);
     try {
       const response = await apiGet(`/api/marketing/fetchAlbumBymarketing?labelId=${labelId}`);
+    
+
       if (response.success) {
         setMarketingData(response.data);
       }

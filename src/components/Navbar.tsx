@@ -103,15 +103,16 @@ const Navbar = () => {
       }
     }
 
+    const sideBarElement = sideBarRef.current;
+
     document.addEventListener("mousedown", handleClickOutside);
-    sideBarRef.current?.addEventListener("mouseover",handleMouseOverOnSideBar)
-    sideBarRef.current?.addEventListener("mouseout",handleMouseOutFromSidebar)
-    
+    sideBarElement?.addEventListener("mouseover", handleMouseOverOnSideBar);
+    sideBarElement?.addEventListener("mouseout", handleMouseOutFromSidebar);
     
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
-      sideBarRef.current?.removeEventListener("mouseover",handleMouseOverOnSideBar)
-      sideBarRef.current?.removeEventListener("mouseout",handleMouseOutFromSidebar)
+      sideBarElement?.removeEventListener("mouseover", handleMouseOverOnSideBar);
+      sideBarElement?.removeEventListener("mouseout", handleMouseOutFromSidebar);
     };
   }, []);
 

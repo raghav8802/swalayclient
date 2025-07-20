@@ -4,6 +4,7 @@ import Track from "@/models/track";
 import { type NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
+  await connect();
   const isrc = request.nextUrl.searchParams.get("isrc");
 
   try {
@@ -15,11 +16,12 @@ export async function GET(request: NextRequest) {
       }
     );
 
+
     if (response.result) {
       await connect();
 
       const track = await Track.findOne({ isrc: isrc });
-      console.log("Track found:", track);
+
 
       if (!track) {
         return NextResponse.json(
@@ -50,6 +52,7 @@ export async function GET(request: NextRequest) {
       track.platformLinks = platformLinks;
 
       await track.save();
+
 
       return NextResponse.json({
         success: true,
