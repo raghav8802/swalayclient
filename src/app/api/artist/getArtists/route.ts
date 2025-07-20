@@ -9,7 +9,6 @@ export async function GET(request: NextRequest) {
         const labelId = request.nextUrl.searchParams.get("labelId");
         const limit = parseInt(request.nextUrl.searchParams.get("limit") || "0"); // Default to 0 if no limit provided
 
-        console.log("LabelId : " + labelId);
 
         if (!labelId) {
             return NextResponse.json({

@@ -8,13 +8,12 @@ import UserContext from "@/context/userContext";
 import Image from "next/image";
 import { Wallet } from "lucide-react";
 
-
-
 const Navbar = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<any[]>([]); // Stores search results from API
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [loading, setLoading] = useState(false); // To show loading state
+  const [isMobileView, setIsMobileView] = useState(false);
   const suggestionsRef = useRef<HTMLDivElement>(null);
   const sideBarRef = useRef<HTMLDivElement>(null)
 
@@ -45,26 +44,28 @@ const Navbar = () => {
   const handleSearch = React.useCallback(
     async (query: string) => {
       console.log("query : ", query);
-  
+
       if (!query) {
         setSearchResults([]);
         setShowSuggestions(false);
         return;
       }
-  
+
       if (query === "") {
         setSearchResults([]);
         setShowSuggestions(false);
         return;
       }
-  
+
       setLoading(true);
       try {
-        const response = await apiGet(`/api/search?query=${query}&labelid=${labelId}`);
-  
+        const response = await apiGet(
+          `/api/search?query=${query}&labelid=${labelId}`
+        );
+
         console.log("response : ");
         console.log(response);
-  
+
         if (response.success) {
           setSearchResults(response.data); // Store search results
           setShowSuggestions(true); // Show suggestions dropdown
@@ -82,7 +83,7 @@ const Navbar = () => {
     },
     [labelId] // Add dependencies here
   );
-  
+
   useEffect(() => {
     // Trigger search API if search term is not empty
     if (searchTerm.trim().length > 0) {
@@ -102,15 +103,16 @@ const Navbar = () => {
       }
     }
 
+    const sideBarElement = sideBarRef.current;
+
     document.addEventListener("mousedown", handleClickOutside);
-    sideBarRef.current?.addEventListener("mouseover",handleMouseOverOnSideBar)
-    sideBarRef.current?.addEventListener("mouseout",handleMouseOutFromSidebar)
-    
+    sideBarElement?.addEventListener("mouseover", handleMouseOverOnSideBar);
+    sideBarElement?.addEventListener("mouseout", handleMouseOutFromSidebar);
     
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
-      sideBarRef.current?.removeEventListener("mouseover",handleMouseOverOnSideBar)
-      sideBarRef.current?.removeEventListener("mouseout",handleMouseOutFromSidebar)
+      sideBarElement?.removeEventListener("mouseover", handleMouseOverOnSideBar);
+      sideBarElement?.removeEventListener("mouseout", handleMouseOutFromSidebar);
     };
   }, []);
 
@@ -126,6 +128,18 @@ const Navbar = () => {
     }
   }
 
+  useEffect(() => {
+  if (typeof window !== "undefined") {
+    const handleResize = () => {
+      setIsMobileView(window.innerWidth < 673);
+    };
+
+    handleResize(); // Set initially
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }
+}, []);
+
   return (
     <div>
       <header className="header">
@@ -133,7 +147,9 @@ const Navbar = () => {
           
           <Link href="/" className="header__logo">
             <Image
-              src={"https://swalay-music-files.s3.ap-south-1.amazonaws.com/assets/SwaLay-logo.png"}
+              src={
+                "https://swalay-music-files.s3.ap-south-1.amazonaws.com/assets/SwaLay-logo.png"
+              }
               alt="logo"
               width={100}
               height={70}
@@ -177,9 +193,13 @@ const Navbar = () => {
                         setShowSuggestions(false);
                         // Redirect to the appropriate page
                         if (result.type === "album") {
-                          router.push(`/albums/viewalbum/${btoa(result.albumId)}`);
+                          router.push(
+                            `/albums/viewalbum/${btoa(result.albumId)}`
+                          );
                         } else if (result.type === "track") {
-                          router.push(`/albums/viewalbum/${btoa(result.albumId)}`);
+                          router.push(
+                            `/albums/viewalbum/${btoa(result.albumId)}`
+                          );
                         }
                       }}
                     >
@@ -194,13 +214,7 @@ const Navbar = () => {
               )}
             </div>
             </div>
-              <Link
-                  href="/profile"
-                  className="nav__link ml-auto"
-                  onClick={handleLinkClick}
-                >
-                  <i className="bi bi-person flex mx-auto size-4 w-full"></i>
-              </Link>
+             
           </div>
 
           
@@ -220,7 +234,7 @@ const Navbar = () => {
           <div>
             <div className="overflow-hidden">
               <Link href="/" className="nav__link nav__logo">
-                <Image src={"https://swalay-music-files.s3.ap-south-1.amazonaws.com/assets/SwaLay-logo.png"} width={100} height={100} className={`max-w-[100px] m-auto ${window.innerWidth < 673 ? "opacity-100" : showLogo ? "" : "opacity-0 ease-in-out duration-500"}`}  alt="Logo"/>
+                <Image src={"https://swalay-music-files.s3.ap-south-1.amazonaws.com/assets/SwaLay-logo.png"} width={100} height={100} className={`max-w-[100px] m-auto ${isMobileView  ? "opacity-100" : showLogo ? "" : "opacity-0 ease-in-out duration-500"}`}  alt="Logo"/>
               </Link>
             </div>
             
@@ -252,7 +266,7 @@ const Navbar = () => {
                       >
                         New release
                       </Link>
-                      <Link href="/albums/all" className="nav__dropdown-item" onClick={handleLinkClick}>
+                      <Link href="/albums" className="nav__dropdown-item" onClick={handleLinkClick}>
                         Albums
                       </Link>
                       <Link href="/albums/draft" className="nav__dropdown-item" onClick={handleLinkClick}>
@@ -307,7 +321,7 @@ const Navbar = () => {
                   <i className="bi bi-mic nav__icon"></i>
                   <span className="nav__name">Artists</span>
                 </Link>
-                
+
                 <Link
                   href="/subscriptions"
                   className="nav__link "
@@ -315,7 +329,6 @@ const Navbar = () => {
                 >
                   <Wallet size={20} strokeWidth={1.75} className="nav__icon" />
                   <span className="nav__name">Subscriptions</span>
-
                 </Link>
 
                 {/* <Link
@@ -331,16 +344,28 @@ const Navbar = () => {
                   <i className="bi bi-chat-left nav__icon"></i>
                   <span className="nav__name">My Tickets</span>
                 </Link>
+
+                 <Link
+                  href="/profile"
+                  className="nav__link "
+                  onClick={handleLinkClick}
+                >
+                  <i className="bi bi-person nav__icon"></i>
+                  <span className="nav__name">Profile</span>
+                </Link>
+                {/* <Link href="/smartlink" className="nav__link">
+                  <i className="bi bi-link nav__icon"></i>
+                  <span className="nav__name">SmartLink</span>
+                </Link> */}
               </div>
             </div>
-
-
           </div>
 
           <div className="nav__link nav__logout" onClick={onLogout}>
             <i className="bi bi-box-arrow-left nav__icon"></i>
             <span className="nav__name">Log Out</span>
           </div>
+
         </nav>
       </div>
     </div>

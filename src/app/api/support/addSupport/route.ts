@@ -2,14 +2,17 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { connect } from '@/dbConfig/dbConfig';
-import Support from '@/models/support';
+import Support from '@/models/Support';
+import sendMail from '@/helpers/sendMail';
+import SupportTicketEmail from '@/components/Email/SupportTicketEmail';
+import React from 'react';
 
 export async function POST(req: NextRequest) {
   try {
     await connect();
 
     const body = await req.json();
-    const { name, email, labelId, subject, message, reply, status, field1, field2 } = body;
+    const { name, email, labelId, subject, message, status } = body;
 
     // Validate required fields
     if (!name || !email || !labelId || !subject || !message) {
@@ -45,13 +48,30 @@ export async function POST(req: NextRequest) {
       labelId,
       subject,
       message,
-      reply: reply || '',
       status: status || 'pending',
-      field1: field1 || '',
-      field2: field2 || ''
+      priority: 'medium',
+      category: 'general',
+      isClosed: false
     });
 
     const savedSupport = await newSupport.save();
+
+    // Send email notification
+    try {
+      await sendMail({
+        to: email,
+        subject: `Support Ticket Created - ${savedSupport.ticketId}`,
+        emailTemplate: React.createElement(SupportTicketEmail, {
+          clientName: name,
+          ticketId: savedSupport.ticketId,
+          subject: subject,
+          message: message
+        })
+      });
+    } catch (emailError) {
+      console.error('Error sending support ticket email:', emailError);
+      // Don't return error to client if email fails, just log it
+    }
 
     return NextResponse.json({
       message: "Thank you! We will reach out to you soon.",

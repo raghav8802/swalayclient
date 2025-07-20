@@ -11,7 +11,7 @@ interface ModalProps {
     onSave: () => void;
     onClose: () => void;
     children: ReactNode;
-
+    isLoading?: boolean;
 }
 
 export function Modal({
@@ -22,10 +22,10 @@ export function Modal({
     onSave,
     onClose,
     children,
+    isLoading = false,
 }: ModalProps) {
     return (
         <Dialog open={isVisible} onOpenChange={onClose}>
-            
             <DialogContent className={"sm:max-w-[750px]  max-h-screen"}>
                 <DialogHeader>
                     <DialogTitle>{title}</DialogTitle>
@@ -39,8 +39,10 @@ export function Modal({
                     {children}
                 </div>
                 <DialogFooter>
-                    <Button type="button" variant={"ghost"} onClick={onClose}>Close </Button>
-                    <Button type="button" onClick={onSave}>{triggerLabel}</Button>
+                    <Button type="button" variant={"ghost"} onClick={onClose} disabled={isLoading}>Close</Button>
+                    <Button type="button" onClick={onSave} disabled={isLoading}>
+                        {isLoading ? "Loading..." : triggerLabel}
+                    </Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

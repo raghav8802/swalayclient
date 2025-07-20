@@ -71,7 +71,9 @@ const Albums = () => {
 
       {/* new releases  */}
       <div className={`mt-3 mb-3  ${Style.newReleseContainer}`}>
-        <div className={` mb-3 flex-col md:flex-row gap-2 md:gap-4 self-start md:items-center ${Style.spaceBetween}`}>
+        <div
+          className={` mb-3 flex-col md:flex-row gap-2 md:gap-4 self-start md:items-center w-[100%] ${Style.spaceBetween}`}
+        >
           <h3 className="text-3xl font-bold text-blue-500">All Albums</h3>
 
           <Link href={"./albums/new-release"}>
@@ -79,7 +81,7 @@ const Albums = () => {
               className={Style.button}
               style={{ "--clr": color } as React.CSSProperties}
             >
-                 New Release
+              New Release
               <span className={Style.button__icon_wrapper}>
                 <svg
                   viewBox="0 0 14 15"
@@ -107,10 +109,8 @@ const Albums = () => {
                   ></path>
                 </svg>
               </span>
-           
             </button>
           </Link>
-
         </div>
 
         <div className={`mb-3`}>
@@ -121,7 +121,7 @@ const Albums = () => {
       {/* all music list  */}
 
       <div
-        className={`bg-white p-3 border rounded mt-5 ${Style.musicListContainer}`}
+        className={`bg-white p-3 rounded mt-5 ${Style.musicListContainer}`}
       >
         <div className={` ${Style.spaceBetween}`}>
           <h3 className={Style.titleHeading}>All releases</h3>

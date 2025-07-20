@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connect } from '@/dbConfig/dbConfig';
-import Support from '@/models/support';
+import Support from '@/models/Support';
 
 // Create a dynamic config for this route
 export const dynamic = 'force-dynamic';
@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
 
     const tickets = await Support.find({ labelId })
       .sort({ createdAt: -1 }) // Sort by newest first
-      .select('subject message reply status createdAt'); // Select only needed fields
+      .select('ticketId subject message status priority category isClosed createdAt'); // Include all necessary fields
 
     return NextResponse.json({
       success: true,

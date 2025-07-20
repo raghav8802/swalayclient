@@ -27,6 +27,45 @@ const nextConfig = {
   // This makes it possible to use dynamic features within API routes
   experimental: {
     serverComponentsExternalPackages: ['mongoose']
+  },
+
+  async headers() {
+    return [
+      {
+        source: '/api/smartlink/getProfile',
+        headers: [
+          {
+            key: 'Access-Control-Allow-Origin',
+            value: process.env.SMARTLINK_URL || '*'
+          },
+          {
+            key: 'Access-Control-Allow-Methods',
+            value: 'GET'
+          },
+          {
+            key: 'Access-Control-Allow-Headers',
+            value: 'Content-Type'
+          }
+        ]
+      },
+      {
+        source: '/api/smartlink/getTrack',
+        headers: [
+          {
+            key: 'Access-Control-Allow-Origin',
+            value: process.env.SMARTLINK_URL || '*'
+          },
+          {
+            key: 'Access-Control-Allow-Methods',
+            value: 'GET'
+          },
+          {
+            key: 'Access-Control-Allow-Headers',
+            value: 'Content-Type'
+          }
+        ]
+      }
+    ];
   }
 };
 

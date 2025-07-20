@@ -200,7 +200,7 @@ function Payment() {
       icon: <Globe className="h-5 w-5" />,
       description:
         "Tailored for labels, companies & bands – unlimited artist & track flexibility",
-      cycle: "Valid for 2 years",
+      cycle: "Valid for 1 years",
       startDate: new Date(2024, 3, 28),
       endDate: null,
       status: "active",

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import UserContext from "@/context/userContext";
 import { apiPost } from "@/helpers/axiosRequest";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 interface FormData {
   name: string;
@@ -13,27 +14,24 @@ interface FormData {
   subject: string;
   message: string;
   labelId?: string;
-  reply?: string;
   status?: string;
-  field1?: string;
-  field2?: string;
 }
 
 export default function Component() {
   const context = useContext(UserContext);
+  const router = useRouter();
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
     subject: "",
     message: "",
     labelId: "",
-    reply: "",
-    status: "pending",
-    field1: "",
-    field2: ""
+    status: "pending"
   });
 
   const [error, setError] = useState<string | null>(null);
+  const [ticketId, setTicketId] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (context?.user) {
@@ -43,10 +41,7 @@ export default function Component() {
         subject: "",
         message: "",
         labelId: context.user._id || "",
-        reply: "",
-        status: "pending",
-        field1: "",
-        field2: ""
+        status: "pending"
       });
     }
   }, [context]);
@@ -63,9 +58,11 @@ export default function Component() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setIsSubmitting(true);
 
     if (!formData.subject || !formData.message) {
       setError("All fields are required.");
+      setIsSubmitting(false);
       return;
     }
 
@@ -73,14 +70,28 @@ export default function Component() {
       const response = await apiPost("/api/support/addSupport", formData);
 
       if (response.success) {
+        setTicketId(response.data.ticketId);
         toast.success("Thank You! We will be in touch with you shortly.");
-        setFormData({ ...formData, subject: "", message: "" });
+        
+        // Clear form data except user info
+        setFormData(prev => ({
+          ...prev,
+          subject: "",
+          message: ""
+        }));
+
+        // Redirect after 5 seconds
+        setTimeout(() => {
+          router.push("/my-tickets");
+        }, 5000);
       } else {
         toast.error(response.message);
         setError("Failed to send the message. Please try again.");
       }
     } catch (err) {
       setError("An error occurred. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -99,62 +110,76 @@ export default function Component() {
             <CardTitle>Contact Us</CardTitle>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label htmlFor="name">Name</label>
-                  <input
-                    id="name"
-                    type="text"
-                    value={formData.name}
-                    onChange={handleChange}
-                    className="form-control"
-                    required
-                    readOnly
-                  />
-                </div>
+            {ticketId ? (
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+                <h3 className="text-lg font-semibold text-green-800 mb-2">Ticket Created Successfully!</h3>
+                <p className="text-green-700">Your ticket ID is: <span className="font-mono font-bold">{ticketId}</span></p>
+                <p className="text-sm text-green-600 mt-2">
+                  You will be redirected to your tickets page in a few seconds...
+                </p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label htmlFor="name">Name</label>
+                    <input
+                      id="name"
+                      type="text"
+                      value={formData.name}
+                      onChange={handleChange}
+                      className="form-control"
+                      required
+                      readOnly
+                    />
+                  </div>
 
+                  <div className="space-y-2">
+                    <label htmlFor="email">Email</label>
+                    <input
+                      id="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="form-control"
+                      required
+                      readOnly
+                    />
+                  </div>
+                </div>
                 <div className="space-y-2">
-                  <label htmlFor="email">Email</label>
+                  <label htmlFor="subject">Subject</label>
                   <input
-                    id="email"
-                    type="email"
-                    value={formData.email}
+                    id="subject"
+                    type="text"
+                    placeholder="Briefly describe your issue"
+                    value={formData.subject}
                     onChange={handleChange}
-                    className="form-control"
+                    className="form-control w-full"
                     required
-                    readOnly
                   />
                 </div>
-              </div>
-              <div className="space-y-2">
-                <label htmlFor="subject">Subject</label>
-                <input
-                  id="subject"
-                  type="text"
-                  placeholder="Briefly describe your issue"
-                  value={formData.subject}
-                  onChange={handleChange}
-                  className="form-control"
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <label htmlFor="message">Message</label>
-                <textarea
-                  id="message"
-                  placeholder="Provide more details about your request"
-                  value={formData.message}
-                  onChange={handleChange}
-                  className="min-h-[150px] form-control"
-                  required
-                />
-              </div>
-              {error && <p className="text-red-500">{error}</p>}
-              <Button type="submit" className="w-full btn btn-primary">
-                Submit
-              </Button>
-            </form>
+                <div className="space-y-2">
+                  <label htmlFor="message">Message</label>
+                  <textarea
+                    id="message"
+                    placeholder="Provide more details about your request"
+                    value={formData.message}
+                    onChange={handleChange}
+                    className="min-h-[150px] form-control w-full"
+                    required
+                  />
+                </div>
+                {error && <p className="text-red-500">{error}</p>}
+                <Button 
+                  type="submit" 
+                  className="w-full btn btn-primary"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Submitting..." : "Submit"}
+                </Button>
+              </form>
+            )}
           </CardContent>
         </Card>
         <Card>
@@ -162,7 +187,6 @@ export default function Component() {
             <CardTitle>Contact Information</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            
             <div>
               <h3 className="font-semibold">Phone</h3>
               <p>

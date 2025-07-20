@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
   try {
     const reqBody = await request.json();
 
-    const { username, email, password, contact, userType } = reqBody;
+    const { username, email, password, contact, userType, labelName } = reqBody;
 
     if (!username || !email || !contact) {
 
@@ -41,12 +41,12 @@ export async function POST(request: NextRequest) {
     const hashedPassword = await bcryptjs.hash(password, 10);
 
     let labelType = "normal";
-    let MusicLabelName = "";
+    let MusicLabelName = "SwaLay Digital";
 
 
     if (userType === "label") {
       labelType = "super";
-      MusicLabelName = username;
+      MusicLabelName = labelName;
     }
 
 

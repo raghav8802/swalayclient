@@ -7,12 +7,12 @@ import { apiGet, apiPost } from "@/helpers/axiosRequest";
 import toast from "react-hot-toast";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
 import { useTrackContext } from "@/context/TrackContext";
+
 // import { onShare } from "@/helpers/urlShare";
 
 interface TrackListProps {
   trackId: string;
 }
-
 
 interface ArtistDetail {
   _id: string;
@@ -34,10 +34,7 @@ interface TrackDetail {
   duration: string | null;
   crbt: string | null;
   platformLinks: {
-    SpotifyLink: string | null;
-    AppleLink: string | null;
-    Instagram: string | null;
-    Facebook: string | null;
+    [key: string]: string | null;
   } | null;
   category: string | null;
   version: string | null;
@@ -46,29 +43,29 @@ interface TrackDetail {
   albumStatus: number;
 }
 
-
-const TrackDetails: React.FC<TrackListProps> = ({
-  trackId
-}) => {
+const TrackDetails: React.FC<TrackListProps> = ({ trackId }) => {
   const [trackDetails, setTrackDetails] = useState<TrackDetail | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { setAudioInfo, setShowAudioPlayer } = useTrackContext();
+
+  const [isLinkFetching, setIsLinkFetching] = useState(false);
+
 
   const fetchTrackDetails = React.useCallback(async () => {
     try {
       const response = await apiGet(
         `/api/track/getTrackDetails?trackId=${trackId}`
       );
-  
+      
       if (response.success) {
         setTrackDetails(response.data);
-        
+
         if (response.data.audioFile) {
           const audioUrl = `${process.env.NEXT_PUBLIC_AWS_S3_FOLDER_PATH}albums/07c1a${response.data.albumId}ba3/tracks/${response.data.audioFile}`;
           setShowAudioPlayer(true);
           setAudioInfo({
             songName: response.data.songName || "",
-            songUrl: audioUrl
+            songUrl: audioUrl,
           });
         }
       }
@@ -108,8 +105,6 @@ const TrackDetails: React.FC<TrackListProps> = ({
   };
 
   const handleContinue = async () => {
-
-
     try {
       const response = await apiPost("/api/track/deleteTrack", { trackId });
 
@@ -120,8 +115,36 @@ const TrackDetails: React.FC<TrackListProps> = ({
         toast.error(response.message);
       }
     } catch (error) {
- 
       toast.error("Internal server error");
+    }
+  };
+
+  const handleFetchLinks = async () => {
+    console.log("Fetching links for ISRC:");
+
+    if (!trackDetails || !trackDetails.isrc) {
+      toast.error("ISRC is required to fetch links");
+      return;
+    }
+    setIsLinkFetching(true);
+
+    try {
+      const response = await apiGet(
+        `/api/track/getTrackLinks?isrc=${trackDetails.isrc}`
+      );
+      console.log("Response from getTrackLinks:", response);
+      if (response.success) {
+        toast.success("Track links fetched successfully");
+        window.location.reload();
+        return;
+      }
+
+      toast.error(response.message || "Failed to fetch track links");
+    } catch (error) {
+      toast.error("Internal server error");
+      console.error("Error fetching track links:", error);
+    } finally{
+      setIsLinkFetching(false);
     }
   };
 
@@ -184,7 +207,7 @@ const TrackDetails: React.FC<TrackListProps> = ({
             )}
         </div>
       </div>
-      <div className={`mt-2 ${Style.currentTrackDetails} `}>
+      <div className={`mt-2 ${Style.currentTrackDetails} overflow-auto `}>
         {/* <p className={`mb-3 ${Style.trackInfoTrackName}`}><span className={Style.trackNameLable}>Track Name: </span> Lost in Mountain</p> */}
         <p className={`mb-3 ${Style.trackInfoTrackName}`}>
           <i className={`bi bi-music-note-list ${Style.trackNameIcon}`}></i>
@@ -215,6 +238,7 @@ const TrackDetails: React.FC<TrackListProps> = ({
             <TabsList>
               <TabsTrigger value="track">Track Info</TabsTrigger>
               <TabsTrigger value="publishiling">Publishing Info</TabsTrigger>
+              <TabsTrigger value="links">Track Links</TabsTrigger>
             </TabsList>
             <TabsContent value="track">
               <div className={`mt-2  ${Style.trackInfoListContainer}`}>
@@ -275,7 +299,6 @@ const TrackDetails: React.FC<TrackListProps> = ({
             <TabsContent value="publishiling">
               <div className={`mt-2  ${Style.trackInfoListContainer}`}>
                 <ul className="p-6 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-xl shadow-md space-y-4">
-                  
                   {/* Primary Singer with special highlight */}
                   {trackDetails?.primarySinger && (
                     <li className="flex flex-col">
@@ -323,15 +346,11 @@ const TrackDetails: React.FC<TrackListProps> = ({
                       Featured
                     </span>
                     <div className="flex flex-wrap items-center">
-
                       {trackDetails?.featuredArtist && (
-                        <span
-                          className="inline-flex items-center"
-                        >
-                            {trackDetails.featuredArtist}   
+                        <span className="inline-flex items-center">
+                          {trackDetails.featuredArtist}
                         </span>
                       )}
-
                     </div>
                   </li>
 
@@ -412,6 +431,60 @@ const TrackDetails: React.FC<TrackListProps> = ({
                       ))}
                     </div>
                   </li>
+                </ul>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="links">
+              <div className={`mt-2  ${Style.trackInfoListContainer}`}>
+                <ul className="p-6  space-y-4">
+                  {trackDetails?.platformLinks ? (
+                    <>
+                      {(
+                        Object.keys(trackDetails.platformLinks) as Array<
+                          keyof typeof trackDetails.platformLinks
+                        >
+                      ).map((key, i) => {
+                        const link =
+                          (trackDetails.platformLinks &&
+                            trackDetails.platformLinks[key]) ||
+                          "";
+                        if (!link) return null; // Skip if link is null
+
+                        if ((key as string) === "_id") return null; // Skip if key is _id
+
+                        return (
+                          <li key={i} className="flex flex-col">
+                            <span className="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 me-2">
+                              {key}
+                            </span>
+                            <a
+                              href={link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition duration-200"
+                            >
+                              {link}
+                            </a>
+                          </li>
+                        );
+                      })}
+                    </>
+                  ) : (
+                    <li className="text-gray-500 dark:text-gray-400 ">
+                      <p className="mb-6 mt-3 text-center">No links available for this track.</p>
+                      <div className="flex justify-center items-center ">
+                        <button
+                          className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition duration-200 "
+                          style={{ display: "block", marginLeft: "auto", marginRight: "auto" }}
+                          onClick={handleFetchLinks}
+                          disabled={isLinkFetching}
+                        >
+                          {isLinkFetching ? "Fetching..." : "Fetch Live Links"}
+                        </button>
+                      </div>
+                    </li>
+                  )}
                 </ul>
               </div>
             </TabsContent>
