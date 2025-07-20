@@ -8,20 +8,16 @@ import toast from "react-hot-toast";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AlertCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const UpdateUniqueUsernameModal = ({
   onClose,
   isVisible,
-  setIsVisible
 }: {
   onClose: () => void;
   isVisible: boolean;
-  setIsVisible : Dispatch<SetStateAction<boolean>>
 }) => {
-<<<<<<< HEAD
-=======
   const router = useRouter();
->>>>>>> 74b58952eac953cf03c38a115fd2871b3a5d1155
   const context = useContext(UserContext);
 
   const labelId = context?.user?._id ?? "";
@@ -58,17 +54,9 @@ const UpdateUniqueUsernameModal = ({
       });
       
       if (response.success) {
-<<<<<<< HEAD
-        toast.success("Username Updated Successfully");
-        setIsVisible(false)
-        setTimeout(()=>{
-          window.location.reload()
-        },1000)
-=======
         toast.success("Username updated successfully");
         router.refresh();
         onClose();
->>>>>>> 74b58952eac953cf03c38a115fd2871b3a5d1155
       } else {
         setError(response.message || "Failed to update username");
         toast.error(response.message);

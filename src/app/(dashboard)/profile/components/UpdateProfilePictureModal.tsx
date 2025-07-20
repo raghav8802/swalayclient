@@ -3,7 +3,8 @@ import { Modal } from "@/components/Modal";
 import { Button } from "@/components/ui/button";
 import UserContext from "@/context/userContext";
 import { apiFormData } from "@/helpers/axiosRequest";
-import React, { Dispatch, SetStateAction, useContext, useState } from "react";
+import { useRouter } from "next/navigation";
+import React, { useContext, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import toast from "react-hot-toast";
 import Image from "next/image";
@@ -11,17 +12,13 @@ import Image from "next/image";
 const UpdateProfilePictureModal = ({
   isVisible,
   onClose,
-<<<<<<< HEAD
-  setIsVisible,
-=======
   onSuccess,
->>>>>>> 74b58952eac953cf03c38a115fd2871b3a5d1155
 }: {
   isVisible: boolean;
-  setIsVisible : Dispatch<SetStateAction<boolean>>
   onClose: () => void;
   onSuccess?: () => void;
 }) => {
+  const router = useRouter();
   const context = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -103,19 +100,10 @@ const UpdateProfilePictureModal = ({
       
       if (response.success) {
         toast.success("Profile Picture updated successfully");
-<<<<<<< HEAD
-        toast.dismiss(loadingToastId);
-        setIsVisible(false)
-        setProfilePicture(null);
-        setTimeout(()=>{
-          window.location.reload()
-        },1000)
-=======
         setProfilePicture(null);
         onSuccess?.(); // Call the success callback if provided
         onClose(); // Close the modal
         router.refresh(); // Refresh the page data
->>>>>>> 74b58952eac953cf03c38a115fd2871b3a5d1155
       } else {
         toast.error(response.message || "Failed to update profile picture");
       }
@@ -123,13 +111,10 @@ const UpdateProfilePictureModal = ({
       toast.error(
         (error as Error).message || "An error occurred while updating details"
       );
-<<<<<<< HEAD
-    } 
-=======
-    } finally {
+    }
+      finally {
       setIsLoading(false);
     }
->>>>>>> 74b58952eac953cf03c38a115fd2871b3a5d1155
   };
 
   return (

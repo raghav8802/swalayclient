@@ -5,13 +5,9 @@ import UserContext from "@/context/userContext";
 import { apiFormData } from "@/helpers/axiosRequest";
 import { useContext, useState, useEffect } from "react";
 import toast from "react-hot-toast";
-<<<<<<< HEAD
-=======
-
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AlertCircle } from "lucide-react";
->>>>>>> 74b58952eac953cf03c38a115fd2871b3a5d1155
 
 interface EditLabelDetailsForSmartLink {
   bio?: string;
@@ -40,11 +36,6 @@ const LableDetailsEditModal = ({
   };
   onSuccess?: () => void;
 }) => {
-<<<<<<< HEAD
-
-  const context = useContext(UserContext);
-=======
->>>>>>> 74b58952eac953cf03c38a115fd2871b3a5d1155
 
   const context = useContext(UserContext);
   const labelId = context?.user?._id ?? "";
@@ -138,26 +129,9 @@ const LableDetailsEditModal = ({
       const response = await apiFormData("/api/user/updateLabelDetails", formData);
 
       if (response.success) {
-<<<<<<< HEAD
-        setDetails({
-          profilePicture: null,
-          bio: "",
-          instagram: "",
-          facebook: "",
-          ytMusic: "",
-          spotify: "",
-          appleMusic: "",
-        });
-        // setSelectedTags([]);
-        toast.success("Details updated successfully")
-        setTimeout(()=>{
-          window.location.reload()
-        },1000)
-=======
         toast.success("Details updated successfully");
         onSuccess?.();
         onClose();
->>>>>>> 74b58952eac953cf03c38a115fd2871b3a5d1155
       } else {
         toast.error(response.message || "Failed to update details");
       }

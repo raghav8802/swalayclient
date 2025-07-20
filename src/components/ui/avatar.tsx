@@ -1,10 +1,7 @@
 "use client"
 
 /* eslint-disable react/prop-types */
-<<<<<<< HEAD
 
-=======
->>>>>>> 74b58952eac953cf03c38a115fd2871b3a5d1155
 import * as React from "react"
 import * as AvatarPrimitive from "@radix-ui/react-avatar"
 
