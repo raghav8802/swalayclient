@@ -134,11 +134,11 @@ const AlbumForm: React.FC = () => {
       const selectedDate = new Date(value);
       const today = new Date();
       const fiveDaysFromNow = new Date();
-      fiveDaysFromNow.setDate(today.getDate() + 5);
+      fiveDaysFromNow.setDate(today.getDate() + 7);
 
       if (selectedDate >= today && selectedDate <= fiveDaysFromNow) {
         toast.error(
-          "Release date must be at least 5 days from today To ensure smooth content delivery and an on-time album release"
+          "Release date must be at least 7 days from today To ensure smooth content delivery and an on-time album release"
         );
       }
     }
@@ -391,7 +391,7 @@ const AlbumForm: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+               
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
                       Release Date{" "}
@@ -400,6 +400,9 @@ const AlbumForm: React.FC = () => {
                         title="Required field"
                       ></span>
                     </label>
+                    <span className="block text-xs text-yellow-600 my-2">
+                      Note: Release date must be at least 7 days from today to ensure smooth content delivery and an on-time album release
+                    </span>
                     <input
                       type="date"
                       name="releaseDate"
@@ -635,6 +638,7 @@ const AlbumForm: React.FC = () => {
                     )}
                   </div>
 
+ <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
                       P Line{" "}
