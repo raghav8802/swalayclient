@@ -1,23 +1,31 @@
-import React, { useState, useRef, useEffect } from "react";
-// import Style from './AudioPlayer.module.css';
+import React, { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import Style from "../../../../../styles/ViewAlbums.module.css";
 import { useTrackContext } from "@/context/TrackContext";
+import { Play, Pause } from "lucide-react";
 
 interface AudioPlayerProps {
   trackName: string;
   audioSrc: string;
 }
 
-const AudioPlayer: React.FC<AudioPlayerProps> = ({ trackName, audioSrc }) => {
+// ✅ Memoized AudioPlayer to prevent unnecessary re-renders
+const AudioPlayer: React.FC<AudioPlayerProps> = React.memo(({ trackName, audioSrc }) => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const { audioInfo } = useTrackContext();
 
-  // Use the actual values from context
-  const actualTrackName = audioInfo.songName || trackName;
-  const actualAudioSrc = audioInfo.songUrl || audioSrc;
+  // ✅ Memoized actual values to prevent recalculation
+  const actualTrackName = useMemo(() => 
+    audioInfo.songName || trackName, 
+    [audioInfo.songName, trackName]
+  );
+  
+  const actualAudioSrc = useMemo(() => 
+    audioInfo.songUrl || audioSrc, 
+    [audioInfo.songUrl, audioSrc]
+  );
 
   useEffect(() => {
     // Reset playback when trackName changes
@@ -30,7 +38,8 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ trackName, audioSrc }) => {
   }, [actualTrackName, actualAudioSrc]);
   
 
-  const togglePlay = () => {
+  // ✅ Memoized callbacks to prevent re-creation
+  const togglePlay = useCallback(() => {
     if (!audioRef.current) return;
 
     const prevValue = isPlaying;
@@ -40,57 +49,70 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ trackName, audioSrc }) => {
     } else {
       audioRef.current.pause();
     }
-  };
+  }, [isPlaying]);
 
-  const onLoadedMetadata = () => {
+  const onLoadedMetadata = useCallback(() => {
     if (audioRef.current) {
       setDuration(audioRef.current.duration);
     }
-  };
+  }, []);
 
-  const onTimeUpdate = () => {
+  const onTimeUpdate = useCallback(() => {
     if (audioRef.current) {
       setCurrentTime(audioRef.current.currentTime);
     }
-  };
+  }, []);
 
-  const handleRangeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleRangeChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if (audioRef.current) {
-      audioRef.current.currentTime = Number(e.target.value);
-      setCurrentTime(Number(e.target.value));
+      const newTime = Number(e.target.value);
+      audioRef.current.currentTime = newTime;
+      setCurrentTime(newTime);
     }
-  };
+  }, []);
 
-  const formatTime = (time: number): string => {
+  // ✅ Memoized time formatting function
+  const formatTime = useCallback((time: number): string => {
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
     return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
-  };
+  }, []);
 
-  const onEnded = () => {
+  const onEnded = useCallback(() => {
     setCurrentTime(0);
     setIsPlaying(false);
-  };
+  }, []);
+
+  // ✅ Memoized formatted times
+  const formattedCurrentTime = useMemo(() => formatTime(currentTime), [formatTime, currentTime]);
+  const formattedDuration = useMemo(() => formatTime(duration), [formatTime, duration]);
+
+  // ✅ Memoized truncated track name
+  const displayTrackName = useMemo(() => {
+    return actualTrackName.length > 50
+      ? `${actualTrackName.substring(0, 50)}...`
+      : actualTrackName;
+  }, [actualTrackName]);
 
 
   return (
     <div className={`border ${Style.MusicPlayerBox}`}>
       <div className={Style.MusicPlayercontainer}>
         <div className={Style.trackControllerButtonGroup}>
-          {/* <i className="bi bi-rewind-fill ms-2"></i> */}
           <div
             className={`mx-5 ${Style.trackControllerMusicPlayRound}`}
             onClick={togglePlay}
           >
-            <i
-              className={`bi ${isPlaying ? "bi-pause-fill" : "bi-play-fill"}`}
-            ></i>
+            {isPlaying ? (
+              <Pause size={20} />
+            ) : (
+              <Play size={20} />
+            )}
           </div>
-          {/* <i className="me-2 bi bi-fast-forward-fill"></i> */}
         </div>
 
         <div className={Style.rangeContainer}>
-          <span className="me-3">{formatTime(currentTime)}</span>
+          <span className="me-3">{formattedCurrentTime}</span>
           <input
             type="range"
             name="progress"
@@ -102,13 +124,11 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ trackName, audioSrc }) => {
             className={Style.progress}
             id="myRange"
           />
-          <span className="ms-3">{formatTime(duration)}</span>
+          <span className="ms-3">{formattedDuration}</span>
         </div>
 
         <p className={`m-0 ${Style.playingTrack}`}>
-          {actualTrackName.length > 50
-            ? `${actualTrackName.substring(0, 50)}...`
-            : actualTrackName}
+          {displayTrackName}
         </p>
 
         <audio
@@ -121,6 +141,8 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ trackName, audioSrc }) => {
       </div>
     </div>
   );
-};
+});
+
+AudioPlayer.displayName = 'AudioPlayer';
 
 export default AudioPlayer;

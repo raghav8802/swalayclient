@@ -3,7 +3,7 @@ import Album, { AlbumStatus } from '@/models/albums';
 import { connect } from '@/dbConfig/dbConfig';
 import TotalBalance from '@/models/totalBalance';
 import Artist from '@/models/Artists';
-
+import { apiCache, generateCacheKey } from '@/lib/cache';
 
 export async function GET(request: NextRequest) {
   try {
@@ -19,36 +19,40 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    // Get all album IDs under the specific labelId
+    // ✅ Generate cache key
+    const cacheKey = generateCacheKey('numbers', { labelId });
+    
+    // ✅ Check cache first
+    const cached = apiCache.get(cacheKey);
+    if (cached) {
+      console.log(`✅ Cache hit: ${cacheKey}`);
+      return NextResponse.json(cached);
+    }
+
+    // ✅ Execute expensive queries
     const albumIds = await Album.find({ labelId }).distinct('_id');
-
-    // Count the total albums
     const totalAlbums = albumIds.length;
-
-    // Count the unique artists under the labelId
     const totalArtists = await Artist.countDocuments({ labelId });
-
-    // Fetch the total balance for the specific labelId
     const totalBalance = await TotalBalance.findOne({ labelId }).then(balance => balance ? balance.totalBalance : 0);
-    
-    
-
-    // Count the albums with status 'Processing'
     const upcomingReleases = await Album.countDocuments({ labelId, status: AlbumStatus.Processing });
 
-    const data = {
-      totalAlbums,
-      totalArtist: totalArtists,
-      totalBalance,
-      upcomingReleases,
-    };
-
-    return NextResponse.json({
+    const result = {
       message: "Numbers are fetched",
       success: true,
       status: 200,
-      data: data,
-    });
+      data: {
+        totalAlbums,
+        totalArtist: totalArtists,
+        totalBalance,
+        upcomingReleases,
+      }
+    };
+
+    // ✅ Cache for 5 minutes (dashboard stats)
+    apiCache.set(cacheKey, result, 5 * 60 * 1000);
+    console.log(`💾 Cache set: ${cacheKey}`);
+
+    return NextResponse.json(result);
 
   } catch (error) {
     return NextResponse.json({

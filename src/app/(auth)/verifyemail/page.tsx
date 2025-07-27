@@ -75,6 +75,10 @@ const Page = () => {
                 width={100}
                 height={100}
                 alt="Loading"
+                priority={true} // For critical images
+                sizes="(max-width: 768px) 100vw, 50vw"
+                placeholder="blur"
+                blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQ..."
                 style={{  marginTop: "20px"}}
               />
 

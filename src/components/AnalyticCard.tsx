@@ -1,10 +1,11 @@
 import React from "react";
 import Style from "../app/styles/AnalyticCard.module.css";
+import { LucideIcon } from "lucide-react";
 
 interface AnalyticCardProps {
   title: string;
   value: string | number;
-  icon: string; // Dynamic icon from react-icons
+  icon: LucideIcon; // Lucide-react icon component
   trend?: "up" | "down" | "neutral"; // Optional trend indicator
   iconColor?: string; // Custom icon color
 }
@@ -12,7 +13,7 @@ interface AnalyticCardProps {
 const AnalyticCard: React.FC<AnalyticCardProps> = ({
   title,
   value,
-  icon,
+  icon: Icon,
   iconColor = "#6aff67", // Default purple (tailwind indigo-600)
 }) => {
   return (
@@ -21,10 +22,11 @@ const AnalyticCard: React.FC<AnalyticCardProps> = ({
         <p className={`${Style.CardHeader}`}>{title} </p>
         <p className={Style.CardNumber}>{value}</p>
       </div>
-      {/* <i className={`bi bi-arrow-up-right-circle-fill me-4 ${Style.CardIcon}`}></i> */}
-      <i className={`${icon} me-4 ${Style.CardIcon} `} 
+      <Icon 
+        size={24} 
+        className={`me-4 ${Style.CardIcon}`}
         style={{ color: iconColor }} 
-      ></i>
+      />
     </div>
   );
 };

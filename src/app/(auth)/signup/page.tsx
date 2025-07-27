@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { apiPost } from "@/helpers/axiosRequest";
+import { Eye, EyeOff } from "lucide-react";
 
 
 const SignupPage = () => {
@@ -389,7 +390,7 @@ const SignupForm = ({
               className="absolute inset-y-0 right-3 flex items-center cursor-pointer"
               onClick={() => setShowPassword(!showPassword)}
             >
-              <i className={`bi ${showPassword ? 'bi-eye-slash' : 'bi-eye'}`}></i>
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </span>
           </div>
           {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
@@ -412,7 +413,7 @@ const SignupForm = ({
               className="absolute inset-y-0 right-3 flex items-center cursor-pointer"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
             >
-              <i className={`bi ${showConfirmPassword ? 'bi-eye-slash' : 'bi-eye'}`}></i>
+              {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </span>
           </div>
           {errors.confirmPassword && <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>}

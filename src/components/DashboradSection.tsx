@@ -8,6 +8,19 @@ import { apiGet } from "@/helpers/axiosRequest";
 import { NotificationSection } from "./NotificationSection";
 import Image from "next/image";
 import AnalyticCard from "./AnalyticCard";
+import { 
+  TrendingUp, 
+  Mic, 
+  Wallet, 
+  Music, 
+  Plus, 
+  Inbox, 
+  IndianRupee, 
+  Users, 
+  Headphones, 
+  Edit, 
+  User 
+} from "lucide-react";
 
 interface Stats {
   albums: number;
@@ -141,27 +154,27 @@ export default function DashboradSection() {
             <AnalyticCard
               title="Total Releases"
               value={stats.albums}
-              icon="bi bi-arrow-up-right-circle-fill"
+              icon={TrendingUp}
               iconColor="#3b82f6" // Blue
             />
             <AnalyticCard
               title="Total Artists"
               value={stats.artists}
-              icon="bi bi-mic-fill"
+              icon={Mic}
               iconColor="#3b82f6" // Blue
             />
 
             <AnalyticCard
               title="Revenue"
               value={`₹ ${stats.balance}`}
-              icon="bi bi-wallet2"
+              icon={Wallet}
               iconColor="#3b82f6" // Blue
             />
 
             <AnalyticCard
               title="Upcoming Releases"
               value={stats.upcomingReleases}
-              icon="bi bi-music-note-beamed"
+              icon={Music}
               iconColor="#3b82f6" // Blue
             />
           </div>
@@ -184,7 +197,7 @@ export default function DashboradSection() {
                           className="flex flex-col items-center gap-2 group"
                         >
                           <div className="bg-[#8B5CF6] rounded-full QuickAccessItem group-hover:bg-[#7C3AED] transition-colors">
-                            <i className="bi bi-plus-circle QuickAccessItemIcon text-white"></i>
+                            <Plus size={24} className="QuickAccessItemIcon text-white" />
                           </div>
                           <span className="text-sm text-[#8B5CF6] group-hover:text-[#7C3AED] transition-colors">
                             New Release
@@ -196,7 +209,7 @@ export default function DashboradSection() {
                           className=" flex flex-col items-center gap-2 group"
                         >
                           <div className="QuickAccessItem bg-[#6366F1] rounded-full group-hover:bg-[#4F46E5] transition-colors">
-                            <i className="QuickAccessItemIcon bi bi-inbox text-white"></i>
+                            <Inbox size={24} className="QuickAccessItemIcon text-white" />
                           </div>
                           <span className="text-sm text-[#6366F1] group-hover:text-[#4F46E5] transition-colors">
                             Releases
@@ -208,7 +221,7 @@ export default function DashboradSection() {
                           className="flex flex-col items-center gap-2 group"
                         >
                           <div className="QuickAccessItem bg-[#10B981] rounded-full  group-hover:bg-[#059669] transition-colors">
-                            <i className="bi bi-currency-rupee QuickAccessItemIcon text-white"></i>
+                            <IndianRupee size={24} className="QuickAccessItemIcon text-white" />
                           </div>
                           <span className="text-sm text-[#10B981] group-hover:text-[#059669] transition-colors">
                             Earnings
@@ -220,7 +233,7 @@ export default function DashboradSection() {
                     className="flex flex-col items-center gap-2 group"
                     >
                     <div className="bg-[#EC4899] rounded-full QuickAccessItem group-hover:bg-[#D8336D] transition-colors">
-                    <i className="bi bi-people QuickAccessItemIcon text-white"></i>
+                                                <Users size={24} className="QuickAccessItemIcon text-white" />
                     </div>
                     <span className="text-sm text-[#EC4899] group-hover:text-[#D8336D] transition-colors">
                     Artists
@@ -232,7 +245,7 @@ export default function DashboradSection() {
                           className="flex flex-col items-center gap-2 group"
                         >
                           <div className="bg-[#3B82F6] rounded-full QuickAccessItem group-hover:bg-[#2563EB] transition-colors">
-                            <i className="bi bi-headset QuickAccessItemIcon text-white"></i>
+                            <Headphones size={24} className="QuickAccessItemIcon text-white" />
                           </div>
                           <span className="text-sm text-[#3B82F6] group-hover:text-[#2563EB] transition-colors">
                             Support
@@ -337,7 +350,7 @@ export default function DashboradSection() {
                                 href={`/albums/viewalbum/${btoa(album._id)}`}
                                 className="text-sm font-medium"
                               >
-                                <i className="bi bi-pencil-square"></i>
+                                <Edit size={16} />
                               </Link>
                             </div>
                           ))}
@@ -396,7 +409,7 @@ export default function DashboradSection() {
                                   </div>
                                 </div>
 
-                                <i className="bi bi-person-fill"></i>
+                                <User size={16} />
                               </Link>
                             </div>
                           ))}

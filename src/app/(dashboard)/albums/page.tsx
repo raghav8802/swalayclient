@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from "react";
 
 import Style from "../../styles/Albums.module.css";
 import Link from "next/link";
-import { AlbumDataTable } from "./components/AlbumDataTable";
+import { OptimizedAlbumDataTable } from "./components/OptimizedAlbumDataTable";
 import UserContext from "@/context/userContext";
 import toast from "react-hot-toast";
 import { apiGet } from "@/helpers/axiosRequest";
@@ -129,7 +129,7 @@ const Albums = () => {
 
         <div className={Style.musicList}>
           {albumList ? (
-            <AlbumDataTable data={albumList} />
+            <OptimizedAlbumDataTable data={albumList} height={600} />
           ) : (
             <h3 className="text-center mt-4">No Albums found</h3>
           )}

@@ -1,14 +1,53 @@
 "use client";
-import React, { useContext, useState, useRef, useEffect } from "react";
-import "bootstrap-icons/font/bootstrap-icons.css";
+import React, { useContext, useState, useRef, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
 import { apiGet, apiPost } from "@/helpers/axiosRequest";
 import { useRouter } from "next/navigation";
 import UserContext from "@/context/userContext";
 import Image from "next/image";
-import { Wallet } from "lucide-react";
+import { useDebounce } from "@/hooks/useDebounce";
+import { 
+  Wallet, 
+  X, 
+  Menu, 
+  Home, 
+  Disc, 
+  ChevronDown, 
+  Megaphone, 
+  Banknote, 
+  Youtube, 
+  Mic, 
+  User, 
+  MessageSquare, 
+  LogOut 
+} from "lucide-react";
 
-const Navbar = () => {
+// ✅ Memoized search result item to prevent re-renders
+const SearchResultItem = React.memo(({ 
+  result, 
+  index, 
+  onSelect 
+}: { 
+  result: any; 
+  index: number; 
+  onSelect: (result: any) => void;
+}) => (
+  <div
+    key={index}
+    className="cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-indigo-600 hover:text-white"
+    onClick={() => onSelect(result)}
+  >
+    <Link href="#">
+      {result.type === "album"
+        ? `Album: ${result.albumName}`
+        : `Track: ${result.trackName} (Album: ${result.albumName})`}
+    </Link>
+  </div>
+));
+
+SearchResultItem.displayName = 'SearchResultItem';
+
+const Navbar = React.memo(() => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<any[]>([]); // Stores search results from API
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -24,121 +63,119 @@ const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [showLogo,setShowLogo] = useState(false)
 
-  const toggleMenu = () => {
-    setShowMenu(!showMenu);
-  };
+  // ✅ Debounce search term with 400ms delay
+  const debouncedSearchTerm = useDebounce(searchTerm, 400);
 
-  const handleLinkClick = () => {
-    setShowMenu(false);
-  };
-
-  const handleMouseOverOnSideBar = ()=>{
-    setShowLogo(true)
-  }
-
-  const handleMouseOutFromSidebar = ()=>{
-    setShowLogo(false)
-  }
-
-  // Search functionality
-  const handleSearch = React.useCallback(
-    async (query: string) => {
-      console.log("query : ", query);
-
-      if (!query) {
-        setSearchResults([]);
-        setShowSuggestions(false);
-        return;
-      }
-
-      if (query === "") {
-        setSearchResults([]);
-        setShowSuggestions(false);
-        return;
-      }
-
-      setLoading(true);
-      try {
-        const response = await apiGet(
-          `/api/search?query=${query}&labelid=${labelId}`
-        );
-
-        console.log("response : ");
-        console.log(response);
-
-        if (response.success) {
-          setSearchResults(response.data); // Store search results
-          setShowSuggestions(true); // Show suggestions dropdown
-        } else {
-          setSearchResults([]);
-          setShowSuggestions(false);
-        }
-      } catch (error) {
-        console.error("Error during search:", error);
-        setSearchResults([]);
-        setShowSuggestions(false);
-      } finally {
-        setLoading(false);
-      }
-    },
-    [labelId] // Add dependencies here
-  );
-
-  useEffect(() => {
-    // Trigger search API if search term is not empty
-    if (searchTerm.trim().length > 0) {
-      handleSearch(searchTerm);
-    } else {
-      setShowSuggestions(false);
-    }
-  }, [searchTerm, handleSearch]); // Include handleSearch in the dependency array
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        suggestionsRef.current &&
-        !suggestionsRef.current.contains(event.target as Node)
-      ) {
-        setShowSuggestions(false);
-      }
-    }
-
-    const sideBarElement = sideBarRef.current;
-
-    document.addEventListener("mousedown", handleClickOutside);
-    sideBarElement?.addEventListener("mouseover", handleMouseOverOnSideBar);
-    sideBarElement?.addEventListener("mouseout", handleMouseOutFromSidebar);
-    
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      sideBarElement?.removeEventListener("mouseover", handleMouseOverOnSideBar);
-      sideBarElement?.removeEventListener("mouseout", handleMouseOutFromSidebar);
-    };
+  // ✅ Memoized handlers to prevent re-creation
+  const toggleMenu = useCallback(() => {
+    setShowMenu(prev => !prev);
   }, []);
 
-  const onLogout = async () => {
-    console.log("click logout");
+  const handleLinkClick = useCallback(() => {
+    setShowMenu(false);
+  }, []);
+
+  const handleMouseOverOnSideBar = useCallback(() => {
+    setShowLogo(true);
+  }, []);
+
+  const handleMouseOutFromSidebar = useCallback(() => {
+    setShowLogo(false);
+  }, []);
+
+  // ✅ Optimized search function with memoization
+  const handleSearch = useCallback(async (query: string) => {
+    if (!query || !labelId) {
+      setSearchResults([]);
+      setShowSuggestions(false);
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await apiGet(`/api/search?query=${query}&labelid=${labelId}`);
+
+      if (response.success) {
+        setSearchResults(response.data);
+        setShowSuggestions(true);
+      } else {
+        setSearchResults([]);
+        setShowSuggestions(false);
+      }
+    } catch (error) {
+      console.error("Error during search:", error);
+      setSearchResults([]);
+      setShowSuggestions(false);
+    } finally {
+      setLoading(false);
+    }
+  }, [labelId]);
+
+  // ✅ Memoized search result handler
+  const handleSearchResultSelect = useCallback((result: any) => {
+    setSearchTerm(result.albumName || result.trackName);
+    setShowSuggestions(false);
+    
+    if (result.type === "album") {
+      router.push(`/albums/viewalbum/${btoa(result.albumId)}`);
+    } else if (result.type === "track") {
+      router.push(`/albums/viewalbum/${btoa(result.albumId)}`);
+    }
+  }, [router]);
+
+  // ✅ Only trigger search when debounced term changes
+  useEffect(() => {
+    if (debouncedSearchTerm.trim().length > 0) {
+      handleSearch(debouncedSearchTerm);
+    } else {
+      setShowSuggestions(false);
+      setSearchResults([]);
+    }
+  }, [debouncedSearchTerm, handleSearch]); // Include handleSearch in the dependency array
+
+
+
+  // ✅ Memoized logout handler
+  const onLogout = useCallback(async () => {
     try {
       const res = await apiPost("/api/user/logout", {});
-      console.log(res);
       context?.setUser(undefined);
       router.refresh();
     } catch (error) {
       console.log("Error during logout:", error);
     }
-  }
+  }, [context, router]);
 
+  // ✅ Optimized event listeners with cleanup
   useEffect(() => {
-  if (typeof window !== "undefined") {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (suggestionsRef.current && !suggestionsRef.current.contains(event.target as Node)) {
+        setShowSuggestions(false);
+      }
+    };
+
     const handleResize = () => {
       setIsMobileView(window.innerWidth < 673);
     };
 
-    handleResize(); // Set initially
+    const sideBarElement = sideBarRef.current;
+
+    // Add event listeners
+    document.addEventListener("mousedown", handleClickOutside);
     window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }
-}, []);
+    sideBarElement?.addEventListener("mouseover", handleMouseOverOnSideBar);
+    sideBarElement?.addEventListener("mouseout", handleMouseOutFromSidebar);
+
+    // Set initial mobile view state
+    handleResize();
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("resize", handleResize);
+      sideBarElement?.removeEventListener("mouseover", handleMouseOverOnSideBar);
+      sideBarElement?.removeEventListener("mouseout", handleMouseOutFromSidebar);
+    };
+  }, [handleMouseOverOnSideBar, handleMouseOutFromSidebar]);
 
   return (
     <div>
@@ -178,37 +215,19 @@ const Navbar = () => {
 
               {loading && <p>Loading...</p>}
 
-              {/* Display search results dynamically */}
+              {/* ✅ Optimized search results rendering */}
               {showSuggestions && searchResults.length > 0 && (
                 <div
                   ref={suggestionsRef}
                   className="absolute z-12 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
                 >
                   {searchResults.map((result, index) => (
-                    <div
-                      key={index}
-                      className="cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-indigo-600 hover:text-white"
-                      onClick={() => {
-                        setSearchTerm(result.albumName || result.trackName);
-                        setShowSuggestions(false);
-                        // Redirect to the appropriate page
-                        if (result.type === "album") {
-                          router.push(
-                            `/albums/viewalbum/${btoa(result.albumId)}`
-                          );
-                        } else if (result.type === "track") {
-                          router.push(
-                            `/albums/viewalbum/${btoa(result.albumId)}`
-                          );
-                        }
-                      }}
-                    >
-                      <Link href="#">
-                        {result.type === "album"
-                          ? `Album: ${result.albumName}`
-                          : `Track: ${result.trackName} (Album: ${result.albumName})`}
-                      </Link>
-                    </div>
+                    <SearchResultItem
+                      key={`${result.type}-${result.albumId}-${result.trackId || index}`}
+                      result={result}
+                      index={index}
+                      onSelect={handleSearchResultSelect}
+                    />
                   ))}
                 </div>
               )}
@@ -220,11 +239,21 @@ const Navbar = () => {
           
 
           <div className="header__toggle">
-            <i
-              className={`bi ${showMenu ? "bi-x" : "bi-list"}`}
-              id="header-toggle"
-              onClick={toggleMenu}
-            ></i>
+            {showMenu ? (
+              <X 
+                size={20} 
+                id="header-toggle"
+                onClick={toggleMenu}
+                className="cursor-pointer"
+              />
+            ) : (
+              <Menu 
+                size={20} 
+                id="header-toggle"
+                onClick={toggleMenu}
+                className="cursor-pointer"
+              />
+            )}
           </div>
         </div>
       </header>
@@ -370,6 +399,8 @@ const Navbar = () => {
       </div>
     </div>
   );
-};
+});
+
+Navbar.displayName = 'Navbar';
 
 export default Navbar;

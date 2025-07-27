@@ -7,6 +7,7 @@ import { apiPost } from "@/helpers/axiosRequest";
 import { useRouter } from "next/navigation";
 import React from "react";
 import Image from "next/image";
+import { Mail, Eye, EyeOff } from "lucide-react";
 
 const SignIn = () => {
   const router = useRouter();
@@ -87,7 +88,7 @@ const SignIn = () => {
             <div className={`mt-3 ${Styles.registerform}`}>
               <div className={Styles.formGroup}>
                 <label className={Styles.inputLable} htmlFor="email">
-                  <i className="bi bi-envelope-fill"></i>
+                  <Mail size={20} />
                 </label>
                 <input
                   className={Styles.inputField}
@@ -102,12 +103,11 @@ const SignIn = () => {
               </div>
               <div className={Styles.formGroup}>
                 <label className={Styles.inputLable} htmlFor="pass">
-                  <i
-                    className={`bi ${
-                      isPasswordVisible ? "bi-eye-fill" : "bi-eye-slash-fill"
-                    } `}
-                    onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-                  ></i>
+                  {isPasswordVisible ? (
+                    <Eye size={20} onClick={() => setIsPasswordVisible(!isPasswordVisible)} className="cursor-pointer" />
+                  ) : (
+                    <EyeOff size={20} onClick={() => setIsPasswordVisible(!isPasswordVisible)} className="cursor-pointer" />
+                  )}
                 </label>
                 <input
                   className={Styles.inputField}

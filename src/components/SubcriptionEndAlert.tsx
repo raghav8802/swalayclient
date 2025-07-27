@@ -1,6 +1,6 @@
 "use client"
 import React from "react"
-import { Bell, ChevronRight} from "lucide-react"
+import { Bell, ChevronRight, X} from "lucide-react"
 
 import Link from "next/link"
 
@@ -26,7 +26,7 @@ export default function SubscriptionEndAlert({handleSubscriptionEndAlert}: {hand
             <ChevronRight className="ml-1 h-4 w-4" />
           </Link> 
           <button onClick={handleSubscriptionEndAlert}>
-            <i className="bi bi-x-lg text-white-500 hover:text-gray-700"></i>
+            <X size={20} className="text-white-500 hover:text-gray-700" />
           </button>
         </div>
       </div>
