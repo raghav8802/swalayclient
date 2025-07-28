@@ -29,11 +29,13 @@ export function useDebounce<T>(value: T, delay: number): T {
  * @param callback - Function to debounce
  * @param delay - Delay in milliseconds
  */
+/* eslint-disable no-unused-vars */
 export function useDebouncedCallback<T extends (...args: any[]) => void>(
   callback: T,
   delay: number
 ) {
-  const [debounceTimer, setDebounceTimer] = useState<NodeJS.Timeout | null>(null);
+/* eslint-enable no-unused-vars */
+  const [debounceTimer, setDebounceTimer] = useState<number | null>(null);
 
   const debouncedCallback = (...args: Parameters<T>) => {
     // Clear existing timer
@@ -46,7 +48,7 @@ export function useDebouncedCallback<T extends (...args: any[]) => void>(
       callback(...args);
     }, delay);
 
-    setDebounceTimer(timer);
+    setDebounceTimer(timer as unknown as number);
   };
 
   // Cleanup on unmount

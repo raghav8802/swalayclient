@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useState, useRef, useEffect, useMemo, useCallback } from "react";
+import React, { useContext, useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { apiGet, apiPost } from "@/helpers/axiosRequest";
 import { useRouter } from "next/navigation";
@@ -9,20 +9,11 @@ import { useDebounce } from "@/hooks/useDebounce";
 import { 
   Wallet, 
   X, 
-  Menu, 
-  Home, 
-  Disc, 
-  ChevronDown, 
-  Megaphone, 
-  Banknote, 
-  Youtube, 
-  Mic, 
-  User, 
-  MessageSquare, 
-  LogOut 
+  Menu
 } from "lucide-react";
 
 // ✅ Memoized search result item to prevent re-renders
+/* eslint-disable no-unused-vars */
 const SearchResultItem = React.memo(({ 
   result, 
   index, 
@@ -138,7 +129,7 @@ const Navbar = React.memo(() => {
   // ✅ Memoized logout handler
   const onLogout = useCallback(async () => {
     try {
-      const res = await apiPost("/api/user/logout", {});
+      await apiPost("/api/user/logout", {});
       context?.setUser(undefined);
       router.refresh();
     } catch (error) {

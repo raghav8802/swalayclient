@@ -9,6 +9,7 @@ interface AudioPlayerProps {
 }
 
 // ✅ Memoized AudioPlayer to prevent unnecessary re-renders
+/* eslint-disable react/prop-types */
 const AudioPlayer: React.FC<AudioPlayerProps> = React.memo(({ trackName, audioSrc }) => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [currentTime, setCurrentTime] = useState<number>(0);

@@ -1,4 +1,3 @@
-import { NextRequest } from "next/server";
 
 // Enhanced in-memory cache for API responses
 class ApiCache {

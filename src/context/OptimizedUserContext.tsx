@@ -9,14 +9,20 @@ interface UserData {
   loading: boolean;
 }
 
+/* eslint-disable no-unused-vars */
 interface UserActions {
-  setUser: (user: any) => void;
-  setLoading: (loading: boolean) => void;
+  setUser: (_user: any) => void;
+  setLoading: (_loading: boolean) => void;
 }
+/* eslint-enable no-unused-vars */
 
 export const OptimizedUserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
+
+  // ✅ Move useCallback to top level (fixing React hooks violation)
+  const handleSetUser = useCallback((newUser: any) => setUser(newUser), []);
+  const handleSetLoading = useCallback((newLoading: boolean) => setLoading(newLoading), []);
 
   // ✅ Memoize user data to prevent unnecessary re-renders
   const userData = useMemo<UserData>(() => ({
@@ -26,9 +32,9 @@ export const OptimizedUserProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // ✅ Memoize actions to prevent re-creation
   const userActions = useMemo<UserActions>(() => ({
-    setUser: useCallback((newUser: any) => setUser(newUser), []),
-    setLoading: useCallback((newLoading: boolean) => setLoading(newLoading), []),
-  }), []);
+    setUser: handleSetUser,
+    setLoading: handleSetLoading,
+  }), [handleSetUser, handleSetLoading]);
 
   return (
     <UserDataContext.Provider value={userData}>

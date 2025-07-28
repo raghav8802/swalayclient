@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import Album from '@/models/albums';
 import Track from '@/models/track';
 import Artist from '@/models/Artists';

@@ -16,7 +16,6 @@ import {
   Plus, 
   Inbox, 
   IndianRupee, 
-  Users, 
   Headphones, 
   Edit, 
   User 

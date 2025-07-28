@@ -14,12 +14,14 @@ interface TrackData {
   showAudioPlayer: boolean;
 }
 
+/* eslint-disable no-unused-vars */
 interface TrackActions {
-  setActiveTrackId: (id: string | null) => void;
-  setAudioInfo: (info: { songName: string; songUrl: string }) => void;
-  setShowTrackDetails: (show: boolean) => void;
-  setShowAudioPlayer: (show: boolean) => void;
+  setActiveTrackId: (_id: string | null) => void;
+  setAudioInfo: (_info: { songName: string; songUrl: string }) => void;
+  setShowTrackDetails: (_show: boolean) => void;
+  setShowAudioPlayer: (_show: boolean) => void;
 }
+/* eslint-enable no-unused-vars */
 
 interface TrackProviderProps {
   children: ReactNode;
@@ -34,6 +36,12 @@ export const OptimizedTrackProvider: React.FC<TrackProviderProps> = ({ children 
   const [showTrackDetails, setShowTrackDetails] = useState(false);
   const [showAudioPlayer, setShowAudioPlayer] = useState(false);
 
+  // ✅ Move useCallback to top level (fixing React hooks violation)
+  const handleSetActiveTrackId = useCallback((id: string | null) => setActiveTrackId(id), []);
+  const handleSetAudioInfo = useCallback((info: { songName: string; songUrl: string }) => setAudioInfo(info), []);
+  const handleSetShowTrackDetails = useCallback((show: boolean) => setShowTrackDetails(show), []);
+  const handleSetShowAudioPlayer = useCallback((show: boolean) => setShowAudioPlayer(show), []);
+
   // ✅ Memoize track data to prevent unnecessary re-renders
   const trackData = useMemo<TrackData>(() => ({
     activeTrackId,
@@ -44,11 +52,11 @@ export const OptimizedTrackProvider: React.FC<TrackProviderProps> = ({ children 
 
   // ✅ Memoize actions to prevent re-creation
   const trackActions = useMemo<TrackActions>(() => ({
-    setActiveTrackId: useCallback((id: string | null) => setActiveTrackId(id), []),
-    setAudioInfo: useCallback((info: { songName: string; songUrl: string }) => setAudioInfo(info), []),
-    setShowTrackDetails: useCallback((show: boolean) => setShowTrackDetails(show), []),
-    setShowAudioPlayer: useCallback((show: boolean) => setShowAudioPlayer(show), []),
-  }), []);
+    setActiveTrackId: handleSetActiveTrackId,
+    setAudioInfo: handleSetAudioInfo,
+    setShowTrackDetails: handleSetShowTrackDetails,
+    setShowAudioPlayer: handleSetShowAudioPlayer,
+  }), [handleSetActiveTrackId, handleSetAudioInfo, handleSetShowTrackDetails, handleSetShowAudioPlayer]);
 
   return (
     <TrackDataContext.Provider value={trackData}>

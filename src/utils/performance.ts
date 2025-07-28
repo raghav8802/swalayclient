@@ -1,4 +1,4 @@
-import { useMemo, useCallback, useRef, useEffect } from 'react';
+import React, { useCallback, useRef, useEffect, useState } from 'react';
 
 /**
  * ✅ Performance Utilities for React Components
@@ -49,10 +49,12 @@ export function useDeepMemo<T>(factory: () => T, deps: any[]): T {
  * Memoized callback with deep comparison
  * Use when callback dependencies are complex objects
  */
+/* eslint-disable no-unused-vars */
 export function useDeepCallback<T extends (...args: any[]) => any>(
   callback: T,
   deps: any[]
 ): T {
+/* eslint-enable no-unused-vars */
   return useDeepMemo(() => callback, deps) as T;
 }
 
@@ -60,11 +62,11 @@ export function useDeepCallback<T extends (...args: any[]) => any>(
  * Previous value hook - useful for preventing unnecessary effects
  * Returns the previous value of a state or prop
  */
-export function usePrevious<T>(value: T): T | undefined {
+export function usePrevious<T>(_value: T): T | undefined {
   const ref = useRef<T>();
   
   useEffect(() => {
-    ref.current = value;
+    ref.current = _value;
   });
   
   return ref.current;
@@ -96,13 +98,15 @@ export function useRenderMonitor(componentName: string, enabled = process.env.NO
  * Throttled state hook
  * Prevents state updates from happening too frequently
  */
+/* eslint-disable no-unused-vars */
 export function useThrottledState<T>(
   initialValue: T,
   delay: number
-): [T, (value: T) => void] {
-  const [state, setState] = React.useState(initialValue);
+): [T, (_value: T) => void] {
+/* eslint-enable no-unused-vars */
+  const [state, setState] = useState(initialValue);
   const lastUpdate = useRef(0);
-  const timeoutRef = useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<number>();
   
   const throttledSetState = useCallback((newValue: T) => {
     const now = Date.now();
@@ -118,30 +122,24 @@ export function useThrottledState<T>(
       timeoutRef.current = setTimeout(() => {
         setState(newValue);
         lastUpdate.current = Date.now();
-      }, delay - (now - lastUpdate.current));
+      }, delay - (now - lastUpdate.current)) as unknown as number;
     }
   }, [delay]);
-  
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, []);
   
   return [state, throttledSetState];
 }
 
 /**
  * Memoized async function hook
- * Prevents async functions from being recreated on every render
+ * Prevents recreation of async functions
  */
+/* eslint-disable no-unused-vars */
 export function useMemoizedAsync<TArgs extends any[], TReturn>(
-  asyncFn: (...args: TArgs) => Promise<TReturn>,
+  asyncFn: (..._args: TArgs) => Promise<TReturn>,
   deps: React.DependencyList
 ) {
-  return useCallback(asyncFn, deps);
+/* eslint-enable no-unused-vars */
+  return useCallback(asyncFn, [asyncFn, ...deps]);
 }
 
 /**
@@ -150,9 +148,12 @@ export function useMemoizedAsync<TArgs extends any[], TReturn>(
  */
 export function useIntersectionObserver(
   ref: React.RefObject<Element>,
-  options: IntersectionObserverInit = {}
+  options: {
+    threshold?: number;
+    rootMargin?: string;
+  } = {}
 ): boolean {
-  const [isIntersecting, setIsIntersecting] = React.useState(false);
+  const [isIntersecting, setIsIntersecting] = useState(false);
   
   useEffect(() => {
     const element = ref.current;
@@ -177,7 +178,7 @@ export function useIntersectionObserver(
  */
 export function useBatchedUpdates() {
   const updates = useRef<(() => void)[]>([]);
-  const timeoutRef = useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<number>();
   
   const batchUpdate = useCallback((updateFn: () => void) => {
     updates.current.push(updateFn);
@@ -189,7 +190,7 @@ export function useBatchedUpdates() {
     timeoutRef.current = setTimeout(() => {
       updates.current.forEach(fn => fn());
       updates.current = [];
-    }, 0);
+    }, 0) as unknown as number;
   }, []);
   
   useEffect(() => {
@@ -222,10 +223,12 @@ export const performance_utils = {
   /**
    * Measure and log execution time of a function
    */
-  measureTime: <T extends (...args: any[]) => any>(
+  /* eslint-disable no-unused-vars */
+  measureTime: <T extends (..._args: any[]) => any>(
     fn: T,
     label: string
   ): T => {
+  /* eslint-enable no-unused-vars */
     return ((...args: Parameters<T>) => {
       const start = performance.now();
       const result = fn(...args);
@@ -238,10 +241,12 @@ export const performance_utils = {
   /**
    * Measure async function execution time
    */
-  measureAsyncTime: <T extends (...args: any[]) => Promise<any>>(
+  /* eslint-disable no-unused-vars */
+  measureAsyncTime: <T extends (..._args: any[]) => Promise<any>>(
     fn: T,
     label: string
   ): T => {
+  /* eslint-enable no-unused-vars */
     return (async (...args: Parameters<T>) => {
       const start = performance.now();
       const result = await fn(...args);
@@ -250,7 +255,4 @@ export const performance_utils = {
       return result;
     }) as T;
   }
-};
-
-// Import React at the top level for hooks
-import React from 'react'; 
+}; 

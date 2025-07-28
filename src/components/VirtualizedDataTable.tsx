@@ -1,13 +1,5 @@
 import React, { useMemo } from 'react';
 import { FixedSizeList as List } from 'react-window';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import {
   flexRender,
@@ -33,7 +25,7 @@ interface VirtualizedDataTableProps<TData, TValue> {
 const VirtualRow = React.memo(({ 
   index, 
   style, 
-  data: { rows, columns } 
+  data: { rows } 
 }: {
   index: number;
   style: React.CSSProperties;

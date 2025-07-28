@@ -171,6 +171,7 @@ interface OptimizedAlbumDataTableProps {
 }
 
 // ✅ Main optimized component with React.memo
+/* eslint-disable react/prop-types */
 export const OptimizedAlbumDataTable = React.memo<OptimizedAlbumDataTableProps>(({ 
   data, 
   height = 600 
