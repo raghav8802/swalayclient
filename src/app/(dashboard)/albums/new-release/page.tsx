@@ -52,6 +52,25 @@ const AlbumForm: React.FC = () => {
   const userMusiclabel =
     context?.user?.usertype === "normal" ? "SwaLay Digital" : userLable;
 
+  // Calculate minimum date (7 days from today)
+  const getMinDate = () => {
+    const today = new Date();
+    const minDate = new Date(today);
+    minDate.setDate(today.getDate() + 7);
+    
+    // Format as YYYY-MM-DD in local timezone to avoid timezone issues
+    const year = minDate.getFullYear();
+    const month = String(minDate.getMonth() + 1).padStart(2, '0');
+    const day = String(minDate.getDate()).padStart(2, '0');
+    
+    const formattedDate = `${year}-${month}-${day}`;
+    console.log('Today:', today.toDateString());
+    console.log('Minimum date (7 days from today):', minDate.toDateString());
+    console.log('Formatted min date for input:', formattedDate);
+    
+    return formattedDate;
+  };
+
   const subscriptionEndDivRef = React.useRef<HTMLDivElement>(null);
 
   const router = useRouter();
@@ -408,6 +427,7 @@ const AlbumForm: React.FC = () => {
                       name="releaseDate"
                       value={formData.releaseDate}
                       onChange={handleChange}
+                      min={getMinDate()}
                       className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                       required
                     />

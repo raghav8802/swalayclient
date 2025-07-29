@@ -25,9 +25,7 @@ export async function POST(req: NextRequest) {
     const artwork = formData.get("artwork") as File;
     const albumName = (formData.get("title") as string).trim();
     const albumNameNoSpace = albumName.replace(/ /g, "-");
-    console.log("::: albumNameNoSpace : ->");
-    console.log(albumName);
-    
+   
     if (!artwork) {
       return NextResponse.json({
         message: "Artwork is required",
@@ -76,9 +74,6 @@ export async function POST(req: NextRequest) {
       { $set: { updatedAt: new Date() } } // Set 'updatedAt' to current time
     );
 
-    console.log("resUpm  :");
-    console.log(resUpm);
-    
     
 
     return NextResponse.json({
