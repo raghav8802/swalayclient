@@ -101,7 +101,7 @@ const Page = () => {
     }
   }, [labelId, fetchBankDetails]);
 
-  const smartLink = `${process.env.NEXT_PUBLIC_BASE_URL}/${labelDetails?.uniqueUsername}`;
+  const smartLink = `${process.env.NEXT_PUBLIC_SMARTLINK_URL}/${labelDetails?.uniqueUsername}`;
 
   const handleCopyToClipboardSmartLink = async () => {
     if (!labelDetails?.uniqueUsername) {

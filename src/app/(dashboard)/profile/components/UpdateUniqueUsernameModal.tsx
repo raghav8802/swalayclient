@@ -3,12 +3,12 @@
 import { Modal } from "@/components/Modal";
 import UserContext from "@/context/userContext";
 import { apiPost } from "@/helpers/axiosRequest";
-import { useRouter } from "next/navigation";
 import React, { useContext, useState } from "react";
 import toast from "react-hot-toast";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AlertCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const UpdateUniqueUsernameModal = ({
   onClose,

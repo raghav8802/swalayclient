@@ -111,7 +111,8 @@ const UpdateProfilePictureModal = ({
       toast.error(
         (error as Error).message || "An error occurred while updating details"
       );
-    } finally {
+    }
+      finally {
       setIsLoading(false);
     }
   };
