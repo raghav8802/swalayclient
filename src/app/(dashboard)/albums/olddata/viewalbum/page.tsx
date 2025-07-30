@@ -261,8 +261,6 @@ const Page = () => {
                     src={track.image.url || "/placeholder.svg"}
                     alt={track.name}
                     className="w-full h-full object-cover"
-                    width={300}
-                    height={300}
                   />
                 </div>
                 <div className="space-y-2">
