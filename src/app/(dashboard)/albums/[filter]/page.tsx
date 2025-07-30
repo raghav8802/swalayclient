@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import React, { useContext, useEffect, useState, useCallback } from "react";
 import Style from "../../../styles/Albums.module.css";
-import { OptimizedAlbumDataTable } from "../components/OptimizedAlbumDataTable";
+
 import UserContext from "@/context/userContext";
 import toast from "react-hot-toast";
 import { apiGet } from "@/helpers/axiosRequest";
