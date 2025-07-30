@@ -382,6 +382,10 @@ img {
     display: none;
   }
 
+  .sm-div-wrap{
+    flex-wrap: wrap;
+  }
+
 }
 
 @media screen and (min-width: 768px) {

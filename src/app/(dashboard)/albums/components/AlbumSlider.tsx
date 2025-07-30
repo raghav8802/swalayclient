@@ -50,7 +50,7 @@ const AlbumSlider: React.FC<AlbumSliderProps> = ({ labelId }) => {
   }, [labelId]);
 
   return (
-    <div className="w-full flex items-center justify-start">
+    <div className="w-full flex items-center sm-div-wrap justify-start ">
       {albumList &&
         albumList.map((album) => (
           <NewReleaseItem

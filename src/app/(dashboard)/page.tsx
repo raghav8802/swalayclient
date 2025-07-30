@@ -4,7 +4,7 @@ import DashboradSection from "@/components/DashboradSection";
 import HomeStatsCard from "@/components/HomeStatsCard";
 import SubscriptionEndAlert from "@/components/SubcriptionEndAlert";
 import UserContext from "@/context/userContext";
-import "bootstrap-icons/font/bootstrap-icons.css";
+
 import { useContext, useRef } from "react";
 import Style from "../styles/Home.module.css";
 

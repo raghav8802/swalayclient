@@ -4,14 +4,12 @@ import React, { useContext, useEffect, useState } from "react";
 
 import Style from "../../styles/Albums.module.css";
 import Link from "next/link";
-import { OptimizedAlbumDataTable } from "./components/OptimizedAlbumDataTable";
 import UserContext from "@/context/userContext";
 import toast from "react-hot-toast";
 import { apiGet } from "@/helpers/axiosRequest";
 import AlbumsLoading from "@/components/AlbumsLoading";
 import AlbumSlider from "./components/AlbumSlider";
 const color = "#7808d0"; // Define the color variable
-
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -20,6 +18,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { AlbumDataTable } from "./components/AlbumDataTable";
 
 const Albums = () => {
   const context = useContext(UserContext);
@@ -56,7 +55,7 @@ const Albums = () => {
   }
 
   return (
-    <div className=" w-100 bg-whitew-full min-h-[80dvh] p-6 bg-white rounded-sm ">
+    <div className=" w-100 bg-whitew-full min-h-[80dvh] p-3 bg-white rounded-sm ">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -113,7 +112,9 @@ const Albums = () => {
           </Link>
         </div>
 
-        <div className={`mb-3`}>
+        <div
+          className={`mb-3`}
+        >
           {labelId && <AlbumSlider labelId={labelId} />}
         </div>
       </div>
@@ -121,7 +122,7 @@ const Albums = () => {
       {/* all music list  */}
 
       <div
-        className={`bg-white p-3 rounded mt-5 ${Style.musicListContainer}`}
+        className={`bg-white p-2 rounded mt-5 ${Style.musicListContainer}`}
       >
         <div className={` ${Style.spaceBetween}`}>
           <h3 className={Style.titleHeading}>All releases</h3>
@@ -129,7 +130,7 @@ const Albums = () => {
 
         <div className={Style.musicList}>
           {albumList ? (
-            <OptimizedAlbumDataTable data={albumList} height={600} />
+            <AlbumDataTable data={albumList}  />
           ) : (
             <h3 className="text-center mt-4">No Albums found</h3>
           )}

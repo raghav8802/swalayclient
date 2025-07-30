@@ -59,8 +59,9 @@ export const albumColumns: ColumnDef<Album>[] = [
         header: "Title",
         cell: ({ row }) => {
             const album = row.original;
-            return <Link className="ms-2 text-blue-600" href={`/albums/viewalbum/${btoa(album._id)}`}>{album.title}</Link>;
-        },
+            const encodedId = React.useMemo(() => btoa(album._id), [album._id]);
+            return <Link className="ms-2 text-blue-600" href={`/albums/viewalbum/${encodedId}`}>{album.title}</Link>;
+        }
     },
     {
         accessorKey: "artist",

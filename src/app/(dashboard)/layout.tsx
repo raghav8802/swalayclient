@@ -6,7 +6,7 @@ import Navbar from "@/components/Navbar";
 import UserProvider from "@/context/UserProvider";
 import { Toaster } from "react-hot-toast";
 import Footer from "@/components/Footer";
-
+import "bootstrap-icons/font/bootstrap-icons.css";
 import Favicon from "/public/favicon.ico";
 
 const inter = Inter({ subsets: ["latin"] });
